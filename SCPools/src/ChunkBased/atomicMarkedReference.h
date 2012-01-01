@@ -38,6 +38,6 @@ static inline void* get_mark_and_ref(markable_ref m_ref, int* mark)
         (*ptr = ADD_MARK(newAddr, newMark))
 
 #define REF_CAS(ptr,oldaddr,newaddr,oldmark,newmark) \
-        CAS(ptr, ADD_MARK(oldaddr, oldmark), ADD_MARK(newaddr, newmark))
+        CAS((unsigned long*)ptr, ADD_MARK(oldaddr, oldmark), ADD_MARK(newaddr, newmark))
 
 #endif
