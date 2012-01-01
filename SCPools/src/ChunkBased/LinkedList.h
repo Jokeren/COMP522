@@ -7,14 +7,16 @@
 #ifndef LINKEDLIST_H_
 #define LINKEDLIST_H_
 
+#include "Chunk.h"
+#include "atomicMarkedReference.h"
+#include "hp/hp.h"
+
 class Node {
 public:
-	Node(Chunk* c, bool isSentinal);
-
+	Node(Chunk* c);
 	Chunk* chunk;
 	int consIdx;
 	markable_ref next;
-	bool isSentinal;
 };
 
 class LFLinkedList {
@@ -22,9 +24,11 @@ public:
 	LFLinkedList();
 	virtual ~LFLinkedList();
 
-	Node* append(Chunk* c);
-	Node* get(int idx);
-	bool remove(Node* toRemove);
+	Node* append(Chunk* c, HPLocal hpLoc);
+	Node* get(int idx, HPLocal hpLoc);
+	bool remove(Node* toRemove, HPLocal hpLoc);
+private:
+	Node* head;
 };
 
 #endif /* LINKEDLIST_H_ */

@@ -7,7 +7,7 @@
 
 #include "ChunkPool.h"
 
-ChunkPool::ChunkPool() {
+ChunkPool::ChunkPool(int initialSize, const ChunkFactory& factory) {
 	// TODO Auto-generated constructor stub
 
 }

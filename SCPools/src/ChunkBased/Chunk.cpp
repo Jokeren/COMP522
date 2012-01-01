@@ -7,7 +7,7 @@
 
 #include "Chunk.h"
 
-Chunk::Chunk() {
+Chunk::Chunk(int owner) {
 	// TODO Auto-generated constructor stub
 
 }
