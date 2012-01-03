@@ -15,3 +15,9 @@ ChunkPool::ChunkPool(int initialSize, const ChunkFactory& factory) {
 ChunkPool::~ChunkPool() {
 	// TODO Auto-generated destructor stub
 }
+
+//TODO: Implement
+ChunkFactory& ChunkPool::getChunkFactory() {}
+Chunk* ChunkPool::getChunk() {}
+void ChunkPool::putChunk(Chunk* c) {}
+

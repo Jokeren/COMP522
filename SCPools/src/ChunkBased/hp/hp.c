@@ -13,6 +13,15 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+
+
+//Global vars
+
+//Head of HPrecord list - needed for thread register
+HPRecord* head;
+//The per thread data
+__thread HPLocal localHPData;
+
 // AUX ///
 void SwapStacks(Stack* s1, Stack* s2);
 void scan(HPLocal localData);
@@ -59,14 +68,16 @@ HPData initHPData(int hpCountPerThread, int ThreadCount, int recCount) {
 	return res;
 }
 
+HPLocal getHPLocal() {
+	return localHPData;
+}
+
+
 /*
  * Adds a thread to the HPReord list.
- * Returns an HPLocal var that the thread will hold locally,
- * so it will be used later when accessing hazard pointers.
- * Head - the head of the HPRecord list, or NULL if this is the first element
  * hpData - An HPData object created by initHPData
  */
-HPLocal threadRegister(HPRecord* head, HPData hpData) {
+void threadRegister(HPData hpData) {
 	int i;
 	//init record
 	HPRecord* record = (HPRecord*) malloc(sizeof(HPRecord)+(sizeof(void*) * hpData->HP_COUNT));
@@ -82,8 +93,10 @@ HPLocal threadRegister(HPRecord* head, HPData hpData) {
 
 	res->localRecord = record;
 
-	if (head == NULL)
+	if (head == NULL) {
 		res->HPRecHead = record;
+		head = record;
+	}
 	else
 		res->HPRecHead = head;
 
@@ -100,8 +113,7 @@ HPLocal threadRegister(HPRecord* head, HPData hpData) {
 			last = last->next;
 		last->next = record;
 	}
-
-	return res;
+	localHPData = res;
 }
 
 // Marks that the node needs to be freed and calls scan if needed.

@@ -9,7 +9,7 @@
 #include <stdlib.h>
 
 
-//Aux function deceleration:
+//Aux function declaration:
 
 void find(Node *head, void* toFind, int findIdx, Node*& predRes, Node*& currRes, HPLocal hpLoc);
 void findNode(Node *head, void* toFind, Node*& predRes, Node*& currRes, HPLocal hpLoc);
@@ -31,7 +31,8 @@ LFLinkedList::~LFLinkedList() {
 
 
 
-Node* LFLinkedList::append(Chunk* c, HPLocal hpLoc) {
+Node* LFLinkedList::append(Chunk* c) {
+	HPLocal hpLoc = getHPLocal();
 	Node *pred, *curr;
 	Node *newNode = new Node(c);
 	while (true) {
@@ -41,14 +42,16 @@ Node* LFLinkedList::append(Chunk* c, HPLocal hpLoc) {
 	}
 }
 
-Node* LFLinkedList::get(int idx, HPLocal hpLoc) {
+Node* LFLinkedList::get(int idx) {
+	HPLocal hpLoc = getHPLocal();
 	Node *pred;
 	Node *curr;
 	findIdx(this->head, idx, pred, curr, hpLoc);
 	if (GET_REF(curr->next) == NULL) return NULL;
 	return curr;
 }
-bool LFLinkedList::remove(Node* toRemove, HPLocal hpLoc) {
+bool LFLinkedList::remove(Node* toRemove) {
+	HPLocal hpLoc = getHPLocal();
 	int snip;
 	Node *pred, *curr;
 	while (true) {

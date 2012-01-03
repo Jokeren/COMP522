@@ -10,14 +10,15 @@
 
 #include "../SCTaskPool.h"
 
-class ChunkPool;
-class LFLinkedList;
+#include "ChunkPool.h"
+#include "LinkedList.h"
+#include "Chunk.h"
 
-class NoFIFOPool : SCTaskPool {
+class NoFIFOPool : public SCTaskPool {
 public:
 	class ProdCtx : SCTaskPool::ProducerContext {
 	public:
-		ProdCtx(LFLinkedList& l, unsigned int& count);
+		ProdCtx(LFLinkedList& l, unsigned int& count, NoFIFOPool& _noFIFOPool, int _producerId);
 		virtual ~ProdCtx() {};
 		virtual OpResult produce(const Task& t, bool& changeConsumer);
 		virtual void produceForce(const Task& t);
@@ -28,12 +29,14 @@ public:
 		LFLinkedList& chunkList;
 		unsigned int& chunkCount;
 		Chunk* curChunk;
+		NoFIFOPool& noFIFOPool;
+		int producerId;
 	};
 
 	NoFIFOPool(int _numProducers);
 	virtual ~NoFIFOPool();
 
-	virtual ProducerContext* getProducerContext(const Producer& prod);
+	virtual SCTaskPool::ProducerContext* getProducerContext(const Producer& prod);
 	virtual OpResult consume(Task*& t);
 
 	virtual float getStealingScore() const;

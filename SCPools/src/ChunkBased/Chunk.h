@@ -30,7 +30,7 @@ protected:
 
 class ChunkFactory {
 public:
-	virtual Chunk* createChunk() = 0;
+	virtual Chunk* createChunk(int owner) = 0;
 };
 
 #endif /* CHUNK_H_ */

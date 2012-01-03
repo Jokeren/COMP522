@@ -9,8 +9,9 @@
 
 #include "Chunk.h"
 #include "atomicMarkedReference.h"
-#include "hp/hp.h"
-
+extern "C" {
+	#include "hp/hp.h"
+}
 class Node {
 public:
 	Node(Chunk* c);
@@ -24,9 +25,9 @@ public:
 	LFLinkedList();
 	virtual ~LFLinkedList();
 
-	Node* append(Chunk* c, HPLocal hpLoc);
-	Node* get(int idx, HPLocal hpLoc);
-	bool remove(Node* toRemove, HPLocal hpLoc);
+	Node* append(Chunk* c);
+	Node* get(int idx);
+	bool remove(Node* toRemove);
 private:
 	Node* head;
 };

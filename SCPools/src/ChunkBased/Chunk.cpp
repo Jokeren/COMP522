@@ -15,3 +15,7 @@ Chunk::Chunk(int owner) {
 Chunk::~Chunk() {
 	// TODO Auto-generated destructor stub
 }
+
+//TODO: implement
+int Chunk::getOwner() const {}
+bool Chunk::changeOwner(int prevOwner, int newOwner) {}

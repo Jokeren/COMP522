@@ -15,6 +15,10 @@ ArchEnvironment* ArchEnvironment::getInstance() {
 	return instance;
 }
 
+SCTaskPool** ArchEnvironment::getSortedConsumers(const Producer&) {}
+SCTaskPool** ArchEnvironment::getSortedConsumers(const Consumer&) {}
+
+
 ArchEnvironment::ArchEnvironment() {
 	// TODO Auto-generated constructor stub
 }

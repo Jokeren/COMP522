@@ -76,15 +76,30 @@ unsigned int AAF(volatile unsigned int *mem, unsigned int add)
  *   @add: value to add
  *
  *   returns: old value */
-static inline
-unsigned int FAA(volatile unsigned int *mem, unsigned int add)
+//static inline
+//unsigned int FAA(volatile unsigned int *mem, unsigned int add)
+//{
+//	unsigned long __tmp = add;
+//	__asm__ __volatile__("lock " XADDx " %0,%1"
+//			:"+r" (add),
+//			"+m" (*mem)
+//			: : "memory");
+//	return add + __tmp;
+//}
+
+
+static __inline__
+int FAA (volatile unsigned int *atomic, int val)
 {
-	__asm__ __volatile__("lock " XADDx " %0,%1"
-			:"+r" (add),
-			"+m" (*mem)
-			: : "memory");
-	return add;
+  int result;
+
+  __asm__ __volatile__ ("lock; xaddl %0,%1"
+                        : "=r" (result), "=m" (*atomic)
+                        : "0" (val), "m" (*atomic));
+  return result;
 }
+
+
 
 /* add-negative: atomically adds @del to @mem
  *

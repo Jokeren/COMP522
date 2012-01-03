@@ -5,32 +5,50 @@
  */
 
 #include "NoFIFOPool.h"
-#include "ChunkPool.h"
-#include "LinkedList.h"
 #include "../Configuration.h"
 #include "../commons.h"
 #include "../Atomic.h"
+#include "SPChunk.h"
 #include <assert.h>
 
-NoFIFOPool::NoFIFOPool()
+NoFIFOPool::NoFIFOPool(int _numProducers) : SCTaskPool(_numProducers)
 {
+
 	int initialPoolSize;
 	if (!Configuration::getInstance()->getVal(initialPoolSize, "initialPoolSize")) {
 		initialPoolSize = 200;
 	}
-	chunkPool = new ChunkPool(initialPoolSize, *(new SPChunkFactory));
+
+	chunkPool = new ChunkPool(initialPoolSize, *(new SPChunkFactory()));
 }
 
 NoFIFOPool::~NoFIFOPool() {
 	// TODO Auto-generated destructor stub
 }
 
-NoFIFOPool::ProdCtx::ProdCtx(LFLinkedList& l, unsigned int& c)
+
+
+//TODO: implement:
+SCTaskPool::ProducerContext* NoFIFOPool::getProducerContext(const Producer& prod) {}
+OpResult NoFIFOPool::consume(Task*& t) {}
+
+float NoFIFOPool::getStealingScore() const {}
+float NoFIFOPool::getStealingThreshold() const {}
+Task* NoFIFOPool::steal(SCTaskPool& from) {}
+
+int NoFIFOPool::getEmptynessCounter() const {}
+
+
+
+
+NoFIFOPool::ProdCtx::ProdCtx(LFLinkedList& l, unsigned int& c, NoFIFOPool& _noFIFOPool, int _producerId)
  : chunkList(l),
    chunkCount(c),
-   curChunk(NULL)
+   curChunk(NULL),
+   noFIFOPool(_noFIFOPool),
+   producerId(_producerId)
 {
-	curChunk = chunkPool->getChunk();
+	curChunk = noFIFOPool.chunkPool->getChunk();
 	chunkList.append(curChunk);
 	FAA(&chunkCount, 1);
 }
@@ -51,13 +69,13 @@ OpResult NoFIFOPool::ProdCtx::produceAux(const Task& t, bool& changeConsumer, bo
 	}
 	// the previous chunk is full
 	// Try to get a new chunk from the chunk pool
-	Chunk* newChunk = chunkPool->getChunk();
+	Chunk* newChunk = noFIFOPool.chunkPool->getChunk();
 	if (newChunk == NULL) {
 		// no free chunks in the pool
 		if (!force)	{
 			return FULL;
 		} else {
-			newChunk = chunkPool->getChunkFactory().createChunk();
+			newChunk = noFIFOPool.chunkPool->getChunkFactory().createChunk(producerId);
 		}
 	}
 	chunkList.append(newChunk);

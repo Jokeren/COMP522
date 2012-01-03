@@ -8,22 +8,25 @@
 #ifndef SPCHUNK_H_
 #define SPCHUNK_H_
 
-class SPChunk : Chunk {
+#include "Chunk.h"
+
+
+class SPChunk : public Chunk {
 public:
-	SPChunk();
+	SPChunk(int owner);
 	virtual ~SPChunk();
 
-	virtual OpResult insertTask(const Task& t);
+	virtual OpResult insertTask(const Task& t, bool& isLastTask);
 	virtual OpResult getTask(Task*& t);
 
 	virtual int getMaxSize();
 };
 
-class SPChunkFactory : ChunkFactory {
+class SPChunkFactory : public ChunkFactory {
 public:
 	SPChunkFactory() {}
-	SPChunk* createChunk() {
-		return new SPChunk();
+	virtual SPChunk* createChunk(int owner) {
+		return new SPChunk(owner);
 	}
 };
 

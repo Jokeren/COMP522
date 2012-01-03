@@ -37,16 +37,15 @@ HPData initHPData(int hpCountPerThread, int ThreadCount, int recCount);
  * Head - the head of the HPRecord list, or NULL if this is the first element
  * hpData - An HPData object created by initHPData
  */
-HPLocal threadRegister(HPRecord* head, HPData hpData);
+void threadRegister(HPData hpData);
+
+HPLocal getHPLocal();
 
 /* Marks that the node needs to be freed and calls scan if needed. */
 void retireNode(void* addr, ReclaimationFunc reclaimationFunc, HPLocal localData);
 
 /* Set hazard pointer with index of idx to point to addr */
 void setHP(int idx, void* addr, HPLocal localData);
-
-/*Gets head of the HPRecord list - needed for threadRegister()*/
-HPRecord* getHPListHead(HPLocal localData);
 
 /*check if I have a HP pointing at addr - for tests*/
 int isHP(void* addr, HPLocal localData);

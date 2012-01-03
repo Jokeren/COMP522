@@ -7,7 +7,7 @@
 
 #include "SPChunk.h"
 
-SPChunk::SPChunk() {
+SPChunk::SPChunk(int owner) : Chunk(owner) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -15,3 +15,9 @@ SPChunk::SPChunk() {
 SPChunk::~SPChunk() {
 	// TODO Auto-generated destructor stub
 }
+
+//TODO: implement
+
+OpResult SPChunk::insertTask(const Task& t, bool& isLastTask) {}
+OpResult SPChunk::getTask(Task*& t) {}
+int SPChunk::getMaxSize() {}
