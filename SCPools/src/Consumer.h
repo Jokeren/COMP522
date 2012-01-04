@@ -16,6 +16,7 @@ public:
 	virtual ~Consumer();
 
 	virtual OpResult consume(Task*& t);
+	int getId() const{ return id;}
 
 protected:
 	virtual OpResult consumeEmpty(Task*& t);

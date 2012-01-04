@@ -16,7 +16,14 @@ public:
 		virtual void produceForce(const Task& t) = 0;
 	};
 
+	/* constructor to be used when derived TaskPool is aware to the number of producers.
+	   Needs to be explicitly called by constructor of derived class. */
 	SCTaskPool(int _numProducers) : numProducers(_numProducers) {};
+	
+	/* default constructor - to be used when derived TaskPool is unaware to the number of 
+	producers. Called automatically by constructor of derived class */
+	SCTaskPool():numProducers(0){};
+	
 	virtual ~SCTaskPool() {};
 
 	virtual ProducerContext* getProducerContext(const Producer& prod) = 0;
@@ -24,7 +31,7 @@ public:
 
 	virtual float getStealingScore() const = 0;
 	virtual float getStealingThreshold() const = 0;
-	virtual Task* steal(SCTaskPool& from) = 0;
+	virtual Task* steal(SCTaskPool* from) = 0;
 
 	virtual int getEmptynessCounter() const = 0;
 

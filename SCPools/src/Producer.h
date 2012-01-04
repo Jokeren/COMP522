@@ -16,7 +16,7 @@ public:
 
 	virtual void produce(const Task& t);
 
-	int getId() {
+	int getId() const{
 		return id;
 	}
 private:

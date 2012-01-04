@@ -39,7 +39,7 @@ OpResult Consumer::consume(Task*& t) {
 		for(int c = 1; c < consumersNum; c++) {
 			if (consumers[c]->getStealingScore() >= stealThreshold) {
 				// try to steal from that pool
-				Task* stolenTask = myPool->steal(*(consumers[c]));
+				Task* stolenTask = myPool->steal(consumers[c]);
 				if (stolenTask != NULL) {
 					// successful stealing
 					t = stolenTask;
