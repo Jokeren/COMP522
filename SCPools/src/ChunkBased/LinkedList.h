@@ -16,7 +16,7 @@ class Node {
 public:
 	Node(Chunk* c);
 	Chunk* chunk;
-	int consIdx;
+	int consumerIdx;
 	markable_ref next;
 };
 
@@ -26,6 +26,7 @@ public:
 	virtual ~LFLinkedList();
 
 	Node* append(Chunk* c);
+	Node* append(Chunk* c, int consumerIdx);
 	Node* get(int idx);
 	bool remove(Node* toRemove);
 private:

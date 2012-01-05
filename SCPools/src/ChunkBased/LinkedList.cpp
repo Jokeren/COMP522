@@ -15,7 +15,7 @@ void find(Node *head, void* toFind, int findIdx, Node*& predRes, Node*& currRes,
 void findNode(Node *head, void* toFind, Node*& predRes, Node*& currRes, HPLocal hpLoc);
 void findIdx(Node *head, int findIdx, Node*& predRes, Node*& currRes, HPLocal hpLoc);
 
-Node::Node(Chunk* c) : chunk(c), consIdx(0), next(0)
+Node::Node(Chunk* c) : chunk(c), consumerIdx(0), next(0)
 {
 }
 
@@ -30,16 +30,21 @@ LFLinkedList::~LFLinkedList() {
 }
 
 
-
-Node* LFLinkedList::append(Chunk* c) {
+Node* LFLinkedList::append(Chunk* c, int consumerIdx) {
 	HPLocal hpLoc = getHPLocal();
 	Node *pred, *curr;
 	Node *newNode = new Node(c);
+	newNode->consumerIdx = consumerIdx;
 	while (true) {
 		findNode(this->head, NULL, pred, curr,hpLoc);
 		newNode->next = (markable_ref)curr;
 		if (REF_CAS(&(pred->next), curr, newNode, FALSE_MARK, FALSE_MARK)) return newNode;
 	}
+}
+
+
+Node* LFLinkedList::append(Chunk* c) {
+	return LFLinkedList::append(c,0);
 }
 
 Node* LFLinkedList::get(int idx) {
