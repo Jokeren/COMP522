@@ -1,0 +1,93 @@
+\documentclass[11pt]{article}
+\usepackage{times}
+\usepackage{fullpage}
+\usepackage{epic}
+\usepackage{subfigure}
+\usepackage{eepic}
+\usepackage{epsfig}
+\usepackage{color}
+\usepackage{amsmath,amsthm,amssymb}
+\usepackage{amsfonts}
+\usepackage{float}
+\usepackage{appendix}
+\usepackage{multirow}
+\usepackage{booktabs}
+\usepackage{url}
+
+\renewcommand\floatpagefraction{1.0}
+\renewcommand\topfraction{1.0}
+\renewcommand\bottomfraction{0.9}
+\renewcommand\bottomfraction{1.0}
+\renewcommand\textfraction{0.0}
+
+\newenvironment{enum*}%
+ {\begin{enumerate}%
+   \setlength{\itemsep}{-5pt}%
+   \setlength{\parsep}{-5pt}%
+   \setlength{\topsep}{-5pt}}%
+ {\end{enumerate}}
+
+\newenvironment{item*}%
+ {\begin{itemize}%
+   \setlength{\itemsep}{-5pt}%
+   \setlength{\parsep}{-5pt}%
+   \setlength{\topsep}{-5pt}}%
+ {\end{itemize}}
+
+\newcommand{\tup}[1]{%
+        \relax\ifmmode
+	           \langle #1 \rangle%
+        \else
+                $\langle$#1$\rangle$%
+        \fi
+}
+
+\theoremstyle{plain}
+\floatstyle{ruled}
+\newfloat{algo}{htbp}{algo}
+\floatname{algo}{Algorithm}
+\usepackage[noend]{algorithmic}
+\usepackage{distribalgo}
+
+\usepackage{setspace}
+%\doublespacing
+
+\newtheorem{thm}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{claim}{Claim}
+\newtheorem{corollary}{Corollary}
+\newtheorem{definition}{Definition}
+\newtheorem{property}{Property}
+\newtheorem{proposition}{Proposition}
+\newtheorem{observation}{Observation}
+\newtheorem{conjecture}{Conjecture}
+\newtheorem{designrule}{Design Principle}
+\newtheorem{invariant}{Invariant}
+\newtheorem{theorem}{Theorem}
+
+\newcommand{\up}[1]{\ensuremath{^{\textrm{#1}}}}
+\newcommand{\down}[1]{\ensuremath{_{\textrm{#1}}}}
+\newcommand{\tb}{\makebox[0.6cm]{}}
+\newcommand{\negspace}{\vspace{-0.6\baselineskip}}
+\newcommand{\snegspace}{\vspace{-0.25\baselineskip}}
+\def\hyph{-\penalty0\hskip0pt\relax}
+
+\newenvironment{restate}[1]{\begin{trivlist} \item {\bf #1 (restated)} \em}
+  {\end{trivlist}}
+
+\definecolor{Gray}{rgb}{0.1,0.4,0.1}
+\definecolor{DarkBlue}{rgb}{0.2,0.2,0.5}
+\definecolor{Cyan}{rgb}{0.5,0.2,0.5}
+\newcommand{\comment}[1]{{\color{Gray}{$\rhd$ #1}}}
+\newcommand{\elcomment}[1]{\hfill{\comment{#1}}}
+\newcommand{\funcname}[1]{\textsc{\color{DarkBlue}{#1}}}
+\newcommand{\typename}[1]{\textbf{\color{Cyan}{#1}}}
+
+%\setlength\topmargin{-0.025in}
+%\setlength\textheight{8.75in}
+
+\begin{document}
+\input{SCPoolAPI}
+\input{NoFIFOPool}
+
+\end{document}
