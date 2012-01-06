@@ -3,8 +3,6 @@
 #include <assert.h>
 
 bool ProducerThread::stopFlag = false;
-bool ProducerThread::startFlag = false;
-
 
 ProducerThread::ProducerThread(int id) {
 	this->id = id;
@@ -31,9 +29,6 @@ ProducerThread::~ProducerThread(){
 	This means that once a producer started a peak period, it will always complete it before finishing
 */
 void ProducerThread::run(){
-	// busy-wait until simulation starts
-	while(!startFlag){}
-	
 	// peak-silence loop
 	while(!stopFlag)
 	{

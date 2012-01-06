@@ -1,9 +1,15 @@
 #include "Threads.h"
 #include <pthread.h>
 #include <sched.h>
+#include <assert.h>
+#include <iostream>
 #include "ProducerThread.h"
 #include "ConsumerThread.h"
 #include "ArchEnvironment.h"
+using namespace std;
+
+bool initFlags::simulationStart = false;
+int initFlags::allocatedPoolsCounter = false;
 
 void assignToCPU(int cpu){
 	pthread_t threadId = pthread_self();
@@ -21,6 +27,8 @@ void assignToCPU(int cpu){
 void* prodRun(void* _arg){
 	producerArg* arg = (producerArg*)_arg;
 	int id = arg->id;
+	
+	// handle thread's affinity
 	string forceAssignment;
 	Configuration::getInstance()->getVal(forceAssignment, "forceAssignment");
 	if(forceAssignment.compare("yes") == 0)
@@ -28,6 +36,11 @@ void* prodRun(void* _arg){
 		int cpu = ArchEnvironment::getInstance()->getProducerCore(id);
 		assignToCPU(cpu);
 	}
+	
+	// wait until simulation starts
+	while(!initFlags::getStartFlag()){}
+	
+	// create producer and run
 	ProducerThread* producerThread = new ProducerThread(id);
 	producerThread->run();
 	
@@ -53,6 +66,8 @@ void* prodRun(void* _arg){
 void* consRun(void* _arg){
 	consumerArg* arg = (consumerArg*)_arg;
 	int id = arg->id;
+	
+	// handle thread's affinity
 	string forceAssignment;
 	Configuration::getInstance()->getVal(forceAssignment, "forceAssignment");
 	if(forceAssignment.compare("yes") == 0)
@@ -60,7 +75,26 @@ void* consRun(void* _arg){
 		int cpu = ArchEnvironment::getInstance()->getConsumerCore(id);
 		assignToCPU(cpu);
 	}
-	ConsumerThread* consumerThread = new ConsumerThread(id,arg->poolPtr);
+	
+	// allocate consumer's thread pool according to pool's type
+	string poolType;
+	assert(Configuration::getInstance()->getVal(poolType, "poolType"));
+	if(poolType.compare("MSQTaskPool") == 0)
+	{
+		*(arg->poolPtr) = new MSQTaskPool();
+	}
+	else
+	{
+		cout << "ERROR: pool type not supported. exiting.." << endl;
+		exit(1);
+	}
+	initFlags::incPoolsCounter();
+	
+	// wait until simulation starts
+	while(!initFlags::getStartFlag()){}
+	
+	// create consumer and run
+	ConsumerThread* consumerThread = new ConsumerThread(id);
 	consumerThread->run();
 	
 	// build the returned stats

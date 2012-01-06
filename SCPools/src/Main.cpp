@@ -19,8 +19,8 @@ int main(int argc, char* argv[])
 	}
 	setenv("WS_CONFIG", argv[1], 1);
 	int prodNum, consNum;
-	assert(Configuration::getInstance()->getVal(prodNum, "prodThreadsNum"));
-	assert(Configuration::getInstance()->getVal(consNum, "consThreadsNum"));
+	assert(Configuration::getInstance()->getVal(prodNum, "producersNum"));
+	assert(Configuration::getInstance()->getVal(consNum, "consumersNum"));
 	
 	ArchEnvironment::getInstance()->threadToCoreChipMapping();
 	
@@ -49,31 +49,28 @@ int main(int argc, char* argv[])
 	//create and start threads
 	pthread_t* cThreads = new pthread_t[consNum];
 	pthread_t* pThreads = new pthread_t[prodNum];
-	
 	for(int i = 0; i < consNum; i++)
 	{
-		pthread_create(&cThreads[i],NULL,consRun,(void*)&consArgs[i]);
+		pthread_create(&cThreads[i],NULL, consRun,(void*)&consArgs[i]);
+	}
+	for(int i = 0; i < prodNum; i++)
+	{
+		pthread_create(&pThreads[i],NULL, prodRun,(void*)&prodArgs[i]);
 	}
 	
 	// busy-wait until all pools have been allocated
-	while(ConsumerThread::getAllocatedPoolsCounter() < consNum){}
-	
+	while(initFlags::getAllocatedPoolsCounter() < consNum){}
 	// set consumer-to-pool mapping in ArchEnvironment
 	ArchEnvironment::getInstance()->setConsumerToPoolMapping(pools);
 	
-	for(int i = 0; i < prodNum; i++)
-	{
-		pthread_create(&pThreads[i],NULL,prodRun,(void*)&prodArgs[i]);
-	}
 	
 	void** prodStatsArray = new void*[prodNum];
 	void** consStatsArray = new void*[consNum];
-	ProducerThread::startSimulation();
-	ConsumerThread::startSimulation();	
-
+	
 	// let producers and consumers do their thing...
 	int timeToRun;
 	assert(Configuration::getInstance()->getVal(timeToRun, "timeToRun"));
+	initFlags::start();	
 	usleep(1000*timeToRun);
 	ProducerThread::stop();
 	ConsumerThread::stop();

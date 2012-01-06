@@ -2,40 +2,19 @@
 #include "ConsumerThread.h"
 #include <assert.h>
 
-bool ConsumerThread::startFlag = false;
 bool ConsumerThread::stopFlag = false;
-int ConsumerThread::allocatedPoolsCounter = 0;
 
-ConsumerThread::ConsumerThread(int id, SCTaskPool** poolPtr) {
+ConsumerThread::ConsumerThread(int id) {
 	this->numOfTasks = 0;
 	this->throughput = 0;
 	this->ts = new timespec();
 	this->id = id;
 	this->consumer = new Consumer(id);
-	string poolType;
-	assert(Configuration::getInstance()->getVal(poolType, "poolType"));
-	int numOfProducers;
-	assert(Configuration::getInstance()->getVal(numOfProducers, "producersNum"));
-	//Initialize TaskPool according to poolType. 
-	if(poolType.compare("MSQTaskPool") == 0)
-	{
-		*poolPtr = new MSQTaskPool();
-	}
-	else
-	{
-		cout << "ERROR: pool type not supported. exiting.." << endl;
-		exit(1);
-	}
-	__sync_fetch_and_add(&allocatedPoolsCounter,1);	
 }
 
 
 /* consumer run: retrieve tasks in a loop */
 void ConsumerThread::run(){
-
-	/* busy-wait until simulation starts */
-	while(!startFlag){}
-	
 	/* get retrieval loop start time */
 	clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
 	unsigned long start_sec = ts->tv_sec;

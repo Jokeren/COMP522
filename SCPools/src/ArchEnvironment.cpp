@@ -21,8 +21,8 @@ ArchEnvironment::ArchEnvironment() {
 	assert(Configuration::getInstance()->getVal(consString, "cons"));
 	assert(Configuration::getInstance()->getVal(prodString, "prods"));
 	assert(Configuration::getInstance()->getVal(chipString, "chips"));
-	assert(Configuration::getInstance()->getVal(producersNum, "prodThreadsNum"));
-	assert(Configuration::getInstance()->getVal(consumersNum, "consThreadsNum"));
+	assert(Configuration::getInstance()->getVal(producersNum, "producersNum"));
+	assert(Configuration::getInstance()->getVal(consumersNum, "consumersNum"));
 	consumerCores = parseThreadCores(consString, consumerCoresNum);
 	producerCores = parseThreadCores(prodString, producerCoresNum);
 	chips = parseChipCores(chipString, chipsNum, coresPerChip);
@@ -108,9 +108,10 @@ void ArchEnvironment::threadToCoreChipMapping(){
 	producerToCore = new map<int,int>();
 	consumerToChip = new map<int,int>();
 	consumerToCore = new map<int,int>();
-	coreToConsumers = new list<int>*[consumerCoresNum];
-	chipToConsumers = new list<int>*[consumerCoresNum];
-	for(int i = 0; i < consumerCoresNum; i++)
+	int coresNum = consumerCoresNum + producerCoresNum;
+	coreToConsumers = new list<int>*[coresNum];
+	chipToConsumers = new list<int>*[chipsNum];
+	for(int i = 0; i < coresNum; i++)
 	{
 		coreToConsumers[i] = new list<int>();
 	}
@@ -215,7 +216,7 @@ SCTaskPool** ArchEnvironment::getSortedConsumers(const Producer& prod){
 
 SCTaskPool** ArchEnvironment::getSortedConsumers(const Consumer& cons){
 	int id = cons.getId();
-	SCTaskPool** res = getSortedConsumers(id,true);
+	SCTaskPool** res = getSortedConsumers(id,false);
 	return res;
 }
 

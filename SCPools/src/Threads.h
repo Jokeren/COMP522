@@ -24,8 +24,19 @@ typedef struct{
 	SCTaskPool** poolPtr;
 } consumerArg;
 
-void assignToCPU(int cpu);
-void* prodRun(void* arg);
-void* consRun(void* arg);
+class initFlags{	
+	static bool simulationStart;
+	static int allocatedPoolsCounter;
+public:
+	static void start(){simulationStart = true;}
+	static void incPoolsCounter(){__sync_fetch_and_add(&allocatedPoolsCounter,1);}
+	static int getAllocatedPoolsCounter(){return allocatedPoolsCounter;}
+	static bool getStartFlag(){return simulationStart;}
+};
+
+	void assignToCPU(int cpu);
+	void* prodRun(void* arg);
+	void* consRun(void* arg);
+
 
 #endif //THREADS_H_
