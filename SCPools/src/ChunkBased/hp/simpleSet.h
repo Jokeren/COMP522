@@ -20,9 +20,9 @@ typedef struct set_t *Set, SetT;
 // Returns a set with maximun size of maxSize.
 Set setInit(int maxSize);
 // Adds value val to set.
-void setAdd(Set set, int addr);
+void setAdd(Set set, long addr);
 // Returns TRUE if val is in set, otherwise returns false.
-int setContains(Set set, int addr);
+int setContains(Set set, long addr);
 // Resets the set.
 void setReset(Set set);
 //Frees the Set's resources.

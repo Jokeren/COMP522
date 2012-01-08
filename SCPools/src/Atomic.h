@@ -39,6 +39,7 @@ typedef __uint64_t DWORD;
  *   add-and-fetch
  *   compare-and-swap
  *   double-compare-and-swap */
+
 #ifdef GCC_ATOMIC_BUILTINS			/* recent GCC has atomic builtins */
 #define FAA __sync_fetch_and_add
 #define AAF __sync_add_and_fetch
@@ -124,17 +125,23 @@ char AN(volatile unsigned long *mem, long del)
  *   @old: old value
  *   @new: new value
  *
+ *   Does not work on 64 bit pointers!
+ *
  *   returns: 0 on failure, non-zero on success */
-static inline
-char CAS(volatile unsigned long *mem, unsigned long oldVal, unsigned long newVal)
-{
-	unsigned long r;
-	__asm__ __volatile__("lock cmpxchgl %k2,%1"
-			: "=a" (r), "+m" (*mem)
-			: "r" (newVal), "0" (oldVal)
-			: "memory");
-	return r == oldVal ? 1 : 0;
-}
+//static inline
+//char CAS(volatile unsigned long *mem, unsigned long oldVal, unsigned long newVal)
+//{
+//	unsigned long r;
+//	__asm__ __volatile__("lock cmpxchgl %k2,%1"
+//			: "=a" (r), "+m" (*mem)
+//			: "r" (newVal), "0" (oldVal)
+//			: "memory");
+//	return r == oldVal ? 1 : 0;
+//}
+
+#define CAS __sync_bool_compare_and_swap
+
+
 /* double-compare-and-swap: atomically sets the two-word data at address @mem
  *                          to the two-word value of @new if value at @mem
  *                          equals @old

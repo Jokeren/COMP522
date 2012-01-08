@@ -6,7 +6,30 @@
  */
 
 #include "LinkedList.h"
+
+
+#include "hp/hp.h"
+#include <assert.h>
+#include <iostream>
 #include <stdlib.h>
+
+using namespace HP;
+using namespace std;
+
+
+
+
+void printLL (Node *head) {
+	Node* curr = head;
+	while (GET_REF(curr->next) != NULL) {
+		cout << '-' << (GET_MARK(curr->next) ? 'x' : '-') << "->" << GET_REF(curr->next);
+		cout.flush();
+		assert(curr->next);
+		curr = (Node*)GET_REF(curr->next);
+	}
+	cout << endl;
+
+}
 
 
 //Aux function declaration:
@@ -14,6 +37,8 @@
 void find(Node *head, void* toFind, int findIdx, Node*& predRes, Node*& currRes, HPLocal hpLoc);
 void findNode(Node *head, void* toFind, Node*& predRes, Node*& currRes, HPLocal hpLoc);
 void findIdx(Node *head, int findIdx, Node*& predRes, Node*& currRes, HPLocal hpLoc);
+void deleteLinkedListNode(void* node);
+
 
 Node::Node(Chunk* c) : chunk(c), consumerIdx(0), next(0)
 {
@@ -26,7 +51,12 @@ LFLinkedList::LFLinkedList() {
 }
 
 LFLinkedList::~LFLinkedList() {
-	// TODO Auto-generated destructor stub
+	Node* curr = this->head;
+	while (curr != NULL) {
+		Node* tmp = curr;
+		curr = (Node*)GET_REF(curr->next);
+		delete tmp;
+	}
 }
 
 
@@ -38,7 +68,10 @@ Node* LFLinkedList::append(Chunk* c, int consumerIdx) {
 	while (true) {
 		findNode(this->head, NULL, pred, curr,hpLoc);
 		newNode->next = (markable_ref)curr;
-		if (REF_CAS(&(pred->next), curr, newNode, FALSE_MARK, FALSE_MARK)) return newNode;
+		setHP(2,newNode,hpLoc);
+		if (REF_CAS(&(pred->next), curr, newNode, FALSE_MARK, FALSE_MARK)) {
+			return newNode;
+		}
 	}
 }
 
@@ -69,13 +102,17 @@ bool LFLinkedList::remove(Node* toRemove) {
 			if (!snip)
 				continue;
 			if (REF_CAS(&(pred->next),curr,succ,FALSE_MARK,FALSE_MARK))
-				retireNode(curr,&free,hpLoc);
+				retireNode(curr,&deleteLinkedListNode,hpLoc);
 			return true;
 		}
 	}
 }
 
 //AUX
+
+void deleteLinkedListNode(void* node) {
+	delete (Node*) node;
+}
 
 void find(Node *head, void* toFind, int findIdx, Node*& predRes, Node*& currRes, HPLocal hpLoc) {
 	Node *pred = NULL, *curr = NULL, *succ = NULL;
@@ -103,7 +140,7 @@ void find(Node *head, void* toFind, int findIdx, Node*& predRes, Node*& currRes,
 					retry = true;
 					break;
 				}
-				retireNode(curr,&free,hpLoc);
+				retireNode(curr,&deleteLinkedListNode,hpLoc);
 				curr = succ;
 
 				setHP(hpIdx0,curr,hpLoc);

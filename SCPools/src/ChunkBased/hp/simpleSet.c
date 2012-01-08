@@ -21,7 +21,7 @@ struct set_t {
 	int last;		// index of the last object in the set
 	int isSorted;	// flag to determine if the data array is sorted
 	int maxSize;	// max set size
-	int* data;		// the data array
+	long* data;		// the data array
 };
 
 //AUX
@@ -41,7 +41,7 @@ Set setInit(int maxSize) {
 }
 
 // Adds value val to set.
-void setAdd(Set set, int val) {
+void setAdd(Set set, long val) {
 	assert(set->last < set->maxSize);
 	set->isSorted = 0;
 	set->data[set->last] = val;
@@ -49,7 +49,7 @@ void setAdd(Set set, int val) {
 }
 
 // Returns TRUE if val is in set, otherwise returns false.
-int setContains(Set set, int val) {
+int setContains(Set set, long val) {
 	if (!set->isSorted) {
 		bubbleSort(set->data,set->last);
 	}

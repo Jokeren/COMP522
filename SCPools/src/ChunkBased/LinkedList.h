@@ -9,9 +9,7 @@
 
 #include "Chunk.h"
 #include "atomicMarkedReference.h"
-extern "C" {
-	#include "hp/hp.h"
-}
+
 class Node {
 public:
 	Node(Chunk* c);
