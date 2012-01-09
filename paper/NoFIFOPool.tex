@@ -8,19 +8,13 @@
 \smallskip
 
 \INDENT {{\bf Chunk data structure}:}
-	\STATE Task[] tasks 
+	\STATE Task[CHUNK\_SIZE] tasks 
   \STATE int owner \comment {owner's consumer id}
 \ENDINDENT
 
 \INDENT {{\bf Node data structure}:}
-  \STATE Chunk c \comment {initially $\bot$}
-  \STATE int idx \comment {initially -1}
-\ENDINDENT
-
-\INDENT {{\bf ProducerCtx (per-producer local storage)}:}
-	\STATE int producerId
-	\STATE Chunk chunk \comment {the chunk to insert to, initially $\bot$}
-	\STATE int prodIdx \comment {the prefix of inserted tasks to a chunk}
+  \STATE Chunk c; initially $\bot$
+  \STATE int idx; initially -1
 \ENDINDENT
 
 \setcounter{alg:non-fifo:lines}{\value{ALC@line}} % store the line number
@@ -35,11 +29,11 @@
 \setcounter{ALC@line}{\value{alg:non-fifo:lines}}
 \smallskip
 
-\INDENT {{\bf SCPool data structure}:}
+\INDENT {{\bf SCPool per consumer data structure}:}
   \STATE int consumerId
   \STATE List\tup{Node}[] chunkLists \comment {one list per producer + extra list for stealing (single-writer multi-reader)} 
-  \STATE ChunkPool chunkPool \comment {per-consumer pool of spare chunks}
-  \STATE Node currentNode \comment {current node to work with, initially $\bot$} 
+  \STATE ChunkPool chunkPool \comment {the pool of spare chunks}
+  \STATE Node currentNode, initially $\bot$ \comment {current node to work with} 
 \ENDINDENT
 
 \setcounter{alg:non-fifo:lines}{\value{ALC@line}}
@@ -47,35 +41,76 @@
 \end{minipage}
 \end{algo}
 
+\begin{algo}[!ht]
+\caption{Non-FIFO implementation of SCPool: Producer Functions.}
+\label{alg:producer-non-fifo}
+\scriptsize
+\begin{minipage}[t]{0.48\textwidth}
+\begin{distribalgo}[1]
+\setcounter{ALC@line}{\value{alg:non-fifo:lines}}
 
+\INDENT {{\bf Producer local variables}:}
+	\STATE int producerId
+	\STATE Chunk chunk; initially $\bot$ \comment {the chunk to insert to}
+	\STATE int prodIdx; initially $0$ \comment {the prefix of inserted tasks}
+\ENDINDENT
+
+\setcounter{alg:non-fifo:lines}{\value{ALC@line}} % store the line number
+\end{distribalgo}
+\end{minipage}%
+%
+\hfill
+%
+\begin{minipage}[t]{0.48\textwidth}
+%
+\begin{distribalgo}[1]
+\setcounter{ALC@line}{\value{alg:non-fifo:lines}}
+
+\INDENT {{\bf Function produce}(Task t, SCPool scPool):}
+	\INDENT {{\bf if} (chunk $= \bot$) {\bf then}}
+		\STATE newChunk $\leftarrow$ a chunk from scPool.chunkPool
+		\STATE {\bf if} (chunk $= \bot$) {\bf then return FULL} \comment {no available chunks}
+		\STATE newChunk.owner $\leftarrow$ scPool.consumerId
+		\STATE node $\leftarrow$ new node with idx $=-1$ and c $=$ newChunk
+		
+		\STATE scPool.chunkLists[producerId].{\bf append}(node)
+		\STATE chunk $\leftarrow$ newChunk; prodIdx $\leftarrow 0$ 
+	\ENDINDENT
+	\STATE chunk.tasks[prodIdx] $\leftarrow$ t; prodIdx++
+	\INDENT {{\bf if}(prodIdx $=$ CHUNK\_SIZE) {\bf then}}
+	  \STATE chunk $\leftarrow \bot$ \comment {the chunk is full}
+	\ENDINDENT
+	\STATE {\bf return SUCCESS}
+\ENDINDENT
+
+\setcounter{alg:non-fifo:lines}{\value{ALC@line}}
+\end{distribalgo}
+\end{minipage}
+\end{algo}
 
 \begin{algo}[!ht]
-\caption{Non-FIFO implementation of SCPool: Functions.} 
+\caption{Non-FIFO implementation of SCPool: Consumer Functions.} 
 \label{alg:non-fifo}
 \scriptsize
 \begin{minipage}[t]{0.48\textwidth}
 \begin{distribalgo}[1]
 \setcounter{ALC@line}{\value{alg:non-fifo:lines}}
 \smallskip
-\INDENT {{\bf Function produce}(Task t):}
-	\STATE chunk $\leftarrow$ producerCtx.chunk
-	\INDENT {{\bf if} (chunk $= \bot$) {\bf then}}
-		\STATE chunk $\leftarrow$ chunkPool.getChunk()
-		\STATE {\bf if} (chunk $= \bot$) {\bf then return FULL} \comment {no available chunks}
-		\STATE chunk.owner $\leftarrow$ consumerId
-		\STATE node $\leftarrow$ new node with node.idx $=-1$ and node.c $=$ chunk
-		
-		%\STATE node $\leftarrow$ new node; node.idx $\leftarrow 0$; node.chunk $\leftarrow$ chunk
-		\STATE chunkLists[producerCtx.producerId].{\bf append}(node)
-		%\STATE {\bf FetchAndInc}(chunkCounters[producerCtx.producerId])
-		\STATE producerCtx.chunk $\leftarrow$ chunk; producerCtx.prodIdx $\leftarrow 0$ 
+
+
+\INDENT {{\bf Function consume}():}
+  \INDENT {{\bf if}(currentNode $\neq \bot$) {\bf then} \comment {common case}}
+		\STATE t $\leftarrow$ {\bf takeTask}(currentNode)
+		\STATE {\bf if} (t $\neq \bot$) {\bf then return} t
 	\ENDINDENT
-	\STATE chunk.tasks[producerCtx.prodIdx] $\leftarrow$ t
-	\STATE producerCtx.prodIdx++
-	\INDENT {{\bf if}(producerCtx.prodIdx $=$ CHUNK\_SIZE) {\bf then}}
-	  \STATE producerCtx.chunk $\leftarrow \bot$ \comment {the chunk is full}
+	\comment {Iterate over other chunk lists}
+	\INDENT {{\bf foreach} cl {\bf in} chunkLists {\bf do} \comment {fair traversal}} 
+  	\INDENT {{\bf foreach} node {\bf in} cl {\bf do}}
+  		\STATE t $\leftarrow$ {\bf takeTask}(node)
+			\STATE {\bf if} (t $\neq \bot$) {\bf then} currentNode $\leftarrow$ node; {\bf return} t
+  	\ENDINDENT
 	\ENDINDENT
-	\STATE {\bf return SUCCESS}
+	\STATE currentNode $\leftarrow \bot$; {\bf return} $\bot$
 \ENDINDENT
 
 \medskip
@@ -90,9 +125,9 @@
  	\smallskip 
   \STATE n.idx++ \comment {tell the world you're going to take a task from idx}
   \INDENT {{\bf if} (chunk.owner $=$ consumerId) {\bf then} \comment {common case}}
- 		\STATE chunk.tasks[n.idx] $\leftarrow \bot_2$
+ 		\STATE chunk.tasks[n.idx] $\leftarrow$ TAKEN
   	\INDENT {{\bf if}(n.idx $+1 = $ CHUNK\_SIZE) {\bf then} \comment {finished the chunk}}
-  		\STATE {\bf reclaimChunk}(chunk); n.c $\leftarrow \bot$
+  		\STATE n.c $\leftarrow \bot$; return the chunk to the chunkPool
   		\STATE currentNode $\leftarrow \bot$
   	\ENDINDENT
   	\STATE {\bf return} task 
@@ -100,7 +135,8 @@
   
   \smallskip
   \comment {the chunk has been stolen, CAS the last task and go away}
- 	\STATE success $\leftarrow$ (task $\neq \bot_2 \wedge $ CAS(chunk.tasks[n.idx], task, $\bot_2$))
+ 	\STATE success $\leftarrow$ (task $\neq$ TAKEN $\wedge$ \\
+ 		\hspace{0.5cm} CAS(chunk.tasks[n.idx], task, TAKEN))
 	\STATE n.c $\leftarrow \bot$; currentNode $\leftarrow \bot$
  	\STATE {\bf return} (success) ? task : $\bot$
 \ENDINDENT
@@ -117,63 +153,29 @@
 \setcounter{ALC@line}{\value{alg:non-fifo:lines}}
 \smallskip
 
-\INDENT {{\bf Function consume}():}
-  \INDENT {{\bf if}(currentNode $\neq \bot$) {\bf then} \comment {common case}}
-		\STATE t $\leftarrow$ {\bf takeTask}(currentNode)
-		\STATE {\bf if} (t $\neq \bot$) {\bf then return} t
-	\ENDINDENT
-	\comment {Iterate over other chunk lists}
-	\INDENT {{\bf foreach} cl {\bf in} chunkLists {\bf do}}
-	%\INDENT {{\bf for} i $= 0, \ldots, $ NUM\_PRODUCERS {\bf do}}
-		%\STATE currentEntry $\leftarrow$ (currentEntry+1) \% NUM\_PRODUCERS
-  	\INDENT {{\bf foreach} node {\bf in} cl {\bf do}}
-  		%\STATE currentNode $\leftarrow$ chunkList.{\bf head}()
-  		%\INDENT {{\bf if} (node $\neq \bot$) {\bf then}}
-  		\STATE t $\leftarrow$ {\bf takeTask}(node)
-			\STATE {\bf if} (t $\neq \bot$) {\bf then} currentNode $\leftarrow$ node; {\bf return} t
-  		%\ENDINDENT
-  	\ENDINDENT
-	\ENDINDENT
-	\STATE currentNode $\leftarrow \bot$; {\bf return} $\bot$
-\ENDINDENT
-
-\medskip
-
 \INDENT {{\bf Function steal}(SCPool from):}
-	\STATE nodeToSteal $\leftarrow$ a non-empty node from the longest list
-	\STATE {\bf return} {\bf stealChunk}(nodeToSteal, from.consumerId)
-%		
-%	
-%	\STATE idx $\leftarrow$ chooseEntryForSteal(from)
-%	\STATE {\bf if}(from.chunkCounters[idx] $= 0$) {\bf then return} $\bot$
-%	\STATE {\bf return} {\bf stealChunk}(from.prodEntries[idx], idx, consumerId)
-\ENDINDENT
+	\STATE prevNode $\leftarrow$ a node holding tasks from some list \comment {different policies possible}
+	\STATE c $\leftarrow$ prevNode.c;
+  \STATE {\bf if} (c = $\bot$) {\bf then return} $\bot$
 
-\medskip
-
-\INDENT {{\bf Function stealChunk}(Node prevNode, int prevOwner):}
-  \STATE c $\leftarrow$ prevNode.c;
-  \STATE {\bf if} ({\bf isEmpty}(prevNode)) {\bf then return} $\bot$
-
-  \STATE chunkLists[stealEntry].{\bf append}(prevNode)
-  \INDENT {{\bf if} ({\bf CAS}(c.owner, prevOwner, consumerId) $=$ false) {\bf then}}
- 		\STATE chunkLists[stealEntry].{\bf remove}(prevNode)
+	\comment {add prevNode to steal list to make it re-stealable}
+  \STATE chunkLists[steal].{\bf append}(prevNode)
+  \INDENT {{\bf if} ({\bf CAS}(c.owner, from.consumerId, consumerId) $=$ false)}
+ 		\STATE chunkLists[steal].{\bf remove}(prevNode)
  		\STATE {\bf return} $\bot$ \comment {failed to steal}
 	\ENDINDENT
 	
 	\smallskip
 	\STATE newNode $\leftarrow$ copy of prevNode
-	%\STATE newNode $\leftarrow$ new node; newNode.chunk $\leftarrow$ c
-	%\STATE newNode.idx $\leftarrow$ from.idx; newNode.owner $\leftarrow$ consumerIdx
-	\STATE replace prevNode with newNode in chunkLists[stealEntry]
-	\STATE prevNode.c $\leftarrow \bot$; 
-	\STATE idx $\leftarrow$ newNode.idx
+	\STATE replace prevNode with newNode in chunkLists[steal]
+	\STATE prevNode.c $\leftarrow \bot$ \comment {done stealing the chunk, take its task}
 	
 	\smallskip
-	\comment {try to take the task at idx+1 using CAS}
-	\STATE task $\leftarrow$ c.tasks[idx+1]
+	\STATE idx $\leftarrow$ newNode.idx
+	\STATE task $\leftarrow$ c.tasks[idx+1] 
 	\STATE {\bf if} (task $= \bot$) {\bf then return} $\bot$ \comment {still no task at idx+1}
-	\INDENT {{\bf if} (task $= \bot_2 \vee $ !CAS(c.tasks[idx+1], task, $\bot_2$)) {\bf then}} 
+	\INDENT {{\bf if} (task $=$ TAKEN $\vee$ \\
+		\hspace{0.5cm} !CAS(c.tasks[idx+1], task, TAKEN)) {\bf then}} 
 		\STATE task $\leftarrow \bot$
 	\ENDINDENT
 	\STATE newNode.idx $\leftarrow$ newNode.idx+1
