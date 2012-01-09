@@ -63,7 +63,7 @@
 		\STATE chunk $\leftarrow$ chunkPool.getChunk()
 		\STATE {\bf if} (chunk $= \bot$) {\bf then return FULL} \comment {no available chunks}
 		\STATE chunk.owner $\leftarrow$ consumerId
-		\STATE node $\leftarrow$ new node with node.idx $=0$ and node.c $=$ chunk
+		\STATE node $\leftarrow$ new node with node.idx $=-1$ and node.c $=$ chunk
 		
 		%\STATE node $\leftarrow$ new node; node.idx $\leftarrow 0$; node.chunk $\leftarrow$ chunk
 		\STATE chunkLists[producerCtx.producerId].{\bf append}(node)
@@ -163,11 +163,11 @@
 	
 	\smallskip
 	\STATE newNode $\leftarrow$ copy of prevNode
-	\STATE newNode.c.owner $\leftarrow$ consumerId
 	%\STATE newNode $\leftarrow$ new node; newNode.chunk $\leftarrow$ c
 	%\STATE newNode.idx $\leftarrow$ from.idx; newNode.owner $\leftarrow$ consumerIdx
 	\STATE replace prevNode with newNode in chunkLists[stealEntry]
 	\STATE prevNode.c $\leftarrow \bot$; 
+	\STATE idx $\leftarrow$ newNode.idx
 	
 	\smallskip
 	\comment {try to take the task at idx+1 using CAS}
