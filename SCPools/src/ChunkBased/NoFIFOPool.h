@@ -11,14 +11,14 @@
 #include "../SCTaskPool.h"
 
 #include "ChunkPool.h"
-#include "LinkedList.h"
+#include "SwLinkedList.h"
 #include "Chunk.h"
 
 class NoFIFOPool : public SCTaskPool {
 public:
 	class ProdCtx : SCTaskPool::ProducerContext {
 	public:
-		ProdCtx(LFLinkedList& l, unsigned int& count, NoFIFOPool& _noFIFOPool, int _producerId);
+		ProdCtx(SwLinkedList& l, unsigned int& count, NoFIFOPool& _noFIFOPool, int _producerId);
 		virtual ~ProdCtx() {};
 		virtual OpResult produce(const Task& t, bool& changeConsumer);
 		virtual void produceForce(const Task& t);
@@ -26,7 +26,7 @@ public:
 	protected:
 		virtual OpResult produceAux(const Task& t, bool& changeConsumer, bool force = false);
 	private:
-		LFLinkedList& chunkList;
+		SwLinkedList& chunkList;
 		unsigned int& chunkCount;
 		Chunk* curChunk;
 		NoFIFOPool& noFIFOPool;

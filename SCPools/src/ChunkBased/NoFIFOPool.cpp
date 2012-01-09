@@ -41,7 +41,7 @@ int NoFIFOPool::getEmptynessCounter() const {}
 
 
 
-NoFIFOPool::ProdCtx::ProdCtx(LFLinkedList& l, unsigned int& c, NoFIFOPool& _noFIFOPool, int _producerId)
+NoFIFOPool::ProdCtx::ProdCtx(SwLinkedList& l, unsigned int& c, NoFIFOPool& _noFIFOPool, int _producerId)
  : chunkList(l),
    chunkCount(c),
    curChunk(NULL),

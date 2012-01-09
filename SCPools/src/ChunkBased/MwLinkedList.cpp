@@ -5,7 +5,7 @@
  *      Author: dima39
  */
 
-#include "LinkedList.h"
+#include "MwLinkedList.h"
 
 
 #include "hp/hp.h"
@@ -16,29 +16,12 @@
 using namespace HP;
 using namespace std;
 
-
-
-
-void printLL (Node *head) {
-	Node* curr = head;
-	while (GET_REF(curr->next) != NULL) {
-		cout << '-' << (GET_MARK(curr->next) ? 'x' : '-') << "->" << GET_REF(curr->next);
-		cout.flush();
-		assert(curr->next);
-		curr = (Node*)GET_REF(curr->next);
-	}
-	cout << endl;
-
-}
-
-
 //Aux function declaration:
 
 void find(Node *head, void* toFind, int findIdx, Node*& predRes, Node*& currRes, HPLocal hpLoc);
 void findNode(Node *head, void* toFind, Node*& predRes, Node*& currRes, HPLocal hpLoc);
 void findIdx(Node *head, int findIdx, Node*& predRes, Node*& currRes, HPLocal hpLoc);
 void deleteLinkedListNode(void* node);
-
 
 Node::Node(Chunk* c) : chunk(c), consumerIdx(0), next(0)
 {
