@@ -190,7 +190,7 @@ SCTaskPool** ArchEnvironment::getSortedConsumers(int tid, bool producer){
 			insertIdx++;
 		}
 	}
-	for(int i = 1; i < consumersNum; i++)
+	for(int i = 0; i < consumersNum; i++)
 	{
 		int next = (tid + i)%consumersNum;
 		if(!taken[next])
@@ -205,6 +205,18 @@ SCTaskPool** ArchEnvironment::getSortedConsumers(int tid, bool producer){
 	{
 		res[i] = consumerToPool[resIds[i]];
 	}
+	/***** debug ****/
+	/*
+	if(producer && tid == 0)
+	{
+		for(int i = 0; i < consumersNum; i++)
+		{
+			cout << resIds[i] << " ";
+		}
+		cout << endl;
+	}
+	*/
+	/*****************/
 	return res;	
 }
 
@@ -225,7 +237,7 @@ int ArchEnvironment::getConsumerCore(int tid){
 }
 
 int ArchEnvironment::getProducerCore(int tid){
-	return consumerToCore->find(tid)->second;
+	return producerToCore->find(tid)->second;
 }
 
 ArchEnvironment::~ArchEnvironment(){

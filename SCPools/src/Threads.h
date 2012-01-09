@@ -24,14 +24,17 @@ typedef struct{
 	SCTaskPool** poolPtr;
 } consumerArg;
 
-class initFlags{	
+class syncFlags{	
 	static bool simulationStart;
 	static int allocatedPoolsCounter;
+	static bool simulationStop;
 public:
 	static void start(){simulationStart = true;}
 	static void incPoolsCounter(){__sync_fetch_and_add(&allocatedPoolsCounter,1);}
+	static void stop(){simulationStop = true;}
 	static int getAllocatedPoolsCounter(){return allocatedPoolsCounter;}
 	static bool getStartFlag(){return simulationStart;}
+	static bool getStopFlag(){return simulationStop;}
 };
 
 	void assignToCPU(int cpu);

@@ -2,8 +2,6 @@
 	Main test program
 */
 #include "Threads.h"
-#include "ProducerThread.h"
-#include "ConsumerThread.h"
 #include "ArchEnvironment.h"
 #include <assert.h>
 #include <stdlib.h>
@@ -59,7 +57,7 @@ int main(int argc, char* argv[])
 	}
 	
 	// busy-wait until all pools have been allocated
-	while(initFlags::getAllocatedPoolsCounter() < consNum){}
+	while(syncFlags::getAllocatedPoolsCounter() < consNum){}
 	// set consumer-to-pool mapping in ArchEnvironment
 	ArchEnvironment::getInstance()->setConsumerToPoolMapping(pools);
 	
@@ -70,10 +68,11 @@ int main(int argc, char* argv[])
 	// let producers and consumers do their thing...
 	int timeToRun;
 	assert(Configuration::getInstance()->getVal(timeToRun, "timeToRun"));
-	initFlags::start();	
+	syncFlags::start();	
 	usleep(1000*timeToRun);
-	ProducerThread::stop();
-	ConsumerThread::stop();
+	// consider using non-static stop flag (flag for each thread)
+	syncFlags::stop();
+	syncFlags::stop();
 	
 	
 	// wait for child threads
