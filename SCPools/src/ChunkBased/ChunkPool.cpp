@@ -7,16 +7,26 @@
 
 #include "ChunkPool.h"
 
-ChunkPool::ChunkPool(int initialSize) {
-	// TODO Auto-generated constructor stub
-
+ChunkPool::ChunkPool(int o, int initialSize) :
+	owner(o),
+	atomicStat(new AtomicStatistics()),
+	chunkQueue(new MSQueue<SPChunk*>())
+{
+	for(int i = 0; i < initialSize; i++) {
+		putChunk(new SPChunk(owner));
+	}
 }
 
 ChunkPool::~ChunkPool() {
-	// TODO Auto-generated destructor stub
 }
 
-//TODO: Implement
-SPChunk* ChunkPool::getChunk() {}
-void ChunkPool::putChunk(SPChunk* c) {}
+SPChunk* ChunkPool::getChunk() {
+	SPChunk* c;
+	bool res = chunkQueue->dequeue(c, atomicStat);
+	return (res) ? c : NULL;
+}
+
+void ChunkPool::putChunk(SPChunk* c) {
+	this->chunkQueue->enqueue(c, atomicStat);
+}
 

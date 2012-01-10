@@ -19,28 +19,18 @@
 <folderInfo id="cdt.managedbuild.toolchain.gnu.base.1940642711.421047617" name="/" resourcePath="">
 <toolChain id="cdt.managedbuild.toolchain.gnu.base.1751766110" name="cdt.managedbuild.toolchain.gnu.base" superClass="cdt.managedbuild.toolchain.gnu.base">
 <targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="cdt.managedbuild.target.gnu.platform.base.86790300" name="Debug Platform" osList="linux,hpux,aix,qnx" superClass="cdt.managedbuild.target.gnu.platform.base"/>
-<builder buildPath="${workspace_loc:/SCPools/Default}" id="cdt.managedbuild.target.gnu.builder.base.1629314855" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base">
-<outputEntries>
-<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="outputPath" name="Default"/>
-</outputEntries>
-</builder>
+<builder buildPath="${workspace_loc:/SCPools/Default}" id="cdt.managedbuild.target.gnu.builder.base.1629314855" keepEnvironmentInBuildfile="false" managedBuildOn="true" name="Gnu Make Builder" superClass="cdt.managedbuild.target.gnu.builder.base"/>
 <tool id="cdt.managedbuild.tool.gnu.archiver.base.437178164" name="GCC Archiver" superClass="cdt.managedbuild.tool.gnu.archiver.base"/>
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.489472190" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 <option id="gnu.cpp.compiler.option.include.paths.851022356" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/src}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/src/Benchmark}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/src/ChunkBased}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/src/MSQPool}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/src/ChunkBased}&quot;"/>
 </option>
 <inputType id="cdt.managedbuild.tool.gnu.cpp.compiler.input.173721817" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.compiler.base.1606928294" name="GCC C Compiler" superClass="cdt.managedbuild.tool.gnu.c.compiler.base">
-<option id="gnu.c.compiler.option.include.paths.927517803" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/SCPools/src}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/SCPools/src/Benchmark}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/SCPools/src/MSQPool}&quot;"/>
-<listOptionValue builtIn="false" value="../SCPools/src/ChunkBased"/>
-</option>
 <inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1574623937" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.c.linker.base.1756867973" name="GCC C Linker" superClass="cdt.managedbuild.tool.gnu.c.linker.base"/>
@@ -54,17 +44,12 @@
 </inputType>
 </tool>
 <tool id="cdt.managedbuild.tool.gnu.assembler.base.1023235283" name="GCC Assembler" superClass="cdt.managedbuild.tool.gnu.assembler.base">
-<option id="gnu.both.asm.option.include.paths.2036730934" name="Include paths (-I)" superClass="gnu.both.asm.option.include.paths" valueType="includePath">
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/SCPools/src}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/SCPools/src/Benchmark}&quot;"/>
-<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/SCPools/src/MSQPool}&quot;"/>
-<listOptionValue builtIn="false" value="../SCPools/src/ChunkBased"/>
-</option>
 <inputType id="cdt.managedbuild.tool.gnu.assembler.input.507184182" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 </tool>
 </toolChain>
 </folderInfo>
 <sourceEntries>
+<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/ChunkBased"/>
 <entry excluding="src/ChunkBased|ChunkBased" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 </sourceEntries>
 </configuration>

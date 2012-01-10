@@ -8,6 +8,9 @@
 #ifndef SPCHUNK_H_
 #define SPCHUNK_H_
 
+#include "commons.h"
+#include "Task.h"
+
 //TODO: maybe change to enum?
 #define TAKEN (void*)0x1
 
