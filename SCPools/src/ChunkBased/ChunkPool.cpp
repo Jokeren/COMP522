@@ -7,7 +7,7 @@
 
 #include "ChunkPool.h"
 
-ChunkPool::ChunkPool(int initialSize, const SPChunkFactory& factory) {
+ChunkPool::ChunkPool(int initialSize) {
 	// TODO Auto-generated constructor stub
 
 }
@@ -17,7 +17,6 @@ ChunkPool::~ChunkPool() {
 }
 
 //TODO: Implement
-SPChunkFactory& ChunkPool::getChunkFactory() {}
 SPChunk* ChunkPool::getChunk() {}
 void ChunkPool::putChunk(SPChunk* c) {}
 

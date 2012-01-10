@@ -8,12 +8,10 @@
 #ifndef SPCHUNK_H_
 #define SPCHUNK_H_
 
-#include "Chunk.h"
-
 //TODO: maybe change to enum?
 #define TAKEN (void*)0x1
 
-class SPChunk : public Chunk {
+class SPChunk {
 public:
 	SPChunk(int owner);
 	virtual ~SPChunk();
@@ -23,14 +21,12 @@ public:
 	virtual OpResult markTaken(int idx, bool isCAS);
 
 	virtual int getMaxSize();
-};
 
-class SPChunkFactory : public ChunkFactory {
-public:
-	SPChunkFactory() {}
-	virtual SPChunk* createChunk(int owner) {
-		return new SPChunk(owner);
-	}
+	virtual int getOwner() const;
+	virtual bool changeOwner(int prevOwner, int newOwner);
+
+protected:
+	int owner;
 };
 
 #endif /* SPCHUNK_H_ */

@@ -12,10 +12,8 @@
 
 class ChunkPool {
 public:
-	ChunkPool(int initialSize, const SPChunkFactory& factory);
+	ChunkPool(int initialSize);
 	virtual ~ChunkPool();
-
-	SPChunkFactory& getChunkFactory();
 
 	SPChunk* getChunk(); // returns NULL if no chunk available
 	void putChunk(SPChunk* c);
