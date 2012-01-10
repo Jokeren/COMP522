@@ -3,7 +3,6 @@
 
 #include "Consumer.h"
 #include "Configuration.h"
-#include "MSQTaskPool.h"
 #include <time.h>
 #include <list>
 #include <iostream>
