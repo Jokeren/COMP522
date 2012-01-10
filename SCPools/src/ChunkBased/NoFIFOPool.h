@@ -50,6 +50,8 @@ protected:
 	SwLinkedList* chunkLists;
 	SwNode* currentNode;
 	ChunkPool* chunkPool;
+	unsigned int *chunkListSizes;
+
 
 	int currentQueueID;
 

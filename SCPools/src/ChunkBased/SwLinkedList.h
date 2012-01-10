@@ -11,6 +11,7 @@
 
 #include "SPChunk.h"
 #include "hp/hp.h"
+#include "commons.h"
 
 
 class SwNode {
@@ -28,11 +29,12 @@ public:
 	public:
 		SwLinkedListIterator(SwLinkedList* list);
 		//skips removed nodes but doesn't release them
-		SwNode* next();
+		OpResult next(SwNode*& node);
 		//reset to head
 		void reset(SwLinkedList* list);
 	private:
 		SwNode* curr;
+		int hp0,hp1;
 		HP::HPLocal hpLoc;
 	};
 

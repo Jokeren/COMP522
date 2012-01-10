@@ -20,8 +20,9 @@ NoFIFOPool::NoFIFOPool(int _numProducers, int _consumerID) : SCTaskPool(_numProd
 		initialPoolSize = 200;
 	}
 
-	chunkPool = new ChunkPool(initialPoolSize, *(new SPChunkFactory()));
+	chunkPool = new ChunkPool(consumerID,initialPoolSize);
 	chunkLists = new SwLinkedList[_numProducers+1];
+	chunkListSizes = new unsigned int[numProducers+1];
 }
 
 NoFIFOPool::~NoFIFOPool() {
@@ -49,7 +50,8 @@ OpResult NoFIFOPool::consume(Task*& t) {
 		SwLinkedList currList = chunkLists[currentQueueID];
 		iter->reset(&currList);
 		SwNode* n = NULL;
-		while ((n = iter->next()) != NULL) {
+		OpResult res;
+		while ((res = iter->next(n)) != FAILURE && n != NULL) {
 			Task* res = takeTask(n);
 			if (res != NULL){
 				t = res;
@@ -57,6 +59,7 @@ OpResult NoFIFOPool::consume(Task*& t) {
 				return SUCCESS;
 			}
 		}
+		if (res == FAILURE) continue;
 		currentQueueID = (currentQueueID+1) % numProducers;
 	}
 
@@ -112,7 +115,7 @@ OpResult NoFIFOPool::ProdCtx::produceAux(const Task& t, bool& changeConsumer, bo
 		if (!force)	{
 			return FULL;
 		} else {
-			newChunk = noFIFOPool.chunkPool->getChunkFactory().createChunk(producerId);
+			newChunk = new SPChunk(producerId);
 		}
 	}
 	chunkList.append(newChunk);
@@ -136,12 +139,15 @@ Task* NoFIFOPool::takeTask(SwNode* n) {
 		//fast path:
 		chunk->markTaken(n->consumerIdx,false);
 		if (n->consumerIdx + 1 == chunk->getMaxSize()) {
+			FAA(&(chunkListSizes[currentQueueID]),-1);
 			n->chunk = NULL;
 			currentNode = NULL;
+			//TODO: reclaim chunk
 		}
 		return task;
 	}
 	//chunk was stolen:
+	FAA(&(chunkListSizes[currentQueueID]),-1);
 	bool success = (task != TAKEN && chunk->markTaken(n->consumerIdx,true) == SUCCESS);
 	n->chunk = NULL;
 	currentNode = NULL;

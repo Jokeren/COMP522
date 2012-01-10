@@ -7,7 +7,7 @@
 
 #include "SPChunk.h"
 
-SPChunk::SPChunk(int owner) : Chunk(owner) {
+SPChunk::SPChunk(int owner)  {
 	// TODO Auto-generated constructor stub
 
 }

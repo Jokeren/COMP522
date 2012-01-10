@@ -8,6 +8,6 @@
 #ifndef COMMONS_H_
 #define COMMONS_H_
 
-enum OpResult {SUCCESS, FULL, EMPTY};
+enum OpResult {SUCCESS, FULL, EMPTY, FAILURE};
 
 #endif /* COMMONS_H_ */
