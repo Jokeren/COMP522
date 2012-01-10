@@ -90,11 +90,14 @@ int main(int argc, char* argv[])
 	double TotalInsertionThroughput = 0;
 	int TotalNumOfRetrievedTasks = 0;
 	double TotalSystemThroughput = 0;
+	AtomicStatistics* prodStats = new AtomicStatistics();
+	AtomicStatistics* consStats = new AtomicStatistics();
 	for(int i = 0; i < prodNum; i++)
 	{
 		producerStats* stats = (producerStats*)prodStatsArray[i];
 		TotalNumOfProducedTasks += stats->numOfProducedTasks;
 		TotalInsertionThroughput += stats->producerThroughput;
+		prodStats->add(&(stats->atomicStats));
 		delete stats;		
 	}
 	for(int i = 0; i < consNum; i++)
@@ -102,14 +105,23 @@ int main(int argc, char* argv[])
 		consumerStats* stats = (consumerStats*)consStatsArray[i];
 		TotalNumOfRetrievedTasks += stats->numOfRetrievedTasks;
 		TotalSystemThroughput += stats->consumerThroughput;
+		consStats->add(&(stats->atomicStats));
 		delete stats;
 	}
+	prodStats->normalize(prodNum);
+	consStats->normalize(consNum);
 	cout << "Total number of inserted tasks = " << TotalNumOfProducedTasks << endl;
 	cout << "Peak Insertion throughput = " << TotalInsertionThroughput << endl;
 	cout << "Total Number of retrieved tasks = " << TotalNumOfRetrievedTasks << endl;
 	cout << "System Throughput = " << TotalSystemThroughput << endl;
+	cout << "Average Producer Atomic Statistics:" << endl;
+	prodStats->print();
+	cout << "Average Consumer Atomic Statistics:" << endl;
+	consStats->print();
 	
 	// free allocated memory
+	delete prodStats;
+	delete consStats;
 	for(int i = 0; i < consNum; i++)
 	{
 		delete pools[i];

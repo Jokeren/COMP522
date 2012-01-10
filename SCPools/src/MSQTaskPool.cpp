@@ -6,18 +6,20 @@ MSQTaskPool::MSQTaskPool():stealingThreshold(STEALING_THRESHOLD){
 }
 
 MSQTaskPool::~MSQTaskPool(){
+	AtomicStatistics* dummyStat = new AtomicStatistics();
 	Task* t;
-	while(Q->dequeue(t))
+	while(Q->dequeue(t, dummyStat))
 	{
 		delete t;
 	}
+	delete dummyStat;
 	delete Q;
 }
 
 SCTaskPool::ProducerContext* MSQTaskPool::getProducerContext(const Producer& prod){return prodContext;}
 
-OpResult MSQTaskPool::consume(Task*& t){
-	if(Q->dequeue(t))
+OpResult MSQTaskPool::consume(Task*& t, AtomicStatistics* stat){
+	if(Q->dequeue(t, stat))
 	{
 		return SUCCESS;
 	}
@@ -32,9 +34,9 @@ float MSQTaskPool::getStealingScore() const{
 	return Q->getSize();
 }
 
-Task* MSQTaskPool::steal(SCTaskPool* from){
+Task* MSQTaskPool::steal(SCTaskPool* from, AtomicStatistics* stat){
 	Task* task = NULL;
-	from->consume(task);	
+	from->consume(task, stat);	
 	return task;
 }
 
@@ -43,19 +45,19 @@ int MSQTaskPool::getEmptynessCounter() const{
 	return 0;
 }
 
-void MSQTaskPool::insert(const Task& task){
+void MSQTaskPool::insert(const Task& task, AtomicStatistics* stat){
 	const Task* t = &task;
-	Q->enqueue(const_cast <Task*> (t));
+	Q->enqueue(const_cast <Task*> (t), stat);
 }
 
-OpResult MSQProducerContext::produce(const Task& task, bool& changeConsumer){
+OpResult MSQProducerContext::produce(const Task& task, bool& changeConsumer, AtomicStatistics* stat){
 	changeConsumer = false;
-	pool->insert(task);
+	pool->insert(task, stat);
 	return SUCCESS;
 }
 
-void MSQProducerContext::produceForce(const Task& task){
-	pool->insert(task);
+void MSQProducerContext::produceForce(const Task& task, AtomicStatistics* stat){
+	pool->insert(task, stat);
 }
 
 

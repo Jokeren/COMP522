@@ -16,15 +16,16 @@ public:
 
 	virtual void produce(const Task& t);
 
-	int getId() const{
-		return id;
-	}
+	int getId() const{ return id;}
+	AtomicStatistics* getStat(){return stat;}
+	
 private:
 	int id;
 	int consumersNum;
 	SCTaskPool::ProducerContext* curProdContext;
 	int curConsumerIdx;
 	SCTaskPool** consumers;
+	AtomicStatistics* stat;
 };
 
 #endif /* PRODUCER_H_ */

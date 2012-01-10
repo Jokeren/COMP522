@@ -90,7 +90,7 @@ void* prodRun(void* _arg){
 		if(timeBetweenPeaks > 0){1000*usleep(timeBetweenPeaks);}
 	}
 	delete ts;
-	delete producer;
+	
 	
 	// build the returned stats
 	producerStats* prodStats = new producerStats();
@@ -104,7 +104,8 @@ void* prodRun(void* _arg){
 	}
 	double averageInsertionTime = sum/timeMeasurements->size(); // average burst length in [ms]
 	prodStats->producerThroughput = peakLength *(1/averageInsertionTime);  //insertion throughput in tasks/ms
-
+	prodStats->atomicStats = *(producer->getStat());
+	delete producer;
 	delete timeMeasurements;
 	return (void*)prodStats;
 }
@@ -180,12 +181,13 @@ void* consRun(void* _arg){
 	double loopTime = 1000*(finish_sec - start_sec) + ((double)(finish_ns-start_ns))/1000000;
 	throughput = ((double)numOfTasks)/loopTime;
 	delete ts;
-	delete consumer;
-	
+		
 	// build the returned stats
 	consumerStats* consStats = new consumerStats();
 	consStats->id = id;
 	consStats->numOfRetrievedTasks = numOfTasks;
 	consStats->consumerThroughput = throughput;
+	consStats->atomicStats = *(consumer->getStat());
+	delete consumer;
 	return (void*)consStats;
 }

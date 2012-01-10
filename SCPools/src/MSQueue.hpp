@@ -3,7 +3,7 @@
 */
 #ifndef MSQUEUE_H_
 #define MSQUEUE_H_
-//#include "Statistics.h"
+#include "AtomicStatistics.h"
 #include "Atomic.h"
 #include <iostream>
 using namespace std;
@@ -54,12 +54,12 @@ template<class T> class MSQueue{
 	
 	
 	/* performs double-width CAS of pointer_t objects and updates CAS statistics in stat */
-	bool CAS(pointer_t& dest, pointer_t& oldVal, pointer_t& newVal/*, Statistics* stat*/){    
+	bool CAS(pointer_t& dest, pointer_t& oldVal, pointer_t& newVal, AtomicStatistics* stat){    
 		char casRes = 0;
 		casRes = DWCAS(&(dest.dw),oldVal.dw,newVal.dw);
-		//stat->CAS_count_inc();
+		stat->CAS_count_inc();
 		bool retVal = (casRes == 0) ? false : true;
-		//if(!retVal){stat->CAS_failures_inc();}
+		if(!retVal){stat->CAS_failures_inc();}
 		return retVal; 
 	}
 	
@@ -87,7 +87,7 @@ public:
 		return queueSize;
 	}
 
-	void enqueue(const T& t/*, Statistics* stat*/){
+	void enqueue(const T& t, AtomicStatistics* stat){
 		node_t* pNode = new node_t();  // allocate a free node 
 		pNode->value = t;
 		pNode->next.p.ptr = NULL;
@@ -102,24 +102,25 @@ public:
 				if(next.p.ptr == NULL)  // was Tail pointing to the last node?
 				{
 					pointer_t updated_next(pNode,next.p.count+1);		
-					if(CAS(tail.p.ptr->next,next,updated_next/*,stat*/))  // try to link node at the end of the list
+					if(CAS(tail.p.ptr->next,next,updated_next,stat))  // try to link node at the end of the list
 					{
 						__sync_fetch_and_add(&queueSize,1);
+						stat->FetchAndIncCount_inc();
 						break;  //enqueue is done - exit loop
 					}
 				}
 				else  // Tail wasn't pointing to the last node
 				{
 					pointer_t updated_tail(next.p.ptr,tail.p.count+1);	
-					CAS(Tail,tail,updated_tail/*,stat*/);  // try to swing Tail to the next node
+					CAS(Tail,tail,updated_tail,stat);  // try to swing Tail to the next node
 				}
 			}
 		}
 		pointer_t updated_tail(pNode,tail.p.count+1);
-		CAS(Tail,tail,updated_tail/*,stat*/);  //enqueue is done - try to swing Tail to the inserted node
+		CAS(Tail,tail,updated_tail,stat);  //enqueue is done - try to swing Tail to the inserted node
 	}
 
-	bool dequeue(T& pt/*, Statistics* stat*/){
+	bool dequeue(T& pt, AtomicStatistics* stat){
 		pointer_t head;
 		while(true)		// keep trying until dequeue is done
 		{
@@ -139,15 +140,16 @@ public:
 						return false;
 					}
 					pointer_t updated_tail(next.p.ptr,tail.p.count+1);
-					CAS(Tail,tail,updated_tail/*,stat*/);  // Tail is falling behind. Try to advance it
+					CAS(Tail,tail,updated_tail,stat);  // Tail is falling behind. Try to advance it
 				}
 				else  // no need to deal with Tail
 				{				
 					pt = next.p.ptr->value;  //read value before CAS. otherwise another dequeue might free the next node
 					pointer_t updated_head(next.p.ptr,head.p.count+1);
-					if(CAS(Head,head,updated_head/*,stat*/))  // try to swing Head to the next node
+					if(CAS(Head,head,updated_head,stat))  // try to swing Head to the next node
 					{
 						__sync_fetch_and_sub(&queueSize,1);
+						stat->FetchAndIncCount_inc();
 						break;  //dequeue is done - exit node
 					}
 				}

@@ -7,12 +7,14 @@ typedef struct{
 	int id;
 	int numOfProducedTasks;
 	double producerThroughput;
+	AtomicStatistics atomicStats;
 } producerStats;
 
 typedef struct{
 	int id;
 	int numOfRetrievedTasks;
 	double consumerThroughput;
+	AtomicStatistics atomicStats;
 } consumerStats;
 
 typedef struct producerArg{

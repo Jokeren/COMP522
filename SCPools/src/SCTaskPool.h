@@ -3,6 +3,7 @@
 
 #include "Task.h"
 #include "commons.h"
+#include "AtomicStatistics.h"
 
 class Producer;
 
@@ -12,8 +13,8 @@ public:
 	public:
 		virtual ~ProducerContext() {};
 
-		virtual OpResult produce(const Task& t, bool& changeConsumer) = 0;
-		virtual void produceForce(const Task& t) = 0;
+		virtual OpResult produce(const Task& t, bool& changeConsumer, AtomicStatistics* stat) = 0;
+		virtual void produceForce(const Task& t, AtomicStatistics* stat) = 0;
 	};
 
 	/* constructor to be used when derived TaskPool is aware to the number of producers.
@@ -27,11 +28,11 @@ public:
 	virtual ~SCTaskPool() {};
 
 	virtual ProducerContext* getProducerContext(const Producer& prod) = 0;
-	virtual OpResult consume(Task*& t) = 0;
+	virtual OpResult consume(Task*& t, AtomicStatistics* stat) = 0;
 
 	virtual float getStealingScore() const = 0;
 	virtual float getStealingThreshold() const = 0;
-	virtual Task* steal(SCTaskPool* from) = 0;
+	virtual Task* steal(SCTaskPool* from, AtomicStatistics* stat) = 0;
 
 	virtual int getEmptynessCounter() const = 0;
 
