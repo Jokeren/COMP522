@@ -19,5 +19,9 @@ SPChunk::~SPChunk() {
 //TODO: implement
 
 OpResult SPChunk::insertTask(const Task& t, bool& isLastTask) {}
-OpResult SPChunk::getTask(Task*& t) {}
+
+OpResult SPChunk::getTask(Task *& t, int idx){}
+
+OpResult SPChunk::markTaken(int idx, bool isCAS){}
+
 int SPChunk::getMaxSize() {}

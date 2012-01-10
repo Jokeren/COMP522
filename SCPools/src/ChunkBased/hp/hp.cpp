@@ -188,6 +188,14 @@ void scan(HPLocal localData) {
 	setReset(plist);
 }
 
+int getHPIdx(void* addr, HPLocal localData) {
+	void** locHp = localData->localRecord->hp;
+	for (int i = 0; i < localData->hpData->HP_COUNT; i++) {
+		if (locHp[i] == addr) return i;
+	}
+	return -1;
+}
+
 //void prepareForReuse(void* data) {
 //	//simple implementation - can be implemented with reuse
 //	free(data);

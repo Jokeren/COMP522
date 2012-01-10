@@ -52,8 +52,9 @@ void retireNode(void* addr, ReclaimationFunc reclaimationFunc,
 /* Set hazard pointer with index of idx to point to addr */
 void setHP(int idx, void* addr, HPLocal localData);
 
-/*check if I have a HP pointing at addr - for tests*/
-int isHP(void* addr, HPLocal localData);
+
+/* get the index of the HP pointing to addr, or -1 if no local HP is pointing to addr */
+int getHPIdx(void* addr, HPLocal localData);
 
 }
 #endif /* HP_H_ */

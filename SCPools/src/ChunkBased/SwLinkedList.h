@@ -2,18 +2,21 @@
  * SwLinkedList.h
  *
  *	Single writer linked list
+ *	Uses HP 0 & 1
  *
  */
 
 #ifndef SWLINKEDLIST_H_
 #define SWLINKEDLIST_H_
 
-#include "Chunk.h"
+#include "SPChunk.h"
+#include "hp/hp.h"
+
 
 class SwNode {
 public:
-	SwNode(Chunk* c);
-	Chunk* chunk;
+	SwNode(SPChunk* c);
+	SPChunk* chunk;
 	int consumerIdx;
 	SwNode* next;
 };
@@ -30,6 +33,7 @@ public:
 		void reset(SwLinkedList* list);
 	private:
 		SwNode* curr;
+		HP::HPLocal hpLoc;
 	};
 
 	friend class SwLinkedListIterator;
@@ -37,8 +41,7 @@ public:
 	SwLinkedList();
 	virtual ~SwLinkedList();
 	void append(SwNode* nodeToAdd);
-	SwNode* append(Chunk* chunkToAdd);
-	SwNode* getNode(int NodeIdx);
+	SwNode* append(SPChunk* chunkToAdd);
 
 
 private:

@@ -17,8 +17,8 @@ public:
 	virtual ~Chunk();
 
 	virtual OpResult insertTask(const Task& t, bool& isLastTask) = 0;
-	virtual OpResult getTask(Task*& t) = 0;
-
+	virtual OpResult getTask(Task*& t, int idx) = 0;
+	virtual OpResult markTaken(int idx, bool isCAS) = 0;
 	virtual int getMaxSize() = 0;
 
 	virtual int getOwner() const;

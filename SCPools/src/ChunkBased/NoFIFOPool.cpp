@@ -11,7 +11,8 @@
 #include "SPChunk.h"
 #include <assert.h>
 
-NoFIFOPool::NoFIFOPool(int _numProducers) : SCTaskPool(_numProducers)
+
+NoFIFOPool::NoFIFOPool(int _numProducers, int _consumerID) : SCTaskPool(_numProducers), consumerID(_consumerID), currentNode(NULL), currentQueueID(-1)
 {
 
 	int initialPoolSize;
@@ -20,6 +21,7 @@ NoFIFOPool::NoFIFOPool(int _numProducers) : SCTaskPool(_numProducers)
 	}
 
 	chunkPool = new ChunkPool(initialPoolSize, *(new SPChunkFactory()));
+	chunkLists = new SwLinkedList[_numProducers+1];
 }
 
 NoFIFOPool::~NoFIFOPool() {
@@ -30,10 +32,45 @@ NoFIFOPool::~NoFIFOPool() {
 
 //TODO: implement:
 SCTaskPool::ProducerContext* NoFIFOPool::getProducerContext(const Producer& prod) {}
-OpResult NoFIFOPool::consume(Task*& t) {}
+
+OpResult NoFIFOPool::consume(Task*& t) {
+	if (currentNode != NULL) {
+		Task* res = takeTask(currentNode);
+		if (res != NULL){ t = res; return SUCCESS;}
+	}
+
+	//Go over the chunks list in a fair way
+	int prevQueueIdx = currentQueueID;
+
+	currentQueueID = (currentQueueID+1) % numProducers;
+	SwLinkedList::SwLinkedListIterator* iter = new SwLinkedList::SwLinkedListIterator(NULL);
+	while (currentQueueID != prevQueueIdx) {
+		//TODO: use list counters instead of the lists
+		SwLinkedList currList = chunkLists[currentQueueID];
+		iter->reset(&currList);
+		SwNode* n = NULL;
+		while ((n = iter->next()) != NULL) {
+			Task* res = takeTask(n);
+			if (res != NULL){
+				t = res;
+				currentNode = n;
+				return SUCCESS;
+			}
+		}
+		currentQueueID = (currentQueueID+1) % numProducers;
+	}
+
+	currentNode = NULL;
+	t = NULL;
+	return EMPTY;
+
+
+}
 
 float NoFIFOPool::getStealingScore() const {}
 float NoFIFOPool::getStealingThreshold() const {}
+
+
 Task* NoFIFOPool::steal(SCTaskPool& from) {}
 
 int NoFIFOPool::getEmptynessCounter() const {}
@@ -69,7 +106,7 @@ OpResult NoFIFOPool::ProdCtx::produceAux(const Task& t, bool& changeConsumer, bo
 	}
 	// the previous chunk is full
 	// Try to get a new chunk from the chunk pool
-	Chunk* newChunk = noFIFOPool.chunkPool->getChunk();
+	SPChunk* newChunk = noFIFOPool.chunkPool->getChunk();
 	if (newChunk == NULL) {
 		// no free chunks in the pool
 		if (!force)	{
@@ -83,6 +120,34 @@ OpResult NoFIFOPool::ProdCtx::produceAux(const Task& t, bool& changeConsumer, bo
 	curChunk = newChunk;
 	assert(curChunk->insertTask(t, changeConsumer) == SUCCESS); // cannot fail
 	return SUCCESS;
+}
+
+
+//AUX
+Task* NoFIFOPool::takeTask(SwNode* n) {
+	SPChunk* chunk = n->chunk;
+	if (chunk == NULL) return NULL;
+	Task* task = NULL;
+	chunk->getTask(task,n->consumerIdx+1);
+	if (task == NULL) return NULL;
+
+	n->consumerIdx++;
+	if (chunk->getOwner() == consumerID) {
+		//fast path:
+		chunk->markTaken(n->consumerIdx,false);
+		if (n->consumerIdx + 1 == chunk->getMaxSize()) {
+			n->chunk = NULL;
+			currentNode = NULL;
+		}
+		return task;
+	}
+	//chunk was stolen:
+	bool success = (task != TAKEN && chunk->markTaken(n->consumerIdx,true) == SUCCESS);
+	n->chunk = NULL;
+	currentNode = NULL;
+	return success ? task : NULL;
+
+
 }
 
 //	NoFIFOPool(int _numProducers);

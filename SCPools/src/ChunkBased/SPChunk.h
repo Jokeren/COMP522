@@ -10,6 +10,8 @@
 
 #include "Chunk.h"
 
+//TODO: maybe change to enum?
+#define TAKEN (void*)0x1
 
 class SPChunk : public Chunk {
 public:
@@ -17,7 +19,8 @@ public:
 	virtual ~SPChunk();
 
 	virtual OpResult insertTask(const Task& t, bool& isLastTask);
-	virtual OpResult getTask(Task*& t);
+	virtual OpResult getTask(Task*& t, int idx);
+	virtual OpResult markTaken(int idx, bool isCAS);
 
 	virtual int getMaxSize();
 };

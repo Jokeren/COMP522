@@ -27,13 +27,13 @@ Node::Node(Chunk* c) : chunk(c), consumerIdx(0), next(0)
 {
 }
 
-LFLinkedList::LFLinkedList() {
+MwLinkedList::MwLinkedList() {
 	//first and last nodes are sentinel nodes
 	this->head = new Node(0);
 	this->head->next = (markable_ref)new Node(0);
 }
 
-LFLinkedList::~LFLinkedList() {
+MwLinkedList::~MwLinkedList() {
 	Node* curr = this->head;
 	while (curr != NULL) {
 		Node* tmp = curr;
@@ -43,7 +43,7 @@ LFLinkedList::~LFLinkedList() {
 }
 
 
-Node* LFLinkedList::append(Chunk* c, int consumerIdx) {
+Node* MwLinkedList::append(Chunk* c, int consumerIdx) {
 	HPLocal hpLoc = getHPLocal();
 	Node *pred, *curr;
 	Node *newNode = new Node(c);
@@ -51,7 +51,8 @@ Node* LFLinkedList::append(Chunk* c, int consumerIdx) {
 	while (true) {
 		findNode(this->head, NULL, pred, curr,hpLoc);
 		newNode->next = (markable_ref)curr;
-		setHP(2,newNode,hpLoc);
+		int HPIdx = (getHPIdx(pred, hpLoc) == 0) ? 1 : 0;
+		setHP(HPIdx,newNode,hpLoc);
 		if (REF_CAS(&(pred->next), curr, newNode, FALSE_MARK, FALSE_MARK)) {
 			return newNode;
 		}
@@ -59,11 +60,11 @@ Node* LFLinkedList::append(Chunk* c, int consumerIdx) {
 }
 
 
-Node* LFLinkedList::append(Chunk* c) {
-	return LFLinkedList::append(c,0);
+Node* MwLinkedList::append(Chunk* c) {
+	return MwLinkedList::append(c,0);
 }
 
-Node* LFLinkedList::get(int idx) {
+Node* MwLinkedList::get(int idx) {
 	HPLocal hpLoc = getHPLocal();
 	Node *pred;
 	Node *curr;
@@ -71,7 +72,7 @@ Node* LFLinkedList::get(int idx) {
 	if (GET_REF(curr->next) == NULL) return NULL;
 	return curr;
 }
-bool LFLinkedList::remove(Node* toRemove) {
+bool MwLinkedList::remove(Node* toRemove) {
 	HPLocal hpLoc = getHPLocal();
 	int snip;
 	Node *pred, *curr;

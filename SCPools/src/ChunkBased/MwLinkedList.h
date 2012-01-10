@@ -18,10 +18,10 @@ public:
 	markable_ref next;
 };
 
-class LFLinkedList {
+class MwLinkedList {
 public:
-	LFLinkedList();
-	virtual ~LFLinkedList();
+	MwLinkedList();
+	virtual ~MwLinkedList();
 
 	Node* append(Chunk* c);
 	Node* append(Chunk* c, int consumerIdx);

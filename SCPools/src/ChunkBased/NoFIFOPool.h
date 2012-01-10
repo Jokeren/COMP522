@@ -28,12 +28,12 @@ public:
 	private:
 		SwLinkedList& chunkList;
 		unsigned int& chunkCount;
-		Chunk* curChunk;
+		SPChunk* curChunk;
 		NoFIFOPool& noFIFOPool;
 		int producerId;
 	};
 
-	NoFIFOPool(int _numProducers);
+	NoFIFOPool(int _numProducers, int _consumerID);
 	virtual ~NoFIFOPool();
 
 	virtual SCTaskPool::ProducerContext* getProducerContext(const Producer& prod);
@@ -46,7 +46,15 @@ public:
 	virtual int getEmptynessCounter() const;
 
 protected:
+	int consumerID;
+	SwLinkedList* chunkLists;
+	SwNode* currentNode;
 	ChunkPool* chunkPool;
+
+	int currentQueueID;
+
+private:
+	Task* takeTask(SwNode* n);
 };
 
 #endif /* NOFIFOPOOL_H_ */

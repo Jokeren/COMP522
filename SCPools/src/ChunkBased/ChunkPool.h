@@ -8,17 +8,17 @@
 #ifndef CHUNKPOOL_H_
 #define CHUNKPOOL_H_
 
-#include "Chunk.h"
+#include "SPChunk.h"
 
 class ChunkPool {
 public:
-	ChunkPool(int initialSize, const ChunkFactory& factory);
+	ChunkPool(int initialSize, const SPChunkFactory& factory);
 	virtual ~ChunkPool();
 
-	ChunkFactory& getChunkFactory();
+	SPChunkFactory& getChunkFactory();
 
-	Chunk* getChunk(); // returns NULL if no chunk available
-	void putChunk(Chunk* c);
+	SPChunk* getChunk(); // returns NULL if no chunk available
+	void putChunk(SPChunk* c);
 };
 
 #endif /* CHUNKPOOL_H_ */
