@@ -23,7 +23,7 @@ void findNode(Node *head, void* toFind, Node*& predRes, Node*& currRes, HPLocal 
 void findIdx(Node *head, int findIdx, Node*& predRes, Node*& currRes, HPLocal hpLoc);
 void deleteLinkedListNode(void* node);
 
-Node::Node(Chunk* c) : chunk(c), consumerIdx(0), next(0)
+Node::Node(SPChunk* c) : chunk(c), consumerIdx(0), next(0)
 {
 }
 
@@ -43,7 +43,7 @@ MwLinkedList::~MwLinkedList() {
 }
 
 
-Node* MwLinkedList::append(Chunk* c, int consumerIdx) {
+Node* MwLinkedList::append(SPChunk* c, int consumerIdx) {
 	HPLocal hpLoc = getHPLocal();
 	Node *pred, *curr;
 	Node *newNode = new Node(c);
@@ -60,7 +60,7 @@ Node* MwLinkedList::append(Chunk* c, int consumerIdx) {
 }
 
 
-Node* MwLinkedList::append(Chunk* c) {
+Node* MwLinkedList::append(SPChunk* c) {
 	return MwLinkedList::append(c,0);
 }
 

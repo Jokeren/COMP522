@@ -21,12 +21,14 @@ public:
 
 	virtual OpResult insertTask(const Task& t, bool& isLastTask);
 	virtual OpResult getTask(Task*& t, int idx);
+	virtual bool hasTask(int idx);
 	virtual OpResult markTaken(int idx, bool isCAS);
 
 	virtual int getMaxSize();
 
 	virtual int getOwner() const;
 	virtual bool changeOwner(int prevOwner, int newOwner);
+
 
 protected:
 	int owner;

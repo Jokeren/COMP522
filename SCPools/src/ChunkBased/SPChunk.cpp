@@ -22,6 +22,14 @@ OpResult SPChunk::insertTask(const Task& t, bool& isLastTask) {}
 
 OpResult SPChunk::getTask(Task *& t, int idx){}
 
+bool SPChunk::hasTask(int idx) {}
+
 OpResult SPChunk::markTaken(int idx, bool isCAS){}
 
 int SPChunk::getMaxSize() {}
+
+int SPChunk::getOwner() const {}
+
+bool SPChunk::changeOwner(int prevOwner, int newOwner) {}
+
+

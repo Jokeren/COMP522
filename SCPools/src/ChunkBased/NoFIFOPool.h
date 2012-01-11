@@ -12,9 +12,10 @@
 
 #include "ChunkPool.h"
 #include "SwLinkedList.h"
-#include "Chunk.h"
+#include "SPChunk.h"
 
 class NoFIFOPool : public SCTaskPool {
+
 public:
 	class ProdCtx : SCTaskPool::ProducerContext {
 	public:
@@ -41,7 +42,7 @@ public:
 
 	virtual float getStealingScore() const;
 	virtual float getStealingThreshold() const;
-	virtual Task* steal(SCTaskPool& from);
+	Task* steal(NoFIFOPool& from);
 
 	virtual int getEmptynessCounter() const;
 
@@ -57,6 +58,8 @@ protected:
 
 private:
 	Task* takeTask(SwNode* n);
+	SwNode* getStealNode(int &stealQueueID);
+	void reclaimChunk(SwNode *& n, SPChunk*& c, int QueueID);
 };
 
 #endif /* NOFIFOPOOL_H_ */

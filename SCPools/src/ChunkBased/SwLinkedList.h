@@ -28,26 +28,23 @@ public:
 	class SwLinkedListIterator {
 	public:
 		SwLinkedListIterator(SwLinkedList* list);
-		//skips removed nodes but doesn't release them
-		OpResult next(SwNode*& node);
-		//reset to head
-		void reset(SwLinkedList* list);
-	private:
-		SwNode* curr;
-		int hp0,hp1;
-		HP::HPLocal hpLoc;
-	};
-
-	friend class SwLinkedListIterator;
-
-	SwLinkedList();
-	virtual ~SwLinkedList();
-	void append(SwNode* nodeToAdd);
-	SwNode* append(SPChunk* chunkToAdd);
-
-
+        OpResult next(SwNode *& node);
+        void reset(SwLinkedList *list);
+    private:
+        SwNode *curr;
+        int hp0, hp1;
+        HP::HPLocal hpLoc;
+    };
+    friend class SwLinkedListIterator;
+    SwLinkedList();
+    virtual ~SwLinkedList();
+    void append(SwNode *nodeToAdd);
+    void remove(SwNode *nodeToRemove);
+    void replace(SwNode *nodeToReplace, SwNode *newNode);
+    SwNode *append(SPChunk *chunkToAdd);
 private:
-	SwNode* head;
+    SwNode *head;
+    SwNode *findPrevNode(SwNode *n);
 };
 
 

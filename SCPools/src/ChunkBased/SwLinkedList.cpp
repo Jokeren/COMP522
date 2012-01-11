@@ -7,6 +7,7 @@
 
 #include "SwLinkedList.h"
 #include <algorithm>
+#include <assert.h>
 
 using namespace HP;
 
@@ -74,23 +75,38 @@ SwLinkedList::~SwLinkedList() {
 //	}
 //}
 
+
+
+// removes the node from the list - assumes it is another list and doesn't need to be deleted
+void SwLinkedList::remove(SwNode *nodeToRemove)
+{
+	SwNode* prev = findPrevNode(nodeToRemove);
+	prev->next = nodeToRemove->next;
+}
+
+void SwLinkedList::replace(SwNode *nodeToReplace, SwNode *newNode)
+{
+	SwNode* prev = findPrevNode(nodeToReplace);
+	assert(prev != NULL);
+	newNode->next = nodeToReplace->next;
+	prev->next = newNode;
+}
+
 SwNode* SwLinkedList::append(SPChunk *chunkToAdd) {
 	SwNode* newNode = new SwNode(chunkToAdd);
 	append(newNode);
 	return newNode;
 }
 
-// Append a node to the list and remove unnecessary nodes
 // No hazard pointers needed, since this is the only function
 // that can remove nodes and only one thread may call it.
 
-void SwLinkedList::append(SwNode *nodeToAdd) {
-	SwNode* prev = head;
-	SwNode* curr = head->next;
-
-	HPLocal hpLoc = getHPLocal();
-
-	while (curr != NULL) {
+SwNode *SwLinkedList::findPrevNode(SwNode *n)
+{
+    SwNode *prev = head;
+    SwNode *curr = head->next;
+    HPLocal hpLoc = getHPLocal();
+    while (curr != n && curr != NULL) {
 		//remove empty nodes
 		if (curr->chunk == NULL) {
 			prev->next = curr->next;
@@ -103,6 +119,12 @@ void SwLinkedList::append(SwNode *nodeToAdd) {
 		prev = curr;
 		curr = curr->next;
 	}
+    return (curr == n) ?  prev : NULL;
+}
+
+// Append a node to the list and remove unnecessary nodes
+void SwLinkedList::append(SwNode *nodeToAdd) {
+	SwNode* prev = findPrevNode(NULL);
 	prev->next = nodeToAdd;
 }
 
@@ -152,6 +174,7 @@ OpResult SwLinkedList::SwLinkedListIterator::next(SwNode*& node) {
 	node = NULL;
 	return SUCCESS;
 }
+
 //reset to head
 void SwLinkedList::SwLinkedListIterator::reset(SwLinkedList* list) {
 	curr = list->head;

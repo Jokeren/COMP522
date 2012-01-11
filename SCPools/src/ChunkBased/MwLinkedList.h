@@ -7,13 +7,13 @@
 #ifndef LINKEDLIST_H_
 #define LINKEDLIST_H_
 
-#include "Chunk.h"
+#include "SPChunk.h"
 #include "atomicMarkedReference.h"
 
 class Node {
 public:
-	Node(Chunk* c);
-	Chunk* chunk;
+	Node(SPChunk* c);
+	SPChunk* chunk;
 	int consumerIdx;
 	markable_ref next;
 };
@@ -23,8 +23,8 @@ public:
 	MwLinkedList();
 	virtual ~MwLinkedList();
 
-	Node* append(Chunk* c);
-	Node* append(Chunk* c, int consumerIdx);
+	Node* append(SPChunk* c);
+	Node* append(SPChunk* c, int consumerIdx);
 	Node* get(int idx);
 	bool remove(Node* toRemove);
 private:
