@@ -21,7 +21,25 @@ using namespace std;
 void find(Node *head, void* toFind, int findIdx, Node*& predRes, Node*& currRes, HPLocal hpLoc);
 void findNode(Node *head, void* toFind, Node*& predRes, Node*& currRes, HPLocal hpLoc);
 void findIdx(Node *head, int findIdx, Node*& predRes, Node*& currRes, HPLocal hpLoc);
-void deleteLinkedListNode(void* node);
+
+class DeleteLinkedListNode : public HP::ReclaimationFunc {
+
+public :
+	void operator() (void* node) {
+		delete (Node*) node;
+	}
+
+	static DeleteLinkedListNode* getInstance() {
+		if (instance == NULL)
+			instance = new DeleteLinkedListNode();
+		return instance;
+	}
+private:
+	DeleteLinkedListNode() {}
+	static DeleteLinkedListNode* instance;
+
+};
+DeleteLinkedListNode* DeleteLinkedListNode::instance = NULL;
 
 Node::Node(SPChunk* c) : chunk(c), consumerIdx(0), next(0)
 {
@@ -86,17 +104,13 @@ bool MwLinkedList::remove(Node* toRemove) {
 			if (!snip)
 				continue;
 			if (REF_CAS(&(pred->next),curr,succ,FALSE_MARK,FALSE_MARK))
-				retireNode(curr,&deleteLinkedListNode,hpLoc);
+				retireNode(curr,DeleteLinkedListNode::getInstance(),hpLoc);
 			return true;
 		}
 	}
 }
 
 //AUX
-
-void deleteLinkedListNode(void* node) {
-	delete (Node*) node;
-}
 
 void find(Node *head, void* toFind, int findIdx, Node*& predRes, Node*& currRes, HPLocal hpLoc) {
 	Node *pred = NULL, *curr = NULL, *succ = NULL;
@@ -124,7 +138,7 @@ void find(Node *head, void* toFind, int findIdx, Node*& predRes, Node*& currRes,
 					retry = true;
 					break;
 				}
-				retireNode(curr,&deleteLinkedListNode,hpLoc);
+				retireNode(curr,DeleteLinkedListNode::getInstance(),hpLoc);
 				curr = succ;
 
 				setHP(hpIdx0,curr,hpLoc);

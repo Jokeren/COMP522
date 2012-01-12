@@ -11,9 +11,25 @@
 
 using namespace HP;
 
-void deleteNode(void* node) {
-	delete (SwNode*)node;
-}
+
+class DeleteNode : public HP::ReclaimationFunc {
+
+public :
+	void operator() (void* node) {
+		delete (SwNode*) node;
+	}
+
+	static DeleteNode* getInstance() {
+		if (instance == NULL)
+			instance = new DeleteNode();
+		return instance;
+	}
+private:
+	DeleteNode() {}
+	static DeleteNode* instance;
+
+};
+DeleteNode* DeleteNode::instance = NULL;
 
 
 SwNode::SwNode(SPChunk* c) :
@@ -112,7 +128,7 @@ SwNode *SwLinkedList::findPrevNode(SwNode *n)
 			prev->next = curr->next;
 			//so other threads won't go on:
 			curr->next = NULL;
-			retireNode(curr,deleteNode,hpLoc);
+			retireNode(curr,DeleteNode::getInstance(),hpLoc);
 			curr = prev->next;
 			continue;
 		}

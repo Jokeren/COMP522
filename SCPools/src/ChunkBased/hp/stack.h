@@ -9,17 +9,15 @@
 
 typedef struct stack_t StackT, *Stack;
 
-typedef void (*ReclaimationFunc)(void *);
-
 typedef struct recliam_data_t {
 	void* address;
-	ReclaimationFunc reclaimationFunc;
+	void* reclaimationFunc;
 } ReclaimationData;
 
 Stack stackInit(int initialSize);
 
 //Adds obj to stack. may resize the stack if needed.
-void stackPush(Stack stack, void* addr, ReclaimationFunc reclaimationFunc);
+void stackPush(Stack stack, void* addr, void* reclaimationFunc);
 
 // removes head of stack and returns it.
 // returns NULL if stack is empty.

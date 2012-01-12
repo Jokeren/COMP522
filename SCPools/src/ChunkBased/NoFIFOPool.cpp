@@ -27,12 +27,15 @@ NoFIFOPool::NoFIFOPool(int _numProducers, int _consumerID) :
 	chunkPool = new ChunkPool(consumerID, initialPoolSize);
 	chunkLists = new SwLinkedList[_numProducers + 1];
 	chunkListSizes = new unsigned int[numProducers + 1];
+	reclaimChunkFunc = new ReclaimChunkFunc(chunkPool);
+
 }
 
 NoFIFOPool::~NoFIFOPool() {
 	delete chunkPool;
 	delete[] chunkLists;
 	delete[] chunkListSizes;
+	delete reclaimChunkFunc;
 }
 
 //TODO: implement:
@@ -172,10 +175,11 @@ OpResult NoFIFOPool::ProdCtx::produceAux(const Task& t, bool& changeConsumer,
 //AUX
 void NoFIFOPool::reclaimChunk(SwNode *& n, SPChunk*& c, int QueueID)
 {
+	HPLocal hpLoc = getHPLocal();
     n->chunk = NULL;
     currentNode = NULL;
     if (c->getOwner() == consumerID) FAA(&(chunkListSizes[QueueID]), -1);
-    //todo: recalaim chunk
+    retireNode(c,reclaimChunkFunc,hpLoc);
 }
 
 Task* NoFIFOPool::takeTask(SwNode* n) {

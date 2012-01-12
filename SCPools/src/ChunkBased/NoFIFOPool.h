@@ -17,6 +17,20 @@
 class NoFIFOPool : public SCTaskPool {
 
 public:
+
+	class ReclaimChunkFunc : public HP::ReclaimationFunc {
+
+	public:
+		ReclaimChunkFunc(ChunkPool* cp) : chunkPool(cp) {}
+		void operator() (void* chunk) {
+			chunkPool->putChunk((SPChunk*)chunk);
+		}
+
+	private:
+				ChunkPool* chunkPool;
+	};
+
+
 	class ProdCtx : SCTaskPool::ProducerContext {
 	public:
 		ProdCtx(SwLinkedList& l, unsigned int& count, NoFIFOPool& _noFIFOPool, int _producerId);
@@ -52,9 +66,8 @@ protected:
 	SwNode* currentNode;
 	ChunkPool* chunkPool;
 	unsigned int *chunkListSizes;
-
-
 	int currentQueueID;
+	ReclaimChunkFunc* reclaimChunkFunc;
 
 private:
 	Task* takeTask(SwNode* n);

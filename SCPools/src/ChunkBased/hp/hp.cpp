@@ -135,7 +135,7 @@ void resetHPSystem() {
 }
 
 // Marks that the node needs to be freed and calls scan if needed.
-void retireNode(void* addr, ReclaimationFunc reclaimationFunc,
+void retireNode(void* addr, ReclaimationFunc* reclaimationFunc,
 		HPLocal localData) {
 	stackPush(localData->rlist, addr, reclaimationFunc);
 	if (stackCount(localData->rlist) >= localData->hpData->REC_COUNT) {
@@ -181,7 +181,7 @@ void scan(HPLocal localData) {
 			stackPush(localData->rlist, recData->address,
 					recData->reclaimationFunc);
 		} else {
-				recData->reclaimationFunc(recData->address);
+				(*((ReclaimationFunc*)recData->reclaimationFunc))(recData->address);
 		}
 		recData = stackPop(localData->temp);
 	}

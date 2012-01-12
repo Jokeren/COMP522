@@ -28,7 +28,7 @@ Stack stackInit(int initialSize) {
 }
 
 //Adds obj to stack. may resize the stack if needed.
-void stackPush(Stack stack, void* addr, ReclaimationFunc reclaimationFunc) {
+void stackPush(Stack stack, void* addr, void* reclaimationFunc) {
 	//resize if needed
 	if (stack->rcount == stack->size - 1) {
 		stack->data = realloc(stack->data,sizeof(ReclaimationData) * stack->size*2);
