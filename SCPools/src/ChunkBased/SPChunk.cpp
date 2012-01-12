@@ -6,30 +6,48 @@
  */
 
 #include "SPChunk.h"
+#include "Atomic.h"
 
-SPChunk::SPChunk(int owner)  {
-	// TODO Auto-generated constructor stub
 
+SPChunk::SPChunk(int _owner) : head(0), owner(_owner) {}
+
+SPChunk::~SPChunk() {}
+
+
+OpResult SPChunk::insertTask(const Task*& t) {
+	if (head == TASKS_PER_CHUNK)
+		return FULL;
+	tasks[head] = t;
+	head++;
+	return SUCCESS;
 }
 
-SPChunk::~SPChunk() {
-	// TODO Auto-generated destructor stub
+OpResult SPChunk::getTask(const Task *& t, int idx) {
+	t = tasks[idx];
+	return SUCCESS;
 }
 
-//TODO: implement
+bool SPChunk::hasTask(int idx) {
+	if (tasks[idx] == NULL || tasks[idx] == TAKEN)
+		return false;
+	return true;
+}
 
-OpResult SPChunk::insertTask(const Task& t, bool& isLastTask) {}
+void SPChunk::markTaken(int idx) {
+	tasks[idx] = TAKEN;
+}
 
-OpResult SPChunk::getTask(Task *& t, int idx){}
+bool SPChunk::markTaken(int idx, const Task* prevTask) {
+	return CAS(&(tasks[idx]),prevTask,TAKEN);
+}
 
-bool SPChunk::hasTask(int idx) {}
 
-OpResult SPChunk::markTaken(int idx, bool isCAS){}
+int SPChunk::getMaxSize() {
+	return TASKS_PER_CHUNK;
+}
 
-int SPChunk::getMaxSize() {}
-
+//TODO: implement owner with counter:
 int SPChunk::getOwner() const {}
-
 bool SPChunk::changeOwner(int prevOwner, int newOwner) {}
 
 

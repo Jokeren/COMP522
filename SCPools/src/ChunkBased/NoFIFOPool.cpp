@@ -48,9 +48,9 @@ float NoFIFOPool::getStealingScore() const {
 float NoFIFOPool::getStealingThreshold() const {
 }
 
-OpResult NoFIFOPool::consume(Task*& t) {
+OpResult NoFIFOPool::consume(const Task*& t) {
 	if (currentNode != NULL) {
-		Task* res = takeTask(currentNode);
+		const Task* res = takeTask(currentNode);
 		if (res != NULL) {
 			t = res;
 			return SUCCESS;
@@ -69,7 +69,7 @@ OpResult NoFIFOPool::consume(Task*& t) {
 			SwNode* n = NULL;
 			OpResult res;
 			while ((res = iter.next(n)) != FAILURE && n != NULL) {
-				Task* res = takeTask(n);
+				const Task* res = takeTask(n);
 				if (res != NULL) {
 					t = res;
 					currentNode = n;
@@ -88,39 +88,39 @@ OpResult NoFIFOPool::consume(Task*& t) {
 
 }
 
-
-
-Task* NoFIFOPool::steal(NoFIFOPool& from) {
+const Task* NoFIFOPool::steal(NoFIFOPool& from) {
 	// gest a non-empty node or NULL if there are no nodes.
 	int stealQueueID = -1;
 	SwNode* prevNode = from.getStealNode(stealQueueID);
-	if (prevNode == NULL) return NULL;
+	if (prevNode == NULL)
+		return NULL;
 	SPChunk* c = prevNode->chunk;
-	if (c == NULL) return NULL;
+	if (c == NULL)
+		return NULL;
 	//adding prevNode, so it would be stealble after ownership change.
 	SwLinkedList stealList = chunkLists[numProducers];
 	stealList.append(prevNode);
-	if (c->changeOwner(from.consumerID,this->consumerID) == false) {
+	if (c->changeOwner(from.consumerID, this->consumerID) == false) {
 		stealList.remove(prevNode);
 		return NULL;
 	}
 	SwNode* newNode = new SwNode(c);
 	newNode->consumerIdx = prevNode->consumerIdx;
-	stealList.replace(prevNode,newNode);
+	stealList.replace(prevNode, newNode);
 	prevNode->chunk = NULL;
 	//update counters for stealer and the one we stole from
-	FAA(&(chunkListSizes[numProducers]),1);
-	FAA(&(from.chunkListSizes[stealQueueID]),-1);
+	FAA(&(chunkListSizes[numProducers]), 1);
+	FAA(&(from.chunkListSizes[stealQueueID]), -1);
 
 	int idx = newNode->consumerIdx;
-	Task* task = NULL;
-	c->getTask(task,idx+1);
-	if (task == NULL) return NULL;
-	if (task == TAKEN || !c->markTaken(idx+1,true)) {
+	const Task* task = NULL;
+	c->getTask(task, idx + 1);
+	if (task == NULL)
+		return NULL;
+	if (task == TAKEN || !c->markTaken(idx + 1, task)) {
 		task = NULL;
-	}
-	else if (idx+2 == c->getMaxSize()) {
-		reclaimChunk(newNode,c,numProducers);
+	} else if (idx + 2 == c->getMaxSize()) {
+		reclaimChunk(newNode, c, numProducers);
 	}
 	newNode->consumerIdx++;
 	return task;
@@ -139,56 +139,59 @@ NoFIFOPool::ProdCtx::ProdCtx(SwLinkedList& l, unsigned int& c,
 	FAA(&chunkCount, 1);
 }
 
-OpResult NoFIFOPool::ProdCtx::produce(const Task& t, bool& changeConsumer) {
+OpResult NoFIFOPool::ProdCtx::produce(const Task*& t, bool& changeConsumer) {
 	return produceAux(t, changeConsumer);
 }
 
-void NoFIFOPool::ProdCtx::produceForce(const Task& t) {
+void NoFIFOPool::ProdCtx::produceForce(const Task*& t) {
 	bool dummy;
 	produceAux(t, dummy, true);
 }
 
-OpResult NoFIFOPool::ProdCtx::produceAux(const Task& t, bool& changeConsumer,
+OpResult NoFIFOPool::ProdCtx::produceAux(const Task*& t, bool& changeConsumer,
 		bool force) {
-	OpResult res = curChunk->insertTask(t, changeConsumer);
+
+	if (curChunk == NULL) {
+		// the previous chunk is full
+		// Try to get a new chunk from the chunk pool
+		SPChunk* newChunk = noFIFOPool.chunkPool->getChunk();
+		if (newChunk == NULL) {
+			// no free chunks in the pool
+			if (!force) {
+				return FULL;
+			} else {
+				newChunk = new SPChunk(producerId);
+			}
+		}
+		chunkList.append(newChunk);
+		FAA(&chunkCount, 1);
+		curChunk = newChunk;
+		assert(curChunk->insertTask(t) == SUCCESS); // cannot fail
+	}
+
+	OpResult res = curChunk->insertTask(t);
 	if (res == SUCCESS) {
 		return SUCCESS;
 	}
-	// the previous chunk is full
-	// Try to get a new chunk from the chunk pool
-	SPChunk* newChunk = noFIFOPool.chunkPool->getChunk();
-	if (newChunk == NULL) {
-		// no free chunks in the pool
-		if (!force) {
-			return FULL;
-		} else {
-			newChunk = new SPChunk(producerId);
-		}
-	}
-	chunkList.append(newChunk);
-	FAA(&chunkCount, 1);
-	curChunk = newChunk;
-	assert(curChunk->insertTask(t, changeConsumer) == SUCCESS); // cannot fail
-	return SUCCESS;
 }
 
 //AUX
-void NoFIFOPool::reclaimChunk(SwNode *& n, SPChunk*& c, int QueueID)
-{
+void NoFIFOPool::reclaimChunk(SwNode *& n, SPChunk*& c, int QueueID) {
 	HPLocal hpLoc = getHPLocal();
-    n->chunk = NULL;
-    currentNode = NULL;
-    if (c->getOwner() == consumerID) FAA(&(chunkListSizes[QueueID]), -1);
-    retireNode(c,reclaimChunkFunc,hpLoc);
+	n->chunk = NULL;
+	currentNode = NULL;
+	if (c->getOwner() == consumerID)
+		FAA(&(chunkListSizes[QueueID]), -1);
+	retireNode(c, reclaimChunkFunc, hpLoc);
 }
 
-Task* NoFIFOPool::takeTask(SwNode* n) {
+const Task* NoFIFOPool::takeTask(SwNode* n) {
 	HPLocal hpLoc = getHPLocal();
 	SPChunk* chunk = n->chunk;
 	setHP(3, chunk, hpLoc);
-	if (n->chunk != chunk ||chunk == NULL)
+	if (n->chunk != chunk || chunk == NULL)
 		return NULL;
-	Task* task = NULL;
+	const Task* task = NULL;
 	chunk->getTask(task, n->consumerIdx + 1);
 	if (task == NULL)
 		return NULL;
@@ -196,15 +199,15 @@ Task* NoFIFOPool::takeTask(SwNode* n) {
 	n->consumerIdx++;
 	if (chunk->getOwner() == consumerID) {
 		//fast path:
-		chunk->markTaken(n->consumerIdx, false);
+		chunk->markTaken(n->consumerIdx);
 		if (n->consumerIdx + 1 == chunk->getMaxSize()) {
-			reclaimChunk(n,chunk,currentQueueID);
+			reclaimChunk(n, chunk, currentQueueID);
 		}
 		return task;
 	}
 	//chunk was stolen:
 	FAA(&(chunkListSizes[currentQueueID]), -1);
-	bool success = (task != TAKEN && chunk->markTaken(n->consumerIdx, true)
+	bool success = (task != TAKEN && chunk->markTaken(n->consumerIdx, task)
 			== SUCCESS);
 	n->chunk = NULL;
 	currentNode = NULL;
@@ -218,7 +221,7 @@ Task* NoFIFOPool::takeTask(SwNode* n) {
 //TODO: check if this is a good way to choose chunks
 SwNode* NoFIFOPool::getStealNode(int &stealQueueID) {
 	SwLinkedList::SwLinkedListIterator iter(NULL);
-	SwNode *n1 = NULL ,*n2 = NULL;
+	SwNode *n1 = NULL, *n2 = NULL;
 	HPLocal hpLoc = getHPLocal();
 	SPChunk* c = NULL;
 	while (true) {
@@ -242,8 +245,9 @@ SwNode* NoFIFOPool::getStealNode(int &stealQueueID) {
 			if (n1 != NULL) {
 				c = n1->chunk;
 				setHP(3, c, hpLoc);
-				if (n1->chunk != c) continue;
-				if (c != NULL && c->hasTask(n1->consumerIdx+1)) {
+				if (n1->chunk != c)
+					continue;
+				if (c != NULL && c->hasTask(n1->consumerIdx + 1)) {
 					setHP(2, n1, hpLoc);
 					return n1;
 				}
@@ -258,24 +262,29 @@ SwNode* NoFIFOPool::getStealNode(int &stealQueueID) {
 		stealQueueID = maxIdx;
 
 		iter.reset(&list);
-		if (iter.next(n1) == FAILURE) continue;
+		if (iter.next(n1) == FAILURE)
+			continue;
 		//TODO: may just return NULL here:
-		if (n1 == NULL) continue;
+		if (n1 == NULL)
+			continue;
 		setHP(2, n1, hpLoc);
-		if (iter.next(n2) == FAILURE) continue;
+		if (iter.next(n2) == FAILURE)
+			continue;
 		if (n2 != NULL) {
 			c = n2->chunk;
 			setHP(3, c, hpLoc);
-			if (n2->chunk != c) continue;
-			if (c != NULL && c->hasTask(n2->consumerIdx+1)) {
+			if (n2->chunk != c)
+				continue;
+			if (c != NULL && c->hasTask(n2->consumerIdx + 1)) {
 				setHP(2, n2, hpLoc);
 				return n2;
 			}
 		}
 		c = n1->chunk;
 		setHP(3, c, hpLoc);
-		if (n1->chunk != c) continue;
-		if (c != NULL && c->hasTask(n1->consumerIdx+1)) {
+		if (n1->chunk != c)
+			continue;
+		if (c != NULL && c->hasTask(n1->consumerIdx + 1)) {
 			return n1;
 		}
 	}

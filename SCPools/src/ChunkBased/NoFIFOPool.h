@@ -35,28 +35,28 @@ public:
 	public:
 		ProdCtx(SwLinkedList& l, unsigned int& count, NoFIFOPool& _noFIFOPool, int _producerId);
 		virtual ~ProdCtx() {};
-		virtual OpResult produce(const Task& t, bool& changeConsumer);
-		virtual void produceForce(const Task& t);
+		virtual OpResult produce(const Task*& t, bool& changeConsumer);
+		virtual void produceForce(const Task*& t);
 
 	protected:
-		virtual OpResult produceAux(const Task& t, bool& changeConsumer, bool force = false);
+		virtual OpResult produceAux(const Task*& t, bool& changeConsumer, bool force = false);
 	private:
 		SwLinkedList& chunkList;
 		unsigned int& chunkCount;
-		SPChunk* curChunk;
 		NoFIFOPool& noFIFOPool;
 		int producerId;
+		SPChunk* curChunk;
 	};
 
 	NoFIFOPool(int _numProducers, int _consumerID);
 	virtual ~NoFIFOPool();
 
 	virtual SCTaskPool::ProducerContext* getProducerContext(const Producer& prod);
-	virtual OpResult consume(Task*& t);
+	virtual OpResult consume(const Task*& t);
 
 	virtual float getStealingScore() const;
 	virtual float getStealingThreshold() const;
-	Task* steal(NoFIFOPool& from);
+	const Task* steal(NoFIFOPool& from);
 
 	virtual int getEmptynessCounter() const;
 
@@ -70,7 +70,7 @@ protected:
 	ReclaimChunkFunc* reclaimChunkFunc;
 
 private:
-	Task* takeTask(SwNode* n);
+	const Task* takeTask(SwNode* n);
 	SwNode* getStealNode(int &stealQueueID);
 	void reclaimChunk(SwNode *& n, SPChunk*& c, int QueueID);
 };

@@ -11,19 +11,22 @@
 #include "commons.h"
 #include "Task.h"
 
-//TODO: maybe change to enum?
-#define TAKEN (void*)0x1
+//TODO: const for now, maybe changed later.
+#define TASKS_PER_CHUNK 500
+
+
+#define TAKEN (Task*)0x1
 
 class SPChunk {
 public:
 	SPChunk(int owner);
 	virtual ~SPChunk();
 
-	virtual OpResult insertTask(const Task& t, bool& isLastTask);
-	virtual OpResult getTask(Task*& t, int idx);
+	virtual OpResult insertTask(const Task*& t);
+	virtual OpResult getTask(const Task*& t, int idx);
 	virtual bool hasTask(int idx);
-	virtual OpResult markTaken(int idx, bool isCAS);
-
+	virtual void markTaken(int idx);
+	virtual bool markTaken(int idx, const Task* t);
 	virtual int getMaxSize();
 
 	virtual int getOwner() const;
@@ -31,7 +34,9 @@ public:
 
 
 protected:
+	int head; // The index of prefix of the prefix of tasks.
 	int owner;
+	Task const *tasks[TASKS_PER_CHUNK];
 };
 
 #endif /* SPCHUNK_H_ */

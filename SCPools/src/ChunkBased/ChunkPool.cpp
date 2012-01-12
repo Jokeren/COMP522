@@ -18,6 +18,11 @@ ChunkPool::ChunkPool(int o, int initialSize) :
 }
 
 ChunkPool::~ChunkPool() {
+	SPChunk* c;
+	while ((c  = getChunk()) != NULL)
+		delete c;
+	delete atomicStat;
+	delete chunkQueue;
 }
 
 SPChunk* ChunkPool::getChunk() {
