@@ -18,6 +18,7 @@ public:
 	virtual OpResult consume(Task*& t);
 	int getId() const{ return id;}
 	AtomicStatistics* getStat(){return stat;}
+	unsigned long getStealingCounter(){return stealingCounter;}
 protected:
 	virtual OpResult consumeEmpty(Task*& t);
 
@@ -28,6 +29,7 @@ protected:
 	SCTaskPool* myPool;
 	int stealIterations;
 	AtomicStatistics* stat;
+	unsigned long stealingCounter;
 };
 
 #endif /* CONSUMER_H_ */

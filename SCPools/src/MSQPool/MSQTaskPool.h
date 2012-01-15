@@ -3,7 +3,7 @@
 
 #include "MSQueue.hpp"
 #include "SCTaskPool.h"
-#define STEALING_THRESHOLD 100
+#define STEALING_THRESHOLD 10
 #include "AtomicStatistics.h"
 class MSQProducerContext;
 

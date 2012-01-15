@@ -19,6 +19,7 @@ Consumer::Consumer(int _id)
 		stealIterations = 2; // default
 	}
 	stat = new AtomicStatistics();
+	stealingCounter = 0;
 }
 
 Consumer::~Consumer() {
@@ -31,6 +32,10 @@ OpResult Consumer::consume(Task*& t) {
 	// In this case a consumer traverses over other pools until finds the pool with
 	// the stealing score higher than a given threshold.
 	// The threshold is repeatedly decreased to zero.
+	if(stealIterations <= 0)
+	{
+		return myPool->consume(t,stat);
+	}
 	float stealThreshold = myPool->getStealingThreshold();
 	float stealThresholdDelta = stealThreshold / stealIterations;
 
@@ -40,6 +45,7 @@ OpResult Consumer::consume(Task*& t) {
 		for(int c = 1; c < consumersNum; c++) {
 			if (consumers[c]->getStealingScore() >= stealThreshold) {
 				// try to steal from that pool
+				stealingCounter++;
 				Task* stolenTask = myPool->steal(consumers[c],stat);
 				if (stolenTask != NULL) {
 					// successful stealing

@@ -108,17 +108,6 @@ void ArchEnvironment::threadToCoreChipMapping(){
 	producerToCore = new map<int,int>();
 	consumerToChip = new map<int,int>();
 	consumerToCore = new map<int,int>();
-	int coresNum = consumerCoresNum + producerCoresNum;
-	coreToConsumers = new list<int>*[coresNum];
-	chipToConsumers = new list<int>*[chipsNum];
-	for(int i = 0; i < coresNum; i++)
-	{
-		coreToConsumers[i] = new list<int>();
-	}
-	for(int i = 0; i < chipsNum; i++)
-	{
-		chipToConsumers[i] = new list<int>();
-	}
 	// i is the consumer's id
 	for(int i = 0; i < consumersNum; i++)
 	{
@@ -127,8 +116,6 @@ void ArchEnvironment::threadToCoreChipMapping(){
 		int chipId = getChipByCoreId(core);
 		consumerToCore->insert(pair<int,int>(i,core));
 		consumerToChip->insert(pair<int,int>(i,chipId));
-		coreToConsumers[core]->push_front(i);
-		chipToConsumers[chipId]->push_front(i);
 	}
 	// i is the producer's id
 	for(int i = 0; i < producersNum; i++)
@@ -160,39 +147,31 @@ SCTaskPool** ArchEnvironment::getSortedConsumers(int tid, bool producer){
 		coreId = consumerToCore->find(tid)->second;
 		chipId = consumerToChip->find(tid)->second;
 	}
+	
 	int insertIdx = 0;
-	if(!producer)
+	for(int i = 0; i < consumersNum; i++)
 	{
-		resIds[0] = tid;
-		taken[tid] = true;
-		insertIdx = 1;
-	}
-	list<int>* coreNeighbors = coreToConsumers[coreId];
-	list<int>::iterator it;
-	for(it = coreNeighbors->begin(); it !=  coreNeighbors->end(); it++)
-	{
-		int neighbor = *it;
-		if(!taken[neighbor])
+		int next = (tid + i) % consumersNum;
+		if(consumerToCore->find(next)->second == coreId)
 		{
-			taken[neighbor] = true;
-			resIds[insertIdx] = neighbor;
-			insertIdx++;
-		}
-	}
-	list<int>* chipNeighbors = chipToConsumers[chipId];
-	for(it = chipNeighbors->begin(); it !=  chipNeighbors->end(); it++)
-	{
-		int neighbor = *it;
-		if(!taken[neighbor])
-		{
-			taken[neighbor] = true;
-			resIds[insertIdx] = neighbor;
+			taken[next] = true;
+			resIds[insertIdx] = next;
 			insertIdx++;
 		}
 	}
 	for(int i = 0; i < consumersNum; i++)
 	{
-		int next = (tid + i)%consumersNum;
+		int next = (tid + i) % consumersNum;
+		if(!taken[next] && consumerToChip->find(next)->second == chipId)
+		{
+			taken[next] = true;
+			resIds[insertIdx] = next;
+			insertIdx++;
+		}
+	}
+	for(int i = 0; i < consumersNum; i++)
+	{
+		int next = (tid + i) % consumersNum;
 		if(!taken[next])
 		{
 			taken[next] = true;
@@ -200,6 +179,7 @@ SCTaskPool** ArchEnvironment::getSortedConsumers(int tid, bool producer){
 			insertIdx++;
 		}
 	}
+	
 	SCTaskPool** res = new SCTaskPool*[consumersNum];
 	for(int i = 0; i < consumersNum; i++)
 	{
@@ -207,7 +187,7 @@ SCTaskPool** ArchEnvironment::getSortedConsumers(int tid, bool producer){
 	}
 	/***** debug ****/
 	/*
-	if(producer && tid == 0)
+	if(!producer && tid == 8)
 	{
 		for(int i = 0; i < consumersNum; i++)
 		{
@@ -252,16 +232,6 @@ ArchEnvironment::~ArchEnvironment(){
 	delete consumerToChip;
 	delete producerToCore;
 	delete producerToChip;
-	for(int i = 0; i < consumerCoresNum; i++)
-	{
-		delete coreToConsumers[i];
-	}
-	delete[] coreToConsumers;
-	for(int i = 0; i < chipsNum; i++)
-	{
-		delete chipToConsumers;
-	}
-	delete[] chipToConsumers;
 }
 
 	

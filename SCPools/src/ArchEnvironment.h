@@ -43,8 +43,6 @@ private:
 	map<int,int>* consumerToChip;
 	map<int,int>* producerToCore;
 	map<int,int>* producerToChip;
-	list<int>** coreToConsumers;
-	list<int>** chipToConsumers;
 	SCTaskPool** consumerToPool;
 	
 	ArchEnvironment();

@@ -197,6 +197,7 @@ void* consRun(void* _arg){
 	consStats->numOfRetrievedTasks = numOfTasks;
 	consStats->consumerThroughput = throughput;
 	consStats->atomicStats = *(consumer->getStat());
+	consStats->stealingCounter = consumer->getStealingCounter();
 	delete consumer;
 	return (void*)consStats;
 }

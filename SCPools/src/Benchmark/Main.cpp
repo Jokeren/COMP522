@@ -99,6 +99,7 @@ int main(int argc, char* argv[])
 	double TotalInsertionThroughput = 0;
 	int TotalNumOfRetrievedTasks = 0;
 	double TotalSystemThroughput = 0;
+	unsigned long stealingCounter = 0;
 	AtomicStatistics* prodStats = new AtomicStatistics();
 	AtomicStatistics* consStats = new AtomicStatistics();
 	for(int i = 0; i < prodNum; i++)
@@ -115,6 +116,7 @@ int main(int argc, char* argv[])
 		TotalNumOfRetrievedTasks += stats->numOfRetrievedTasks;
 		TotalSystemThroughput += stats->consumerThroughput;
 		consStats->add(&(stats->atomicStats));
+		stealingCounter += stats->stealingCounter;
 		delete stats;
 	}
 	prodStats->normalize(prodNum);
@@ -123,6 +125,7 @@ int main(int argc, char* argv[])
 	cout << "Peak Insertion throughput = " << TotalInsertionThroughput << endl;
 	cout << "Total Number of retrieved tasks = " << TotalNumOfRetrievedTasks << endl;
 	cout << "System Throughput = " << TotalSystemThroughput << endl;
+	cout << "Average Number of Work Stealing Attempts per Consumer = " << (double)stealingCounter/consNum << endl;
 	cout << "Average Producer Atomic Statistics:" << endl;
 	prodStats->print();
 	cout << "Average Consumer Atomic Statistics:" << endl;

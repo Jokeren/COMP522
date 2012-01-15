@@ -15,6 +15,7 @@ typedef struct{
 	int numOfRetrievedTasks;
 	double consumerThroughput;
 	AtomicStatistics atomicStats;
+	unsigned long stealingCounter;
 } consumerStats;
 
 typedef struct producerArg{

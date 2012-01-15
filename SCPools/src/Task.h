@@ -28,6 +28,11 @@ public:
 	}
 	
 	void* run(void* arg) {
+		/*int p = 0;
+		for(int i = 0; i < 5000; i++)
+		{
+			p += i;
+		}*/
 		return NULL;
 	}
 	
