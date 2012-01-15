@@ -24,7 +24,7 @@ Producer::~Producer() {
 	delete stat;
 }
 
-void Producer::produce(const Task& t) {
+void Producer::produce(Task& t) {
 	bool changeConsumer;
 	OpResult res = curProdContext->produce(t, changeConsumer, stat);
 	if (res == SUCCESS) {

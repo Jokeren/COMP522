@@ -23,13 +23,14 @@ typedef struct producerArg{
 
 typedef struct{
 	int id;
+	int numOfProducers;
 	SCTaskPool** poolPtr;
 } consumerArg;
 
 class syncFlags{	
-	static bool simulationStart;
-	static int allocatedPoolsCounter;
-	static bool simulationStop;
+	static volatile bool simulationStart;
+	static volatile int allocatedPoolsCounter;
+	static volatile bool simulationStop;
 public:
 	static void start(){simulationStart = true;}
 	static void incPoolsCounter(){__sync_fetch_and_add(&allocatedPoolsCounter,1);}

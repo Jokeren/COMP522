@@ -149,8 +149,8 @@ void SwLinkedList::append(SwNode *nodeToAdd) {
 // Note: List function may not be used when using this iterator
 // because they share the same HPs.
 
-SwLinkedList::SwLinkedListIterator::SwLinkedListIterator(SwLinkedList* list) : hp0 (0), hp1(1) {
-	curr = list->head;
+SwLinkedList::SwLinkedListIterator::SwLinkedListIterator(SwLinkedList* list) : hp0(0), hp1(1) {
+	curr = (list == NULL) ? NULL : list->head;
 	hpLoc = getHPLocal();
 
 }

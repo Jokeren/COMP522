@@ -12,7 +12,7 @@
 #include "Task.h"
 
 //TODO: const for now, maybe changed later.
-#define TASKS_PER_CHUNK 500
+#define TASKS_PER_CHUNK 50 //1020 // (4KB / 4B) - 2 = 1022
 
 
 #define TAKEN (Task*)0x1
@@ -20,23 +20,26 @@
 class SPChunk {
 public:
 	SPChunk(int owner);
-	virtual ~SPChunk();
+	~SPChunk();
 
-	virtual OpResult insertTask(const Task*& t);
-	virtual OpResult getTask(const Task*& t, int idx);
-	virtual bool hasTask(int idx);
-	virtual void markTaken(int idx);
-	virtual bool markTaken(int idx, const Task* t);
-	virtual int getMaxSize();
+	void clean(); // prepares the chunk for reuse
+	bool insertTask(Task* t, bool& lastTask);
+	OpResult getTask(Task*& t, int idx);
+	bool hasTask(int idx);
+	void markTaken(int idx);
+	bool markTaken(int idx, Task* t);
+	int getMaxSize();
 
-	virtual int getOwner() const;
-	virtual bool changeOwner(int prevOwner, int newOwner);
+
+	static int getOwner(int countedOwner);
+	int getCountedOwner() const;
+	bool changeCountedOwner(int prevOwner, int newOwner);
 
 
 protected:
-	int head; // The index of prefix of the prefix of tasks.
+	int head; // The index for insertion of the next task
 	int owner;
-	Task const *tasks[TASKS_PER_CHUNK];
+	Task *tasks[TASKS_PER_CHUNK];
 };
 
 #endif /* SPCHUNK_H_ */

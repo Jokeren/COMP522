@@ -23,28 +23,29 @@ public:
 	public:
 		ReclaimChunkFunc(ChunkPool* cp) : chunkPool(cp) {}
 		void operator() (void* chunk) {
+			((SPChunk*)chunk)->clean();
 			chunkPool->putChunk((SPChunk*)chunk);
 		}
 
 	private:
-				ChunkPool* chunkPool;
+		ChunkPool* chunkPool;
 	};
 
 
-	class ProdCtx : SCTaskPool::ProducerContext {
+	class ProdCtx : public SCTaskPool::ProducerContext {
 	public:
-		ProdCtx(SwLinkedList& l, unsigned int& count, NoFIFOPool& _noFIFOPool, int _producerId);
+		ProdCtx(SwLinkedList& l, unsigned int& count, ChunkPool& _chunkPool);
 		virtual ~ProdCtx() {};
-		virtual OpResult produce(const Task*& t, bool& changeConsumer);
-		virtual void produceForce(const Task*& t);
+
+		virtual OpResult produce(Task& t, bool& changeConsumer, AtomicStatistics* stat);
+		virtual void produceForce(Task& t, AtomicStatistics* stat);
 
 	protected:
-		virtual OpResult produceAux(const Task*& t, bool& changeConsumer, bool force = false);
+		virtual OpResult produceImpl(Task& t, bool& changeConsumer, bool force = false);
 	private:
 		SwLinkedList& chunkList;
 		unsigned int& chunkCount;
-		NoFIFOPool& noFIFOPool;
-		int producerId;
+		ChunkPool& chunkPool;
 		SPChunk* curChunk;
 	};
 
@@ -52,11 +53,11 @@ public:
 	virtual ~NoFIFOPool();
 
 	virtual SCTaskPool::ProducerContext* getProducerContext(const Producer& prod);
-	virtual OpResult consume(const Task*& t);
+	virtual OpResult consume(Task*& t, AtomicStatistics* stat);
 
 	virtual float getStealingScore() const;
 	virtual float getStealingThreshold() const;
-	const Task* steal(NoFIFOPool& from);
+	virtual Task* steal(SCTaskPool* from, AtomicStatistics* stat);
 
 	virtual int getEmptynessCounter() const;
 
@@ -68,11 +69,12 @@ protected:
 	unsigned int *chunkListSizes;
 	int currentQueueID;
 	ReclaimChunkFunc* reclaimChunkFunc;
+	NoFIFOPool::ProdCtx** prodContexts;
 
 private:
-	const Task* takeTask(SwNode* n);
+	Task* takeTask(SwNode* n);
 	SwNode* getStealNode(int &stealQueueID);
-	void reclaimChunk(SwNode *& n, SPChunk*& c, int QueueID);
+	void reclaimChunk(SwNode* n, SPChunk* c, int QueueID);
 };
 
 #endif /* NOFIFOPOOL_H_ */

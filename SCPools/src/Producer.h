@@ -14,7 +14,7 @@ public:
 	Producer(int id);
 	virtual ~Producer();
 
-	virtual void produce(const Task& t);
+	virtual void produce(Task& t);
 
 	int getId() const{ return id;}
 	AtomicStatistics* getStat(){return stat;}

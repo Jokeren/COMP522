@@ -19,6 +19,7 @@ public:
 
 	SPChunk* getChunk(); // returns NULL if no chunk available
 	void putChunk(SPChunk* c);
+	int getOwner() const;
 
 protected:
 	int owner;

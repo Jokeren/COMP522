@@ -11,7 +11,7 @@ class MSQTaskPool : public SCTaskPool{
 	MSQueue<Task*>* Q;
 	MSQProducerContext* prodContext;
 	const float stealingThreshold ;
-	void insert(const Task& task, AtomicStatistics* stat);
+	void insert(Task& task, AtomicStatistics* stat);
 public:
 	MSQTaskPool();
 	virtual ~MSQTaskPool();
@@ -33,8 +33,8 @@ class MSQProducerContext : public SCTaskPool::ProducerContext{
 	public:
 	MSQProducerContext(MSQTaskPool* _pool):pool(_pool){}
 	virtual ~MSQProducerContext(){};
-	OpResult produce(const Task& task, bool& changeConsumer, AtomicStatistics* stat);
-	void produceForce(const Task& task, AtomicStatistics* stat);
+	OpResult produce(Task& task, bool& changeConsumer, AtomicStatistics* stat);
+	void produceForce(Task& task, AtomicStatistics* stat);
 };
 
 #endif  //MSQTASKPOOL_H_

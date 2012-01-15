@@ -13,8 +13,8 @@ public:
 	public:
 		virtual ~ProducerContext() {};
 
-		virtual OpResult produce(const Task& t, bool& changeConsumer, AtomicStatistics* stat) = 0;
-		virtual void produceForce(const Task& t, AtomicStatistics* stat) = 0;
+		virtual OpResult produce(Task& t, bool& changeConsumer, AtomicStatistics* stat) = 0;
+		virtual void produceForce(Task& t, AtomicStatistics* stat) = 0;
 	};
 
 	/* constructor to be used when derived TaskPool is aware to the number of producers.

@@ -20,6 +20,8 @@ int main(int argc, char* argv[])
 	assert(Configuration::getInstance()->getVal(prodNum, "producersNum"));
 	assert(Configuration::getInstance()->getVal(consNum, "consumersNum"));
 	
+	cout << "producersNum = " << prodNum << " , consumersNum = " << consNum << endl;
+
 	ArchEnvironment::getInstance()->threadToCoreChipMapping();
 	
 	// craete new pool pointers array - one for each consumer. Actual pools will be allocated by the consumers.
@@ -34,6 +36,7 @@ int main(int argc, char* argv[])
 	for(int i = 0; i < consNum; i++)
 	{
 		consArgs[i].id = i;
+		consArgs[i].numOfProducers = prodNum;
 		consArgs[i].poolPtr = &pools[i];
 	}
 	
@@ -57,7 +60,9 @@ int main(int argc, char* argv[])
 	}
 	
 	// busy-wait until all pools have been allocated
+	cout << "Waiting for pools initialization..." << endl;
 	while(syncFlags::getAllocatedPoolsCounter() < consNum){}
+	cout << "Pools created successfully..." << endl;
 	// set consumer-to-pool mapping in ArchEnvironment
 	ArchEnvironment::getInstance()->setConsumerToPoolMapping(pools);
 	
@@ -69,7 +74,9 @@ int main(int argc, char* argv[])
 	int timeToRun;
 	assert(Configuration::getInstance()->getVal(timeToRun, "timeToRun"));
 	syncFlags::start();	
+	cout << "Starting the run..." << endl;
 	usleep(1000*timeToRun);
+	cout << "Terminating threads..." << endl;
 	// consider using non-static stop flag (flag for each thread)
 	syncFlags::stop();
 	syncFlags::stop();

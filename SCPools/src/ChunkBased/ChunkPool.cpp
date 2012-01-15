@@ -35,3 +35,7 @@ void ChunkPool::putChunk(SPChunk* c) {
 	this->chunkQueue->enqueue(c, atomicStat);
 }
 
+int ChunkPool::getOwner() const {
+	return this->owner;
+}
+

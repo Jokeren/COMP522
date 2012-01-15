@@ -1,5 +1,6 @@
 #include "Threads.h"
 #include "MSQTaskPool.h"
+#include "NoFIFOPool.h"
 #include <pthread.h>
 #include <sched.h>
 #include <assert.h>
@@ -10,9 +11,9 @@
 #include "ArchEnvironment.h"
 using namespace std;
 
-bool syncFlags::simulationStart = false;
-int syncFlags::allocatedPoolsCounter = false;
-bool syncFlags::simulationStop = false;
+volatile bool syncFlags::simulationStart = false;
+volatile int syncFlags::allocatedPoolsCounter = false;
+volatile bool syncFlags::simulationStop = false;
 
 void assignToCPU(int cpu){
 
@@ -134,6 +135,11 @@ void* consRun(void* _arg){
 	if(poolType.compare("MSQTaskPool") == 0)
 	{
 		*(arg->poolPtr) = new MSQTaskPool();
+		cout << "MSQTaskPool created" << endl;
+	}
+	else if (poolType.compare("NoFIFOPool") == 0)
+	{
+		*(arg->poolPtr) = new NoFIFOPool(arg->numOfProducers, arg->id);
 	}
 	else
 	{

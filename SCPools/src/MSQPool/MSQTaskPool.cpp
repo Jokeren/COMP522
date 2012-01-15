@@ -45,18 +45,18 @@ int MSQTaskPool::getEmptynessCounter() const{
 	return 0;
 }
 
-void MSQTaskPool::insert(const Task& task, AtomicStatistics* stat){
-	const Task* t = &task;
-	Q->enqueue(const_cast <Task*> (t), stat);
+void MSQTaskPool::insert(Task& task, AtomicStatistics* stat){
+	Task* t = &task;
+	Q->enqueue(t, stat);
 }
 
-OpResult MSQProducerContext::produce(const Task& task, bool& changeConsumer, AtomicStatistics* stat){
+OpResult MSQProducerContext::produce(Task& task, bool& changeConsumer, AtomicStatistics* stat){
 	changeConsumer = false;
 	pool->insert(task, stat);
 	return SUCCESS;
 }
 
-void MSQProducerContext::produceForce(const Task& task, AtomicStatistics* stat){
+void MSQProducerContext::produceForce(Task& task, AtomicStatistics* stat){
 	pool->insert(task, stat);
 }
 
