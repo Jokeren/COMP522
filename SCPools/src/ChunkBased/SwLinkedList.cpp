@@ -176,10 +176,10 @@ OpResult SwLinkedList::SwLinkedListIterator::next(SwNode*& node) {
 			if (curr != prev->next) return FAILURE;
 			return SUCCESS;
 		}
-		prev = curr;
 		std::swap(hp0,hp1);
 		SwNode* next = curr->next;
 		if (curr != prev->next) return FAILURE;
+		prev = curr;
 		curr = next;
 		setHP(hp0,curr,hpLoc);
 		if (curr != prev->next) {

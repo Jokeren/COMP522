@@ -65,15 +65,15 @@ OpResult NoFIFOPool::consume(Task*& t, AtomicStatistics* stat) {
 		}
 	}
 
-	//Go over the chunks list in a fair way
-	int prevQueueIdx = currentQueueID;
-
+	//Go over the all of the chunks list in a fair way
 	currentQueueID = (currentQueueID + 1) % numProducers;
 	SwLinkedList::SwLinkedListIterator iter(NULL);
-	while (currentQueueID != prevQueueIdx) {
+	int count = 0;
+	while (count < numProducers) {
+		count++;
 		if (chunkListSizes[currentQueueID] != 0) {
 			// according to the counter, there are chunks in this list
-			SwLinkedList currList = chunkLists[currentQueueID];
+			SwLinkedList &currList = chunkLists[currentQueueID];
 			iter.reset(&currList);
 			SwNode* n = NULL;
 			OpResult iterationStatus;

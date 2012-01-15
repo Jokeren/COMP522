@@ -64,12 +64,15 @@ HPData initHPData(int hpCountPerThread, int ThreadCount, int recCount) {
 	assert(res != NULL);
 	res->HP_COUNT = hpCountPerThread;
 	res->THREAD_COUNT = ThreadCount;
-	//res->REC_COUNT = hpCountPerThread*ThreadCount;
-	res->REC_COUNT = recCount;
+	if (recCount == -1)
+		res->REC_COUNT = hpCountPerThread*ThreadCount;
+	else
+		res->REC_COUNT = recCount;
 	return res;
 }
 
 HPLocal getHPLocal() {
+	assert(localHPData);
 	return localHPData;
 }
 

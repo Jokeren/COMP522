@@ -18,11 +18,13 @@ typedef struct{
 } consumerStats;
 
 typedef struct producerArg{
+	int numOfThreads;
 	int id;
 } producerArg;
 
 typedef struct{
 	int id;
+	int numOfThreads;
 	int numOfProducers;
 	SCTaskPool** poolPtr;
 } consumerArg;

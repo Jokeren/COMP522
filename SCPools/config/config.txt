@@ -11,6 +11,7 @@ consumersNum=1
 
 #type of container
 poolType=NoFIFOPool
+#poolType=MSQTaskPool
 
 #Producers input intervals
 peakLength=100000

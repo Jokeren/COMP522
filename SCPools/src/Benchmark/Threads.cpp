@@ -1,6 +1,7 @@
 #include "Threads.h"
 #include "MSQTaskPool.h"
 #include "NoFIFOPool.h"
+#include "hp/hp.h"
 #include <pthread.h>
 #include <sched.h>
 #include <assert.h>
@@ -32,6 +33,7 @@ void assignToCPU(int cpu){
 
 void* prodRun(void* _arg){
 	producerArg* arg = (producerArg*)_arg;
+	HP::threadRegister(HP::initHPData(4,arg->numOfThreads));
 	int id = arg->id;
 	
 	// handle thread's affinity
@@ -114,6 +116,7 @@ void* prodRun(void* _arg){
 
 void* consRun(void* _arg){
 	consumerArg* arg = (consumerArg*)_arg;
+	HP::threadRegister(HP::initHPData(4,arg->numOfThreads));
 	int id = arg->id;
 	
 	// handle thread's affinity

@@ -1,5 +1,9 @@
 #include "NoFIFOPool.h"
 
+#include "hp/hp.h"
+using namespace HP;
+
+
 float NoFIFOPool::getStealingScore() const {
 	return 0;
 }
@@ -32,7 +36,7 @@ SwNode* NoFIFOPool::getStealNode(int &stealQueueID) {
 //		if (max < 1 && chunkListSizes[numProducers] != 0) {
 //			stealQueueID = numProducers;
 //			//no list with more than 1 chunk - try to steal any node from steal list
-//			SwLinkedList list = chunkLists[numProducers];
+//			SwLinkedList& list = chunkLists[numProducers];
 //			iter.reset(&list);
 //			if (iter.next(n1) == FAILURE)
 //				continue;
@@ -52,7 +56,7 @@ SwNode* NoFIFOPool::getStealNode(int &stealQueueID) {
 //
 //		// steal from longest list, try to steal the second chunk.
 //		// steal the first chunk if there is no second chunk.
-//		SwLinkedList list = chunkLists[maxIdx];
+//		SwLinkedList& list = chunkLists[maxIdx];
 //		stealQueueID = maxIdx;
 //
 //		iter.reset(&list);
@@ -97,7 +101,7 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 		return NULL;
 
 	// make the prevNode restealable by adding it to my own stealList
-	SwLinkedList stealList = chunkLists[numProducers];
+	SwLinkedList& stealList = chunkLists[numProducers];
 	stealList.append(prevNode);
 	// try to change the owner
 	int prevOwner = c->getCountedOwner();

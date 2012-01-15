@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
 		consArgs[i].id = i;
 		consArgs[i].numOfProducers = prodNum;
 		consArgs[i].poolPtr = &pools[i];
+		consArgs[i].numOfThreads = consNum + prodNum;
 	}
 	
 	producerArg* prodArgs = new producerArg[prodNum];
@@ -45,6 +46,7 @@ int main(int argc, char* argv[])
 	for(int i = 0; i < prodNum; i++)
 	{
 		prodArgs[i].id = i;
+		prodArgs[i].numOfThreads = consNum + prodNum;
 	}
 	
 	//create and start threads
