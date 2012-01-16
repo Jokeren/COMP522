@@ -37,11 +37,16 @@ public:
     };
     friend class SwLinkedListIterator;
     SwLinkedList();
+
     virtual ~SwLinkedList();
     void append(SwNode *nodeToAdd);
     void remove(SwNode *nodeToRemove);
     void replace(SwNode *nodeToReplace, SwNode *newNode);
     SwNode *append(SPChunk *chunkToAdd);
+private:
+    SwLinkedList(const SwLinkedList& other) { this->head = other.head; }
+    SwLinkedList& operator=(const SwLinkedList& other) { this->head = other.head; return *this;}
+
 private:
     SwNode *head;
     SwNode *findPrevNode(SwNode *n);
