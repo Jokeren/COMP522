@@ -1,0 +1,23 @@
+#force affinity ?
+forceAssignment=no
+#if forced affinity - producers/comsumers thread cores
+prods=0 16 2 18 4 20 6 22 8 24 10 26 12 28 14 30
+cons=1 17 3 19 5 21 7 23 9 25 11 27 13 29 15 31
+chips=0 1 16 17:2 3 18 19:4 5 20 21:6 7 22 23:8 9 24 25:10 11 26 27:12 13 28 29:14 15 30 31
+
+stealIterations=2
+
+#number of producer/consumer threads
+producersNum=8
+consumersNum=8
+
+#type of container
+poolType=MSQTaskPool
+
+#Producers input intervals
+peakLength=100000
+timeBetweenPeaks=0
+
+#Test runtime
+timeToRun=10000
+
