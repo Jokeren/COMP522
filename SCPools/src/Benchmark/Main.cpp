@@ -95,9 +95,9 @@ int main(int argc, char* argv[])
 	}
 	
 	// sum and print the statistics
-	int TotalNumOfProducedTasks = 0;
+	unsigned long TotalNumOfProducedTasks = 0;
 	double TotalInsertionThroughput = 0;
-	int TotalNumOfRetrievedTasks = 0;
+	unsigned long TotalNumOfRetrievedTasks = 0;
 	double TotalSystemThroughput = 0;
 	unsigned long stealingCounter = 0;
 	AtomicStatistics* prodStats = new AtomicStatistics();

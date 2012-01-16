@@ -59,6 +59,7 @@ void* prodRun(void* _arg){
 	list<long>* timeMeasurements = new list<long>();
 	struct timespec* ts = new timespec();
 	Producer* producer = new Producer(id);
+	DummyTask* task = new DummyTask();
 	// peak-silence loop
 	while(!syncFlags::getStopFlag())
 	{
@@ -70,7 +71,6 @@ void* prodRun(void* _arg){
 		/* task generation and insertion */
 		for(int i = 0; i < peakLength; i++)
 		{
-			DummyTask* task = new DummyTask();
 			// if i%100 == 0 - set task insertion time to current time in ms
 			if(i%100 == 0)
 			{
@@ -173,9 +173,9 @@ void* consRun(void* _arg){
 			continue;
 		}
 		numOfTasks++;
-		DummyTask* dt = (DummyTask*)task;
-		dt->run(NULL);  // run task
-		delete dt;  // delete task		
+		//DummyTask* dt = (DummyTask*)task;
+		//dt->run(NULL);  // run task
+		//delete dt;  // delete task
 	}
 	/* sample loop end time */
 	clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);

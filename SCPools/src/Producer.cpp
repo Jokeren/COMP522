@@ -10,6 +10,9 @@
 #include "Task.h"
 #include <assert.h>
 
+#include <iostream>
+using namespace std;
+
 Producer::Producer(int _id)
  : id(_id)
 {
@@ -25,8 +28,11 @@ Producer::~Producer() {
 }
 
 void Producer::produce(Task& t) {
+//	curProdContext->produceForce(t, stat);
+
 	bool changeConsumer;
 	OpResult res = curProdContext->produce(t, changeConsumer, stat);
+
 	if (res == SUCCESS) {
 		if (curConsumerIdx != 0 && changeConsumer == true) {
 			curConsumerIdx = 0;
@@ -39,6 +45,7 @@ void Producer::produce(Task& t) {
 	for(int i = 0; i < consumersNum; i++) {
 		curConsumerIdx = i;
 		curProdContext = consumers[i]->getProducerContext(*this);
+
 		if (curProdContext->produce(t, changeConsumer, stat) == SUCCESS) return;
 	}
 

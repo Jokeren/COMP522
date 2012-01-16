@@ -12,7 +12,7 @@
 #include "Task.h"
 
 //TODO: const for now, maybe changed later.
-#define TASKS_PER_CHUNK 500 //1020 // (4KB / 4B) - 2 = 1022
+#define TASKS_PER_CHUNK 1000 //1020 // (4KB / 4B) - 2 = 1022
 
 
 #define TAKEN (Task*)0x1

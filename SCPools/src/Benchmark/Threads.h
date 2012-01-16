@@ -5,14 +5,14 @@
 
 typedef struct{
 	int id;
-	int numOfProducedTasks;
+	unsigned long numOfProducedTasks;
 	double producerThroughput;
 	AtomicStatistics atomicStats;
 } producerStats;
 
 typedef struct{
 	int id;
-	int numOfRetrievedTasks;
+	unsigned long numOfRetrievedTasks;
 	double consumerThroughput;
 	AtomicStatistics atomicStats;
 	unsigned long stealingCounter;

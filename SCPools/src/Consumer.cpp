@@ -32,29 +32,26 @@ OpResult Consumer::consume(Task*& t) {
 	// In this case a consumer traverses over other pools until finds the pool with
 	// the stealing score higher than a given threshold.
 	// The threshold is repeatedly decreased to zero.
-	if(stealIterations <= 0)
-	{
-		return myPool->consume(t,stat);
-	}
-	float stealThreshold = myPool->getStealingThreshold();
-	float stealThresholdDelta = stealThreshold / stealIterations;
+
+	OpResult res = myPool->consume(t, stat);
+	if (res == SUCCESS || stealIterations <= 0) return res;
 
 	for(int stealIter = 0; stealIter < stealIterations; stealIter++) {
 		if (myPool->consume(t,stat) == SUCCESS) return SUCCESS;
+	}
 
-		for(int c = 1; c < consumersNum; c++) {
-			if (consumers[c]->getStealingScore() >= stealThreshold) {
-				// try to steal from that pool
-				stealingCounter++;
-				Task* stolenTask = myPool->steal(consumers[c],stat);
-				if (stolenTask != NULL) {
-					// successful stealing
-					t = stolenTask;
-					return SUCCESS;
-				}
+	float stealThreshold = myPool->getStealingThreshold();
+	for(int c = 1; c < consumersNum; c++) {
+		if (consumers[c]->getStealingScore() >= stealThreshold) {
+			// try to steal from that pool
+			stealingCounter++;
+			Task* stolenTask = myPool->steal(consumers[c],stat);
+			if (stolenTask != NULL) {
+				// successful stealing
+				t = stolenTask;
+				return SUCCESS;
 			}
 		}
-		stealThreshold -= stealThresholdDelta;
 	}
 
 	// the container is probably empty
