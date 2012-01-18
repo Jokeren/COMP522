@@ -40,90 +40,33 @@ SwNode* NoFIFOPool::getStealNode(int &stealQueueID) {
 	int idx = getLongestListIdx();
 	if (chunkListSizes[idx] < getStealingThreshold()) return NULL;
 	HPLocal hpLoc = getHPLocal();
-	// take the second chunk from the beginning
-	while(true) {
-		SwLinkedList::SwLinkedListIterator iter(&(chunkLists[idx]));
-		SwNode* resNode;
 
-		OpResult res = iter.next(resNode); // the first chunk
-		if (res == FAILURE) continue;
-		if (resNode == NULL) return NULL;
+	stealQueueID = idx;
 
-		res = iter.next(resNode); // the second chunk
-		if (res == FAILURE) continue;
-		setHP(2, resNode, hpLoc);
-		stealQueueID = idx;
-		return resNode;
-	}
+	//todo: check if chunk is empty...
+	SwNode* resNode = chunkLists[idx].getLast(hpLoc);
 
-//	SwLinkedList::SwLinkedListIterator iter(NULL);
-//	SwNode *n1 = NULL, *n2 = NULL;
-//	HPLocal hpLoc = getHPLocal();
-//	SPChunk* c = NULL;
-//	while (true) {
-//		//find list with max size:
-//		unsigned int max = 0;
-//		int maxIdx = -1;
-//		for (int i = 0; i < numProducers; i++) {
-//			if (chunkListSizes[i] > max) {
-//				max = chunkListSizes[i];
-//				maxIdx = i;
-//			}
-//		}
+	static int count = 0;
+	cout << "stole: " << count++ << endl;
+	return resNode;
+
+
+//	// take the second chunk from the beginning
+//	while(true) {
+//		SwLinkedList::SwLinkedListIterator iter(&(chunkLists[idx]));
+//		SwNode* resNode;
 //
-//		if (max < 1 && chunkListSizes[numProducers] != 0) {
-//			stealQueueID = numProducers;
-//			//no list with more than 1 chunk - try to steal any node from steal list
-//			SwLinkedList& list = chunkLists[numProducers];
-//			iter.reset(&list);
-//			if (iter.next(n1) == FAILURE)
-//				continue;
-//			if (n1 != NULL) {
-//				c = n1->chunk;
-//				setHP(3, c, hpLoc);
-//				if (n1->chunk != c)
-//					continue;
-//				if (c != NULL && c->hasTask(n1->consumerIdx + 1)) {
-//					setHP(2, n1, hpLoc);
-//					return n1;
-//				}
-//			}
-//		}
-//		if (max == 0)
-//			return NULL;
+//		OpResult res = iter.next(resNode); // the first chunk
+//		if (res == FAILURE) continue;
+//		if (resNode == NULL) return NULL;
 //
-//		// steal from longest list, try to steal the second chunk.
-//		// steal the first chunk if there is no second chunk.
-//		SwLinkedList& list = chunkLists[maxIdx];
-//		stealQueueID = maxIdx;
-//
-//		iter.reset(&list);
-//		if (iter.next(n1) == FAILURE)
-//			continue;
-//		//TODO: may just return NULL here:
-//		if (n1 == NULL)
-//			continue;
-//		setHP(2, n1, hpLoc);
-//		if (iter.next(n2) == FAILURE)
-//			continue;
-//		if (n2 != NULL) {
-//			c = n2->chunk;
-//			setHP(3, c, hpLoc);
-//			if (n2->chunk != c)
-//				continue;
-//			if (c != NULL && c->hasTask(n2->consumerIdx + 1)) {
-//				setHP(2, n2, hpLoc);
-//				return n2;
-//			}
-//		}
-//		c = n1->chunk;
-//		setHP(3, c, hpLoc);
-//		if (n1->chunk != c)
-//			continue;
-//		if (c != NULL && c->hasTask(n1->consumerIdx + 1)) {
-//			return n1;
-//		}
+//		res = iter.next(resNode); // the second chunk
+//		if (res == FAILURE) continue;
+//		setHP(2, resNode, hpLoc);
+//		stealQueueID = idx;
+//		return resNode;
 //	}
+
 }
 
 Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
