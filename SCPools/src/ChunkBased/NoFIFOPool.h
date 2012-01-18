@@ -71,8 +71,8 @@ protected:
 	ReclaimChunkFunc* reclaimChunkFunc;
 	NoFIFOPool::ProdCtx** prodContexts;
 
-private:
-	Task* takeTask(SwNode* n);
+protected:
+	virtual Task* takeTask(SwNode* n);
 	SwNode* getStealNode(int &stealQueueID);
 	void reclaimChunk(SwNode* n, SPChunk* c, int QueueID);
 };

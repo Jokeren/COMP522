@@ -25,6 +25,7 @@ public:
 	void clean(); // prepares the chunk for reuse
 	bool insertTask(Task* t, bool& lastTask);
 	OpResult getTask(Task*& t, int idx);
+	bool isTaken(int idx);
 	bool hasTask(int idx);
 	void markTaken(int idx);
 	bool markTaken(int idx, Task* t);

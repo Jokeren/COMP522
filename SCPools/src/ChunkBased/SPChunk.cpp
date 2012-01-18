@@ -48,6 +48,10 @@ bool SPChunk::hasTask(int idx) {
 	return true;
 }
 
+bool SPChunk::isTaken(int idx) {
+	return (tasks[idx] == TAKEN);
+}
+
 void SPChunk::markTaken(int idx) {
 	tasks[idx] = TAKEN;
 }
