@@ -28,7 +28,12 @@ ChunkPool::~ChunkPool() {
 SPChunk* ChunkPool::getChunk() {
 	SPChunk* c;
 	bool res = chunkQueue->dequeue(c, atomicStat);
-	return (res) ? c : NULL;
+	if (res) {
+		c->setOwner(owner);
+		c->clean();
+		return c;
+	}
+	return NULL;
 }
 
 void ChunkPool::putChunk(SPChunk* c) {

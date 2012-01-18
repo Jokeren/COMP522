@@ -16,7 +16,6 @@
 #include <stdlib.h>
 #include <assert.h>
 
-
 struct set_t {
 	int last;		// index of the last object in the set
 	int isSorted;	// flag to determine if the data array is sorted
@@ -25,15 +24,19 @@ struct set_t {
 };
 
 //AUX
-void bubbleSort(int* array, int size);
-int binarySearch(int array[], int Size, int value);
+void bubbleSort(long* array, int size);
+int binarySearch(long array[], int Size, long value);
 
 // Returns a set with maximun size of maxSize.
 Set setInit(int maxSize) {
+	int i = 0;
 	Set s = (Set)malloc(sizeof(SetT));
 	assert(s != NULL);
-	s->data = (int*)malloc(sizeof(int) * maxSize);
+	s->data = (long*)malloc(sizeof(long) * maxSize);
 	assert(s->data != NULL);
+	for (i = 0; i < maxSize; i++) {
+		s->data[i] = 0;
+	}
 	s->last = 0;
 	s->isSorted = 1;
 	s->maxSize = maxSize;
@@ -71,7 +74,7 @@ void setDestroy(Set set) {
 
 /****** AUX functions ******/
 
-void bubbleSort(int* array, int size)
+void bubbleSort(long* array, int size)
 {
    int swapped;
    int i;
@@ -83,7 +86,7 @@ void bubbleSort(int* array, int size)
        {
            if(array[j] > array[j+1])
            {
-               int temp = array[j];
+        	   long temp = array[j];
                array[j] = array[j+1];
                array[j+1] = temp;
                swapped = 1;
@@ -95,7 +98,7 @@ void bubbleSort(int* array, int size)
    }
 }
 
-int binarySearch(int array[], int Size, int value)
+int binarySearch(long array[], int Size, long value)
 {
     int low = 0, high = Size - 1, midpoint = 0;
     while (low <= high)

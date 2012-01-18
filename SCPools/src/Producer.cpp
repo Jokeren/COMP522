@@ -30,11 +30,11 @@ Producer::~Producer() {
 void Producer::produce(Task& t) {
 //	curProdContext->produceForce(t, stat);
 
-	bool changeConsumer;
+	bool changeConsumer = false;
 	OpResult res = curProdContext->produce(t, changeConsumer, stat);
 
 	if (res == SUCCESS) {
-		if (curConsumerIdx != 0 && changeConsumer == true) {
+		if (curConsumerIdx != 0 && changeConsumer) {
 			curConsumerIdx = 0;
 			curProdContext = consumers[0]->getProducerContext(*this);
 		}

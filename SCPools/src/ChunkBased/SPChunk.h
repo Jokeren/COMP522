@@ -33,6 +33,7 @@ public:
 
 
 	static int getOwner(int countedOwner);
+	void setOwner(int owner); // will reset the ownership and put the counter to zero
 	int getCountedOwner() const;
 	bool changeCountedOwner(int prevOwner, int newOwner);
 

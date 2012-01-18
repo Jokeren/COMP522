@@ -140,7 +140,7 @@ char AN(volatile unsigned long *mem, long del)
 //}
 
 #define CAS __sync_bool_compare_and_swap
-
+#define FAS __sync_fetch_and_sub
 
 /* double-compare-and-swap: atomically sets the two-word data at address @mem
  *                          to the two-word value of @new if value at @mem

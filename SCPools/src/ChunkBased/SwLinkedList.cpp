@@ -11,7 +11,6 @@
 
 using namespace HP;
 
-
 class DeleteNode : public HP::ReclaimationFunc {
 
 public :
@@ -96,16 +95,15 @@ SwLinkedList::~SwLinkedList() {
 // removes the node from the list - assumes it is another list and doesn't need to be deleted
 void SwLinkedList::remove(SwNode *nodeToRemove)
 {
-	SwNode* prev = findPrevNode(nodeToRemove);
-	prev->next = nodeToRemove->next;
+	SwNode* pred = findPrevNode(nodeToRemove);
+	pred->next = nodeToRemove->next;
 }
 
 void SwLinkedList::replace(SwNode *nodeToReplace, SwNode *newNode)
 {
-	SwNode* prev = findPrevNode(nodeToReplace);
-	assert(prev != NULL);
+	SwNode* pred = findPrevNode(nodeToReplace);
 	newNode->next = nodeToReplace->next;
-	prev->next = newNode;
+	pred->next = newNode;
 }
 
 SwNode* SwLinkedList::append(SPChunk *chunkToAdd) {
@@ -116,7 +114,6 @@ SwNode* SwLinkedList::append(SPChunk *chunkToAdd) {
 
 // No hazard pointers needed, since this is the only function
 // that can remove nodes and only one thread may call it.
-
 SwNode *SwLinkedList::findPrevNode(SwNode *n)
 {
     SwNode *prev = head;
@@ -141,6 +138,7 @@ SwNode *SwLinkedList::findPrevNode(SwNode *n)
 // Append a node to the list and remove unnecessary nodes
 void SwLinkedList::append(SwNode *nodeToAdd) {
 	SwNode* prev = findPrevNode(NULL);
+	assert(prev->next == NULL);
 	prev->next = nodeToAdd;
 }
 
@@ -152,13 +150,12 @@ void SwLinkedList::append(SwNode *nodeToAdd) {
 SwLinkedList::SwLinkedListIterator::SwLinkedListIterator(SwLinkedList* list) : hp0(0), hp1(1) {
 	curr = (list == NULL) ? NULL : list->head;
 	hpLoc = getHPLocal();
-
+	setHP(hp0,curr,hpLoc);
 }
 
 // skips removed nodes but doesn't release them
 // may fail if current node was removed, in such a case reset should be called.
 OpResult SwLinkedList::SwLinkedListIterator::next(SwNode*& node) {
-
 	node = NULL;
 	SwNode* prev  = curr;
 	setHP(hp1,prev,hpLoc);
@@ -166,7 +163,7 @@ OpResult SwLinkedList::SwLinkedListIterator::next(SwNode*& node) {
 	curr = curr->next;
 	setHP(hp0,curr,hpLoc);
 	if (curr != prev->next) {
-		curr = prev; //so it would fail again
+		curr = NULL; //so it would fail again
 		return FAILURE;
 	}
 
@@ -176,14 +173,14 @@ OpResult SwLinkedList::SwLinkedListIterator::next(SwNode*& node) {
 			if (curr != prev->next) return FAILURE;
 			return SUCCESS;
 		}
-		std::swap(hp0,hp1);
 		SwNode* next = curr->next;
 		if (curr != prev->next) return FAILURE;
 		prev = curr;
+		std::swap(hp0,hp1);
 		curr = next;
 		setHP(hp0,curr,hpLoc);
 		if (curr != prev->next) {
-			curr = prev; //so it would fail again
+			curr = NULL; //so it would fail again
 			return FAILURE;
 		}
 	}

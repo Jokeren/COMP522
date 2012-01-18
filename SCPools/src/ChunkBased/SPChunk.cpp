@@ -7,6 +7,12 @@
 
 #include "SPChunk.h"
 #include "Atomic.h"
+#include <string.h>
+#include <assert.h>
+#include <iostream>
+
+using namespace std;
+
 
 // we will use 10 bits for the ownership and all the others for the counter
 const int OWNER_MASK = ((1 << 10) - 1);
@@ -14,18 +20,16 @@ const int COUNTER_MASK = ~((1 << 10) - 1);
 const int OWNER_SHIFT = 0;
 const int COUNTER_SHIFT = 10;
 
-SPChunk::SPChunk(int _owner) : head(0), owner(_owner) {}
+SPChunk::SPChunk(int _owner) : head(0), owner(_owner) {
+	clean();
+}
 
 SPChunk::~SPChunk() {}
 
 void SPChunk::clean() {
 	head = 0;
-	// reset the counter
-	owner &= OWNER_MASK;
 	// reset the array of task pointers
-	for(int i = 0; i < TASKS_PER_CHUNK; i++) {
-		tasks[i] = NULL;
-	}
+	memset(tasks, 0, TASKS_PER_CHUNK*sizeof(Task*));
 }
 
 
@@ -65,6 +69,10 @@ int SPChunk::getMaxSize() {
 	return TASKS_PER_CHUNK;
 }
 
+void SPChunk::setOwner(int o) {
+	// will reset the ownership and put the counter to zero
+	owner = o;
+}
 
 int SPChunk::getOwner(int countedOwner) {
 	return (countedOwner & OWNER_MASK);
