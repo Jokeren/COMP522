@@ -30,6 +30,9 @@ NoFIFOPool::NoFIFOPool(int _numProducers, int _consumerID) :
 	chunkPool = new ChunkPool(consumerID, initialPoolSize);
 	chunkLists = new SwLinkedList[_numProducers + 1];
 	chunkListSizes = new unsigned int[numProducers + 1];
+	for (int i = 0; i < numProducers + 1; i++) {
+		chunkListSizes[i] = 0;
+	}
 	reclaimChunkFunc = new ReclaimChunkFunc(chunkPool);
 
 	// create and initiate the contexts for every possible producer
@@ -82,6 +85,7 @@ OpResult NoFIFOPool::consume(Task*& t, AtomicStatistics* stat) {
 				if (resTask != NULL) {
 					t = resTask;
 					currentNode = n;
+					setHP(2,currentNode,getHPLocal());
 					return SUCCESS;
 				}
 			}
@@ -109,6 +113,7 @@ Task* NoFIFOPool::takeTask(SwNode* n) {
 	if (n->chunk != chunk || chunk == NULL)
 		return NULL;
 	Task* task = NULL;
+	assert(n->consumerIdx + 1 >= 0 && n->consumerIdx + 1 < chunk->getMaxSize());
 	chunk->getTask(task, n->consumerIdx + 1);
 	if (task == NULL)
 		return NULL;
@@ -122,12 +127,11 @@ Task* NoFIFOPool::takeTask(SwNode* n) {
 		return task;
 	}
 	// the chunk was stolen:
-	FAA(&(chunkListSizes[currentQueueID]), -1);
-	bool success = (task != TAKEN &&
-			(chunk->markTaken(n->consumerIdx, task) == SUCCESS));
+	bool success = (task != TAKEN && (chunk->markTaken(n->consumerIdx, task)));
 	n->chunk = NULL;
 	currentNode = NULL;
 	return success ? task : NULL;
+	return NULL;
 }
 
 
@@ -141,7 +145,7 @@ void NoFIFOPool::reclaimChunk(SwNode* n, SPChunk* c, int QueueID) {
 	n->chunk = NULL;
 	currentNode = NULL;
 	if (SPChunk::getOwner(c->getCountedOwner()) == consumerID) {
-		FAA(&(chunkListSizes[QueueID]), -1);
+		FAS(&(chunkListSizes[QueueID]), 1);
 	}
 	retireNode(c, reclaimChunkFunc, hpLoc);
 }

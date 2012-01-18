@@ -93,16 +93,18 @@ SwLinkedList::~SwLinkedList() {
 
 
 // removes the node from the list - assumes it is another list and doesn't need to be deleted
+// Also assumes it was the last node in the current list so the previous node points to NULL
 void SwLinkedList::remove(SwNode *nodeToRemove)
 {
-	SwNode* pred = findPrevNode(nodeToRemove);
-	pred->next = nodeToRemove->next;
+	SwNode* prev = findPrevNode(nodeToRemove);
+	prev->next = NULL;
 }
-
+// replace a node from the list with another node - assumes it is another list and doesn't need to be deleted
+// Also assumes it was the last node in the current list so the new node points to NULL
 void SwLinkedList::replace(SwNode *nodeToReplace, SwNode *newNode)
 {
 	SwNode* pred = findPrevNode(nodeToReplace);
-	newNode->next = nodeToReplace->next;
+	newNode->next = NULL;
 	pred->next = newNode;
 }
 

@@ -1,14 +1,34 @@
+
+#include <assert.h>
+
 #include "NoFIFOPool.h"
 
 #include "hp/hp.h"
 using namespace HP;
 
+#include <iostream>
+using namespace std;
+
+int NoFIFOPool::getLongestListIdx() const {
+	unsigned int maxScore = 0;
+	int idx = 0;
+	for(int i = 0; i < numProducers; i++) {
+		if (chunkListSizes[i] > maxScore) {
+			maxScore = chunkListSizes[i];
+			idx = i;
+		}
+	}
+	return idx;
+}
+
 
 float NoFIFOPool::getStealingScore() const {
-	return 0;
+	int longestListIdx = getLongestListIdx();
+	return chunkListSizes[longestListIdx];
 }
+
 float NoFIFOPool::getStealingThreshold() const {
-	return 0;
+	return 3; // in the list with three chunks, there is hopefully at least one full chunk no one is working with
 }
 
 
@@ -17,7 +37,25 @@ float NoFIFOPool::getStealingThreshold() const {
 // HP #2 will point to that node SP 3 will point to the chunk.
 //TODO: check if this is a good way to choose chunks
 SwNode* NoFIFOPool::getStealNode(int &stealQueueID) {
-	return NULL; // TODO: need to talk with Elad, I can't understand what's going on here
+	int idx = getLongestListIdx();
+	if (chunkListSizes[idx] < getStealingThreshold()) return NULL;
+	HPLocal hpLoc = getHPLocal();
+	// take the second chunk from the beginning
+	while(true) {
+		SwLinkedList::SwLinkedListIterator iter(&(chunkLists[idx]));
+		SwNode* resNode;
+
+		OpResult res = iter.next(resNode); // the first chunk
+		if (res == FAILURE) continue;
+		if (resNode == NULL) return NULL;
+
+		res = iter.next(resNode); // the second chunk
+		if (res == FAILURE) continue;
+		setHP(2, resNode, hpLoc);
+		stealQueueID = idx;
+		return resNode;
+	}
+
 //	SwLinkedList::SwLinkedListIterator iter(NULL);
 //	SwNode *n1 = NULL, *n2 = NULL;
 //	HPLocal hpLoc = getHPLocal();
@@ -89,15 +127,17 @@ SwNode* NoFIFOPool::getStealNode(int &stealQueueID) {
 }
 
 Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
+	HPLocal hpLoc = getHPLocal();
+
 	NoFIFOPool* from = (NoFIFOPool*)from_;
 	// obtain a non-empty node or NULL if there are no nodes.
 	int stealQueueID = -1;
-	SwNode* prevNode = from->getStealNode(stealQueueID);
+	SwNode* const prevNode = from->getStealNode(stealQueueID);
 	if (prevNode == NULL)
 		return NULL;
-
-	SPChunk* c = prevNode->chunk; // TODO: do we need hazard pointers here?
-	if (c == NULL)
+	SPChunk* c = prevNode->chunk;
+	setHP(3,c,hpLoc);
+	if (c == NULL || c != prevNode->chunk)
 		return NULL;
 
 	// make the prevNode restealable by adding it to my own stealList
@@ -105,7 +145,7 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 	stealList.append(prevNode);
 	// try to change the owner
 	int prevOwner = c->getCountedOwner();
-	if (SPChunk::getOwner(prevOwner) == from->consumerID ||
+	if (SPChunk::getOwner(prevOwner) != from->consumerID ||
 			(c->changeCountedOwner(prevOwner, this->consumerID) == false)) {
 		// didn't succeed to change the owner (either it didn't correspond to the id of the from list
 		// or it has been already stolen by someone else
@@ -116,12 +156,22 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 	// succeeded to steal, create the copy of the node and put it in the stealing list
 	SwNode* newNode = new SwNode(c);
 	newNode->consumerIdx = prevNode->consumerIdx;
+	if (newNode->consumerIdx +1 == c->getMaxSize()) {
+		//chunk is empty - can't take a task
+		delete newNode;
+		stealList.remove(prevNode);
+		return NULL;
+
+	}
 	stealList.replace(prevNode, newNode);
+
+	//stealList.append(newNode);
+	assert(prevNode->chunk == NULL || prevNode->chunk == c);
 	prevNode->chunk = NULL;
 
 	// update counters for stealer and the one we stole from
 	FAA(&(chunkListSizes[numProducers]), 1);
-	FAA(&(from->chunkListSizes[stealQueueID]), -1);
+	FAS(&(from->chunkListSizes[stealQueueID]), 1);
 
 	// try to grab the task from the stolen chunk (in order to guarantee progress)
 	int idx = newNode->consumerIdx;
@@ -135,6 +185,7 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 		reclaimChunk(newNode, c, numProducers);
 	}
 	newNode->consumerIdx++;
+	currentNode = newNode;
 	return task;
 }
 

@@ -23,7 +23,6 @@ public:
 	public:
 		ReclaimChunkFunc(ChunkPool* cp) : chunkPool(cp) {}
 		void operator() (void* chunk) {
-			((SPChunk*)chunk)->clean();
 			chunkPool->putChunk((SPChunk*)chunk);
 		}
 
@@ -58,7 +57,7 @@ public:
 	virtual float getStealingScore() const;
 	virtual float getStealingThreshold() const;
 	virtual Task* steal(SCTaskPool* from, AtomicStatistics* stat);
-
+	int getLongestListIdx() const;
 	virtual int getEmptynessCounter() const;
 
 protected:
