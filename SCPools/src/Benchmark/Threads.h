@@ -21,12 +21,14 @@ typedef struct{
 typedef struct producerArg{
 	int numOfThreads;
 	int id;
+	volatile bool pause;
 } producerArg;
 
 typedef struct{
 	int id;
 	int numOfThreads;
 	int numOfProducers;
+	volatile bool pause;
 	SCTaskPool** poolPtr;
 } consumerArg;
 

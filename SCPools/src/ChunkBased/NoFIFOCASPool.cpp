@@ -29,7 +29,7 @@ Task* NoFIFOCASPool::takeTask(SwNode* n) {
 		return NULL; // still nothing inserted
 
 	n->consumerIdx++;
-	if (chunk->markTaken(n->consumerIdx, task) == SUCCESS) {
+	if (chunk->markTaken(n->consumerIdx, task)) {
 		if (n->consumerIdx + 1 == chunk->getMaxSize()) {
 			reclaimChunk(n, chunk, currentQueueID);
 		}
@@ -74,7 +74,7 @@ Task* NoFIFOCASPool::stealFromList(SwLinkedList* l) {
 			} else {
 				SPChunk* chunk = node->chunk;
 				setHP(3, chunk, hpLoc);
-				if (chunk == NULL || node->chunk == NULL) continue; // that was an empty node
+				if (node->chunk != chunk || chunk == NULL) continue; // that was an empty node
 				Task *t = stealFromChunk(chunk);
 				if (t != NULL) return t;
 			}
@@ -93,7 +93,7 @@ Task* NoFIFOCASPool::stealFromChunk(SPChunk* chunk) {
 		chunk->getTask(t, idx);
 		if (t == NULL) return NULL; // still no tasks at that idx
 
-		if (chunk->markTaken(idx, t) == SUCCESS) {
+		if (chunk->markTaken(idx, t)) {
 			// succeeded to steal the task
 			return t;
 		}

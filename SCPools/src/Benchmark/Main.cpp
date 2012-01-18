@@ -6,7 +6,43 @@
 #include <assert.h>
 #include <stdlib.h>
 #include <iostream>
+#include <ctime>
+
 using namespace std;
+
+void run(int consNum, consumerArg* consArgs, int prodNum, producerArg* prodArgs) {
+	// let producers and consumers do their thing...
+	int timeToRun;
+	assert(Configuration::getInstance()->getVal(timeToRun, "timeToRun"));
+	cout << "Time to run = " << timeToRun << " msec" << endl;
+
+	bool withFluctuations = false;
+	Configuration::getInstance()->getVal(withFluctuations, "withFluctuations");
+	cout << "Fluctuations are turned " << (withFluctuations ? "on" : "off") << endl;
+
+	syncFlags::start();
+	cout << "Starting the run..." << endl;
+
+	if (withFluctuations) {
+		for(int i = 0; i < 20; i++) {
+			int prodIdx = (rand()%prodNum);
+			int consIdx = (rand()%consNum);
+
+			consArgs[consIdx].pause = true;
+			prodArgs[prodIdx].pause = true;
+
+			usleep(50*timeToRun);
+
+			consArgs[consIdx].pause = false;
+			prodArgs[prodIdx].pause = false;
+		}
+	} else {
+		usleep(1000*timeToRun);
+	}
+
+	cout << "Terminating threads..." << endl;
+	syncFlags::stop();
+}
 
 int main(int argc, char* argv[])
 {
@@ -39,6 +75,7 @@ int main(int argc, char* argv[])
 		consArgs[i].numOfProducers = prodNum;
 		consArgs[i].poolPtr = &pools[i];
 		consArgs[i].numOfThreads = consNum + prodNum;
+		consArgs[i].pause = false;
 	}
 	
 	producerArg* prodArgs = new producerArg[prodNum];
@@ -47,6 +84,7 @@ int main(int argc, char* argv[])
 	{
 		prodArgs[i].id = i;
 		prodArgs[i].numOfThreads = consNum + prodNum;
+		prodArgs[i].pause = false;
 	}
 	
 	//create and start threads
@@ -72,18 +110,8 @@ int main(int argc, char* argv[])
 	void** prodStatsArray = new void*[prodNum];
 	void** consStatsArray = new void*[consNum];
 	
-	// let producers and consumers do their thing...
-	int timeToRun;
-	assert(Configuration::getInstance()->getVal(timeToRun, "timeToRun"));
-	syncFlags::start();	
-	cout << "Starting the run..." << endl;
-	usleep(1000*timeToRun);
-	cout << "Terminating threads..." << endl;
-	// consider using non-static stop flag (flag for each thread)
-	syncFlags::stop();
-	syncFlags::stop();
-	
-	
+	run(consNum, consArgs, prodNum, prodArgs);
+
 	// wait for child threads
 	for(int i = 0; i < prodNum; i++)
 	{

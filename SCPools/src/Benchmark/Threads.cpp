@@ -64,6 +64,7 @@ void* prodRun(void* _arg){
 	// peak-silence loop
 	while(!syncFlags::getStopFlag())
 	{
+		while(arg->pause == true) {} // wait if you're paused
 		// peak period
 		/* sample peak start time */
 		clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
@@ -145,9 +146,9 @@ void* consRun(void* _arg){
 	{
 		*(arg->poolPtr) = new NoFIFOPool(arg->numOfProducers, arg->id);
 	}
-	else if (poolType.compare("NoCASFIFOPool") == 0)
+	else if (poolType.compare("NoFIFOCASPool") == 0)
 	{
-		*(arg->poolPtr) = new NoCASFIFOPool(arg->numOfProducers, arg->id);
+		*(arg->poolPtr) = new NoFIFOCASPool(arg->numOfProducers, arg->id);
 	}
 	else
 	{
@@ -172,6 +173,7 @@ void* consRun(void* _arg){
 	/* retrieval loop */
 	while(!syncFlags::getStopFlag())
 	{
+		while(arg->pause == true) {} // wait if you're paused
 		Task* task;
 		if(consumer->consume(task) != SUCCESS)
 		{
