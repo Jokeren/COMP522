@@ -38,6 +38,7 @@ public:
 
 		virtual OpResult produce(Task& t, bool& changeConsumer, AtomicStatistics* stat);
 		virtual void produceForce(Task& t, AtomicStatistics* stat);
+		virtual void setHP();
 
 	protected:
 		virtual OpResult produceImpl(Task& t, bool& changeConsumer, bool force = false);
@@ -46,6 +47,7 @@ public:
 		unsigned int& chunkCount;
 		ChunkPool& chunkPool;
 		SPChunk* curChunk;
+		HP::HPLocal hpLoc;
 	};
 
 	NoFIFOPool(int _numProducers, int _consumerID);
@@ -70,6 +72,7 @@ protected:
 	ReclaimChunkFunc* reclaimChunkFunc;
 	NoFIFOPool::ProdCtx** prodContexts;
 	unsigned int stealCounter;
+	HP::HPLocal hpLoc;
 protected:
 	virtual Task* takeTask(SwNode* n);
 	SwNode* getStealNode(int &stealQueueID);

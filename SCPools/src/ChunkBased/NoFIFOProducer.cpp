@@ -1,10 +1,12 @@
 #include "NoFIFOPool.h"
+#include "hp/hp.h"
 
 NoFIFOPool::ProdCtx::ProdCtx(SwLinkedList& l, unsigned int& c, ChunkPool& _chunkPool) :
 	chunkList(l),
 	chunkCount(c),
 	chunkPool(_chunkPool),
-	curChunk(NULL)
+	curChunk(NULL),
+	hpLoc(NULL)
 {
 }
 
@@ -31,7 +33,7 @@ OpResult NoFIFOPool::ProdCtx::produceImpl(Task& t, bool& changeConsumer, bool fo
 			}
 		}
 		FAA(&chunkCount, 1);
-		chunkList.append(newChunk);
+		chunkList.append(newChunk, hpLoc);
 		curChunk = newChunk;
 	}
 
@@ -44,3 +46,6 @@ OpResult NoFIFOPool::ProdCtx::produceImpl(Task& t, bool& changeConsumer, bool fo
 	return SUCCESS;
 }
 
+void NoFIFOPool::ProdCtx::setHP() {
+	if (hpLoc == NULL) hpLoc = HP::getHPLocal();
+}

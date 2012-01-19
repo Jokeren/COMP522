@@ -53,32 +53,31 @@ SwLinkedList::~SwLinkedList() {
 
 // removes the node from the list - assumes it is another list and doesn't need to be deleted
 // Also assumes it was the last node in the current list so the previous node points to NULL
-void SwLinkedList::remove(SwNode *nodeToRemove) {
-	SwNode* prev = findPrevNode(nodeToRemove);
+void SwLinkedList::remove(SwNode *nodeToRemove, HPLocal hpLoc) {
+	SwNode* prev = findPrevNode(nodeToRemove, hpLoc);
 	prev->next = NULL;
 }
 // replace a node from the list with another node - assumes it is another list and doesn't need to be deleted
 // Also assumes it was the last node in the current list so the new node points to NULL
-void SwLinkedList::replace(SwNode *nodeToReplace, SwNode *newNode) {
-	SwNode* pred = findPrevNode(nodeToReplace);
+void SwLinkedList::replace(SwNode *nodeToReplace, SwNode *newNode, HPLocal hpLoc) {
+	SwNode* pred = findPrevNode(nodeToReplace, hpLoc);
 	newNode->next = NULL;
 	pred->next = newNode;
 	last = newNode;
 }
 
-SwNode* SwLinkedList::append(SPChunk *chunkToAdd) {
+SwNode* SwLinkedList::append(SPChunk *chunkToAdd, HPLocal hpLoc) {
 	SwNode* newNode = new SwNode(chunkToAdd);
-	append(newNode);
+	append(newNode,hpLoc);
 	last = newNode;
 	return newNode;
 }
 
 // No hazard pointers needed, since this is the only function
 // that can remove nodes and only one thread may call it.
-SwNode *SwLinkedList::findPrevNode(SwNode *n) {
+SwNode *SwLinkedList::findPrevNode(SwNode *n, HPLocal hpLoc) {
 	SwNode *prev = head;
 	SwNode *curr = head->next;
-	HPLocal hpLoc = getHPLocal();
 	while (curr != n && curr != NULL) {
 		//remove empty nodes
 		if (curr->chunk == NULL) {
@@ -98,8 +97,8 @@ SwNode *SwLinkedList::findPrevNode(SwNode *n) {
 }
 
 // Append a node to the list and remove unnecessary nodes
-void SwLinkedList::append(SwNode *nodeToAdd) {
-	SwNode* prev = findPrevNode(NULL);
+void SwLinkedList::append(SwNode *nodeToAdd, HPLocal hpLoc) {
+	SwNode* prev = findPrevNode(NULL, hpLoc);
 	assert(prev->next == NULL);
 	prev->next = nodeToAdd;
 }
@@ -119,10 +118,10 @@ SwNode* SwLinkedList::getLast(HPLocal hpLoc) {
 // Note: List function may not be used when using this iterator
 // because they share the same HPs.
 
-SwLinkedList::SwLinkedListIterator::SwLinkedListIterator(SwLinkedList* list) :
+SwLinkedList::SwLinkedListIterator::SwLinkedListIterator(SwLinkedList* list, HPLocal _hpLoc) :
 	hp0(0), hp1(1) {
 	curr = (list == NULL) ? NULL : list->head;
-	hpLoc = getHPLocal();
+	hpLoc = _hpLoc;
 	setHP(hp0, curr, hpLoc);
 }
 

@@ -5,7 +5,6 @@
 using namespace HP;
 
 Task* NoFIFOCASPool::takeTask(SwNode* n) {
-	HPLocal hpLoc = getHPLocal();
 	SPChunk* chunk = n->chunk;
 	setHP(3, chunk, hpLoc);
 	if (n->chunk != chunk || chunk == NULL)
@@ -55,9 +54,8 @@ Task* NoFIFOCASPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 }
 
 Task* NoFIFOCASPool::stealFromList(SwLinkedList* l) {
-	HPLocal hpLoc = getHPLocal();
 	// iterate over the list nodes, try to steal from each one of them
-	SwLinkedList::SwLinkedListIterator iter(l);
+	SwLinkedList::SwLinkedListIterator iter(l,hpLoc);
 	SwNode* node;
 	while(true) {
 		if (iter.next(node) != SUCCESS) {

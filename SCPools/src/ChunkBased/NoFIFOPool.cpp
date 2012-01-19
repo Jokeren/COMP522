@@ -22,7 +22,7 @@ NoFIFOPool::NoFIFOPool(int _numProducers, int _consumerID) :
 	currentQueueID(0),
 	stealCounter(0)
 {
-
+	hpLoc = getHPLocal();
 	int initialPoolSize;
 	if (!Configuration::getInstance()->getVal(initialPoolSize, "initialPoolSize")) {
 		initialPoolSize = 200;
@@ -57,6 +57,7 @@ NoFIFOPool::~NoFIFOPool() {
 SCTaskPool::ProducerContext* NoFIFOPool::getProducerContext(const Producer& prod) {
 	// assuming that producer ids start from 0
 	// (this is the way the producers are created at Main.cpp)
+	prodContexts[prod.getId()]->setHP();
 	return prodContexts[prod.getId()];
 }
 
@@ -71,7 +72,7 @@ OpResult NoFIFOPool::consume(Task*& t, AtomicStatistics* stat) {
 
 	//Go over the all of the chunks list in a fair way
 	currentQueueID = (currentQueueID + 1) % (numProducers+1);
-	SwLinkedList::SwLinkedListIterator iter(NULL);
+	SwLinkedList::SwLinkedListIterator iter(NULL,hpLoc);
 	int traversedLists = 0;
 	while (traversedLists < (numProducers+1)) {
 		if (chunkListSizes[currentQueueID] != 0) {
@@ -86,7 +87,7 @@ OpResult NoFIFOPool::consume(Task*& t, AtomicStatistics* stat) {
 				if (resTask != NULL) {
 					t = resTask;
 					currentNode = n;
-					setHP(2,currentNode,getHPLocal());
+					setHP(2,currentNode,hpLoc);
 					return SUCCESS;
 				}
 			}
@@ -108,14 +109,12 @@ OpResult NoFIFOPool::consume(Task*& t, AtomicStatistics* stat) {
 }
 
 Task* NoFIFOPool::takeTask(SwNode* n) {
-	HPLocal hpLoc = getHPLocal();
 	SPChunk* chunk = n->chunk;
 	setHP(3, chunk, hpLoc);
 	if (n->chunk != chunk || chunk == NULL)
 		return NULL;
 	Task* task = NULL;
-	if (n->consumerIdx+1 >= chunk->getMaxSize()) return NULL;
-	assert(n->consumerIdx + 1 >= 0 && n->consumerIdx + 1 < chunk->getMaxSize());
+	assert(n->consumerIdx + 1 >= 0 && n->consumerIdx + 1 < TASKS_PER_CHUNK);
 	chunk->getTask(task, n->consumerIdx + 1);
 	if (task == NULL)
 		return NULL;
@@ -123,7 +122,7 @@ Task* NoFIFOPool::takeTask(SwNode* n) {
 	n->consumerIdx++;
 	if (SPChunk::getOwner(chunk->getCountedOwner()) == consumerID) { //fast path:
 		chunk->markTaken(n->consumerIdx);
-		if (n->consumerIdx + 1 == chunk->getMaxSize()) {
+		if (n->consumerIdx + 1 == TASKS_PER_CHUNK) {
 			reclaimChunk(n, chunk, currentQueueID);
 		}
 		return task;
@@ -143,17 +142,9 @@ int NoFIFOPool::getEmptynessCounter() const {
 
 
 void NoFIFOPool::reclaimChunk(SwNode* n, SPChunk* c, int QueueID) {
-	HPLocal hpLoc = getHPLocal();
 	n->chunk = NULL;
 	currentNode = NULL;
-	if (SPChunk::getOwner(c->getCountedOwner()) == consumerID) {
-		while(true) {
-			unsigned int curVal = chunkListSizes[QueueID];
-			if (curVal == 0) break;
-			if (CAS(&(chunkListSizes[QueueID]), curVal, curVal-1)) break;
-		}
-		//FAS(&(chunkListSizes[QueueID]), 1);
-	}
+	FAS(&(chunkListSizes[QueueID]), 1);
 	retireNode(c, reclaimChunkFunc, hpLoc);
 }
 

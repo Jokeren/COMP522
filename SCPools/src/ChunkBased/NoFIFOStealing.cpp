@@ -42,7 +42,7 @@ SwNode* NoFIFOPool::getStealNode(int &stealQueueID) {
 	int idx = getLongestListIdx();
 	stealQueueID = idx;
 
-	return chunkLists[idx].getLast(getHPLocal());
+	return chunkLists[idx].getLast(hpLoc);
 //
 //	int chunkIdx = ((stealCounter++) % chunkListSizes[idx]);
 //	// go and get the node with the chunkIdx
@@ -68,41 +68,31 @@ SwNode* NoFIFOPool::getStealNode(int &stealQueueID) {
 //	}
 }
 
-//unsigned int noNodeFound = 0;
-//unsigned int nodeWithoutChunk = 0;
-//unsigned int failedChangeOwner = 0;
-//unsigned int emptyChunkStolen = 0;
-
 Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
-	HPLocal hpLoc = getHPLocal();
-
 	NoFIFOPool* from = (NoFIFOPool*)from_;
 	// obtain a non-empty node or NULL if there are no nodes.
 	int stealQueueID = -1;
 	SwNode* const prevNode = from->getStealNode(stealQueueID);
 	if (prevNode == NULL) {
-		//if ((++noNodeFound % 10000) == 0) cout << "noNodeFound " << noNodeFound << endl;
 		return NULL;
 	}
 
 	SPChunk* c = prevNode->chunk;
 	setHP(3,c,hpLoc);
 	if (c == NULL || c != prevNode->chunk) {
-		//if ((++nodeWithoutChunk % 10000) == 0) cout << "nodeWithoutChunk " << nodeWithoutChunk << endl;
 		return NULL;
 	}
 
 	// make the prevNode restealable by adding it to my own stealList
 	SwLinkedList& stealList = chunkLists[numProducers];
-	stealList.append(prevNode);
+	stealList.append(prevNode, hpLoc);
 	// try to change the owner
 	int prevOwner = c->getCountedOwner();
 	if (SPChunk::getOwner(prevOwner) != from->consumerID ||
 			(c->changeCountedOwner(prevOwner, this->consumerID) == false)) {
 		// didn't succeed to change the owner (either it didn't correspond to the id of the from list
 		// or it has been already stolen by someone else
-		stealList.remove(prevNode);
-		//if ((++failedChangeOwner % 10000) == 0) cout << "failedChangeOwner " << failedChangeOwner << endl;
+		stealList.remove(prevNode, hpLoc);
 		return NULL;
 	}
 
@@ -112,12 +102,10 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 	if (newNode->consumerIdx +1 == c->getMaxSize()) {
 		//chunk is empty - can't take a task
 		delete newNode;
-		stealList.remove(prevNode);
-		//if ((++emptyChunkStolen % 10000) == 0) cout << "emptyChunkStolen " << emptyChunkStolen << endl;
+		stealList.remove(prevNode, hpLoc);
 		return NULL;
-
 	}
-	stealList.replace(prevNode, newNode);
+	stealList.replace(prevNode, newNode, hpLoc);
 
 	//stealList.append(newNode);
 	assert(prevNode->chunk == NULL || prevNode->chunk == c);
@@ -125,13 +113,9 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 
 	// update counters for stealer and the one we stole from
 	FAA(&(chunkListSizes[numProducers]), 1);
-	while(true) {
-		unsigned int curVal = from->chunkListSizes[stealQueueID];
-		if (curVal == 0) break;
-		if (CAS(&(from->chunkListSizes[stealQueueID]), curVal, curVal-1)) break;
-	}
-	//FAS(&(from->chunkListSizes[stealQueueID]), 1);
 
+	assert(newNode->consumerIdx +1 < c->getMaxSize() && newNode->consumerIdx == prevNode->consumerIdx);
+	FAS(&(from->chunkListSizes[stealQueueID]), 1);
 	// try to grab the task from the stolen chunk (in order to guarantee progress)
 	int idx = newNode->consumerIdx;
 	Task* task = NULL;
@@ -144,6 +128,7 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 		reclaimChunk(newNode, c, numProducers);
 	}
 	newNode->consumerIdx++;
+	currentQueueID = numProducers;
 	currentNode = newNode;
 	return task;
 }
