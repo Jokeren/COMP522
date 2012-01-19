@@ -69,7 +69,7 @@ protected:
 	int currentQueueID;
 	ReclaimChunkFunc* reclaimChunkFunc;
 	NoFIFOPool::ProdCtx** prodContexts;
-
+	unsigned int stealCounter;
 protected:
 	virtual Task* takeTask(SwNode* n);
 	SwNode* getStealNode(int &stealQueueID);

@@ -50,12 +50,8 @@ float NoFIFOCASPool::getStealingThreshold() const {
 Task* NoFIFOCASPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 	NoFIFOCASPool* from = (NoFIFOCASPool*)from_;
 
-	// iterate over the lists, try to steal from each one of them
-	for(int i = 0; i < from->numProducers+1; i++) {
-		Task* t = stealFromList(&(from->chunkLists[i]));
-		if (t != NULL) return t;
-	}
-	return NULL;
+	int idx = getLongestListIdx();
+	return stealFromList(&(from->chunkLists[idx]));
 }
 
 Task* NoFIFOCASPool::stealFromList(SwLinkedList* l) {
@@ -96,6 +92,8 @@ Task* NoFIFOCASPool::stealFromChunk(SPChunk* chunk) {
 		if (chunk->markTaken(idx, t)) {
 			// succeeded to steal the task
 			return t;
+		} else {
+			return NULL;
 		}
 	}
 }

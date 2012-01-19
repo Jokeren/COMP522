@@ -17,7 +17,7 @@ void NoFIFOPool::ProdCtx::produceForce(Task& t, AtomicStatistics* stat) {
 	produceImpl(t, dummy, true);
 }
 
-OpResult NoFIFOPool::ProdCtx::produceImpl(Task& t, bool& changeConsumer,	bool force) {
+OpResult NoFIFOPool::ProdCtx::produceImpl(Task& t, bool& changeConsumer, bool force) {
 	if (curChunk == NULL) {
 		// The previous chunk is full
 		// Try to get a new chunk from the chunk pool
@@ -30,14 +30,15 @@ OpResult NoFIFOPool::ProdCtx::produceImpl(Task& t, bool& changeConsumer,	bool fo
 				newChunk = new SPChunk(chunkPool.getOwner());
 			}
 		}
-		chunkList.append(newChunk);
 		FAA(&chunkCount, 1);
+		chunkList.append(newChunk);
 		curChunk = newChunk;
 	}
 
 	bool lastTask;
 	curChunk->insertTask(&t, lastTask);
 	if (lastTask) {
+		changeConsumer = true;
 		curChunk = NULL; // the next produce operation will start a new chunk
 	}
 	return SUCCESS;

@@ -19,22 +19,31 @@ void run(int consNum, consumerArg* consArgs, int prodNum, producerArg* prodArgs)
 	bool withFluctuations = false;
 	Configuration::getInstance()->getVal(withFluctuations, "withFluctuations");
 	cout << "Fluctuations are turned " << (withFluctuations ? "on" : "off") << endl;
+	int pausedThreads=1;
+	Configuration::getInstance()->getVal(pausedThreads, "pausedThreads");
+	if (withFluctuations) {
+		cout << "Threads to pause = " << pausedThreads << endl;
+	}
+
 
 	syncFlags::start();
 	cout << "Starting the run..." << endl;
-
 	if (withFluctuations) {
-		for(int i = 0; i < 20; i++) {
+		for(int i = 0; i < 10; i++) {
 			int prodIdx = (rand()%prodNum);
-			int consIdx = (rand()%consNum);
+			//int consIdx = (rand()%consNum);
 
-			consArgs[consIdx].pause = true;
-			prodArgs[prodIdx].pause = true;
+			for(int p = 0; p < pausedThreads; p++) {
+				//consArgs[(consIdx + (p<<1))%consNum].pause = true;
+				prodArgs[(prodIdx + (p<<1))%prodNum].pause = true;
+			}
 
-			usleep(50*timeToRun);
+			usleep(100*timeToRun);
 
-			consArgs[consIdx].pause = false;
-			prodArgs[prodIdx].pause = false;
+			for(int p = 0; p < pausedThreads; p++) {
+				//consArgs[(consIdx + (p<<1))%consNum].pause = false;
+				prodArgs[(prodIdx + (p<<1))%prodNum].pause = false;
+			}
 		}
 	} else {
 		usleep(1000*timeToRun);
@@ -144,6 +153,7 @@ int main(int argc, char* argv[])
 		TotalNumOfRetrievedTasks += stats->numOfRetrievedTasks;
 		TotalSystemThroughput += stats->consumerThroughput;
 		consStats->add(&(stats->atomicStats));
+		cout << "Consumer " << i << ": stealingCounter = " << stats->stealingCounter << endl;
 		stealingCounter += stats->stealingCounter;
 		delete stats;
 	}

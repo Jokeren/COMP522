@@ -19,7 +19,8 @@ NoFIFOPool::NoFIFOPool(int _numProducers, int _consumerID) :
 	SCTaskPool(_numProducers),
 	consumerID(_consumerID),
 	currentNode(NULL),
-	currentQueueID(0)
+	currentQueueID(0),
+	stealCounter(0)
 {
 
 	int initialPoolSize;
@@ -69,10 +70,10 @@ OpResult NoFIFOPool::consume(Task*& t, AtomicStatistics* stat) {
 	}
 
 	//Go over the all of the chunks list in a fair way
-	currentQueueID = (currentQueueID + 1) % numProducers;
+	currentQueueID = (currentQueueID + 1) % (numProducers+1);
 	SwLinkedList::SwLinkedListIterator iter(NULL);
 	int traversedLists = 0;
-	while (traversedLists < numProducers) {
+	while (traversedLists < (numProducers+1)) {
 		if (chunkListSizes[currentQueueID] != 0) {
 			// according to the counter, there are chunks in this list
 			SwLinkedList &currList = chunkLists[currentQueueID];
@@ -96,7 +97,7 @@ OpResult NoFIFOPool::consume(Task*& t, AtomicStatistics* stat) {
 				continue;
 		}
 		traversedLists++;
-		currentQueueID = (currentQueueID + 1) % numProducers;
+		currentQueueID = (currentQueueID + 1) % (numProducers+1);
 	}
 
 	// nothing helped -- we didn't find tasks
@@ -113,6 +114,7 @@ Task* NoFIFOPool::takeTask(SwNode* n) {
 	if (n->chunk != chunk || chunk == NULL)
 		return NULL;
 	Task* task = NULL;
+	if (n->consumerIdx+1 >= chunk->getMaxSize()) return NULL;
 	assert(n->consumerIdx + 1 >= 0 && n->consumerIdx + 1 < chunk->getMaxSize());
 	chunk->getTask(task, n->consumerIdx + 1);
 	if (task == NULL)
@@ -145,7 +147,12 @@ void NoFIFOPool::reclaimChunk(SwNode* n, SPChunk* c, int QueueID) {
 	n->chunk = NULL;
 	currentNode = NULL;
 	if (SPChunk::getOwner(c->getCountedOwner()) == consumerID) {
-		FAS(&(chunkListSizes[QueueID]), 1);
+		while(true) {
+			unsigned int curVal = chunkListSizes[QueueID];
+			if (curVal == 0) break;
+			if (CAS(&(chunkListSizes[QueueID]), curVal, curVal-1)) break;
+		}
+		//FAS(&(chunkListSizes[QueueID]), 1);
 	}
 	retireNode(c, reclaimChunkFunc, hpLoc);
 }
