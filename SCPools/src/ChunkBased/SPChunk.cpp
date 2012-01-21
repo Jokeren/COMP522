@@ -60,8 +60,14 @@ void SPChunk::markTaken(int idx) {
 	tasks[idx] = TAKEN;
 }
 
-bool SPChunk::markTaken(int idx, Task* prevTask) {
-	return CAS(&(tasks[idx]),prevTask,TAKEN);
+bool SPChunk::markTaken(int idx, Task* prevTask, AtomicStatistics* stat) {
+	assert(prevTask != TAKEN);
+	stat->CAS_count_inc();
+	bool res = CAS(&(tasks[idx]),prevTask,TAKEN);
+	if (!res) {
+		stat->CAS_failures_inc();
+	}
+	return res;
 }
 
 
@@ -82,12 +88,17 @@ int SPChunk::getCountedOwner() const {
 	return owner;
 }
 
-bool SPChunk::changeCountedOwner(int prevOwner, int newOwner) {
+bool SPChunk::changeCountedOwner(int prevOwner, int newOwner, AtomicStatistics* stat) {
 	if (owner != prevOwner) return false;
 
 	int counter = (prevOwner & COUNTER_MASK) >> COUNTER_SHIFT;
 	int newVal = ((newOwner & OWNER_MASK) | ((counter+1) << COUNTER_SHIFT));
-	return CAS(&owner, prevOwner, newVal);
+	bool res = CAS(&owner, prevOwner, newVal);
+	stat->CAS_count_inc();
+	if (!res) {
+		stat->CAS_failures_inc();
+	}
+	return res;
 }
 
 

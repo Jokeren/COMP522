@@ -26,6 +26,18 @@ public:
 	/* divide counters by num */
 	void normalize(int num);
 
+	unsigned long getCASTotal() {
+		return CAS_totalCount;
+	}
+
+	unsigned long getCASFailures() {
+		return CAS_failuresCount;
+	}
+
+	unsigned long getFAA() {
+		return FetchAndIncCount;
+	}
+
 	void print();
 };
 #endif /* ATOMICSTATISTICS_H_ */

@@ -36,6 +36,8 @@ public:
 
 	virtual int getEmptynessCounter() const = 0;
 
+	virtual void setAtomicStatistics(AtomicStatistics* stat) {};
+
 protected:
 	int numProducers;
 };

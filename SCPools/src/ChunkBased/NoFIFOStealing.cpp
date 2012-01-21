@@ -43,29 +43,6 @@ SwNode* NoFIFOPool::getStealNode(int &stealQueueID) {
 	stealQueueID = idx;
 
 	return chunkLists[idx].getLast(hpLoc);
-//
-//	int chunkIdx = ((stealCounter++) % chunkListSizes[idx]);
-//	// go and get the node with the chunkIdx
-//	SwNode* resNode = NULL;
-//	SwNode* prevNode = NULL;
-//	SwLinkedList::SwLinkedListIterator iter(&(chunkLists[idx]));
-//	while(true) {
-//		bool iterOk = true;
-//		iter.reset(&chunkLists[idx]);
-//
-//		for(int i = 0; i < chunkIdx; i++) {
-//			if (iter.next(resNode) == SUCCESS) {
-//				if (resNode == NULL) return prevNode; // the list is over :(
-//			} else {
-//				iterOk = false;
-//				break;
-//			}
-//			prevNode = resNode;
-//			setHP(2, prevNode, hpLoc); // to assure the node will not be deleted
-//		}
-//		if (iterOk)
-//			return resNode;
-//	}
 }
 
 Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
@@ -89,7 +66,7 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 	// try to change the owner
 	int prevOwner = c->getCountedOwner();
 	if (SPChunk::getOwner(prevOwner) != from->consumerID ||
-			(c->changeCountedOwner(prevOwner, this->consumerID) == false)) {
+			(c->changeCountedOwner(prevOwner, this->consumerID, stat) == false)) {
 		// didn't succeed to change the owner (either it didn't correspond to the id of the from list
 		// or it has been already stolen by someone else
 		stealList.remove(prevNode, hpLoc);
@@ -112,20 +89,20 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 	prevNode->chunk = NULL;
 
 	// update counters for stealer and the one we stole from
-	FAA(&(chunkListSizes[numProducers]), 1);
+	FAA(&(chunkListSizes[numProducers]), 1); stat->FetchAndIncCount_inc();
 
 	assert(newNode->consumerIdx +1 < c->getMaxSize() && newNode->consumerIdx == prevNode->consumerIdx);
-	FAS(&(from->chunkListSizes[stealQueueID]), 1);
+	FAS(&(from->chunkListSizes[stealQueueID]), 1); stat->FetchAndIncCount_inc();
 	// try to grab the task from the stolen chunk (in order to guarantee progress)
 	int idx = newNode->consumerIdx;
 	Task* task = NULL;
 	c->getTask(task, idx + 1);
 	if (task == NULL) return NULL;
-	if (task == TAKEN || !c->markTaken(idx + 1, task)) {
+	if (task == TAKEN || !c->markTaken(idx + 1, task, stat)) {
 		task = NULL;
 	} else if (idx + 2 == c->getMaxSize()) {
 		// stolen the last task in the chunk
-		reclaimChunk(newNode, c, numProducers);
+		reclaimChunk(newNode, c, numProducers, stat);
 	}
 	newNode->consumerIdx++;
 	currentQueueID = numProducers;

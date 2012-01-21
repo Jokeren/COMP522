@@ -23,9 +23,9 @@ public:
 	virtual Task* steal(SCTaskPool* from, AtomicStatistics* stat);
 
 protected:
-	virtual Task* stealFromList(SwLinkedList* l);
-	virtual Task* stealFromChunk(SPChunk* n);
-	virtual Task* takeTask(SwNode* n);
+	virtual Task* stealFromList(SwLinkedList* l, AtomicStatistics* stat);
+	virtual Task* stealFromChunk(SPChunk* n, int startIdx, AtomicStatistics* stat);
+	virtual Task* takeTask(SwNode* n, AtomicStatistics* stat);
 };
 
 #endif /* NOFIFOCASPOOL_H_ */

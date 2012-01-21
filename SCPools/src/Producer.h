@@ -24,6 +24,7 @@ private:
 	int consumersNum;
 	SCTaskPool::ProducerContext* curProdContext;
 	int curConsumerIdx;
+	bool producerMigrate;
 	SCTaskPool** consumers;
 	AtomicStatistics* stat;
 };

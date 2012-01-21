@@ -21,13 +21,18 @@ public:
 	class ReclaimChunkFunc : public HP::ReclaimationFunc {
 
 	public:
-		ReclaimChunkFunc(ChunkPool* cp) : chunkPool(cp) {}
+		ReclaimChunkFunc(ChunkPool* cp) : chunkPool(cp), stat(NULL) {}
+		void setAtomicStatistics(AtomicStatistics* _stat) {
+			this->stat = _stat;
+		}
+
 		void operator() (void* chunk) {
-			chunkPool->putChunk((SPChunk*)chunk);
+			chunkPool->putChunk((SPChunk*)chunk, stat);
 		}
 
 	private:
 		ChunkPool* chunkPool;
+		AtomicStatistics* stat;
 	};
 
 
@@ -39,9 +44,9 @@ public:
 		virtual OpResult produce(Task& t, bool& changeConsumer, AtomicStatistics* stat);
 		virtual void produceForce(Task& t, AtomicStatistics* stat);
 		virtual void setHP();
-
+		
 	protected:
-		virtual OpResult produceImpl(Task& t, bool& changeConsumer, bool force = false);
+		virtual OpResult produceImpl(Task& t, bool& changeConsumer, bool force, AtomicStatistics* stat);
 	private:
 		SwLinkedList& chunkList;
 		unsigned int& chunkCount;
@@ -62,6 +67,9 @@ public:
 	int getLongestListIdx() const;
 	virtual int getEmptynessCounter() const;
 
+	virtual void setAtomicStatistics(AtomicStatistics* stat) {
+		this->reclaimChunkFunc->setAtomicStatistics(stat);
+	};
 protected:
 	int consumerID;
 	SwLinkedList* chunkLists;
@@ -74,9 +82,9 @@ protected:
 	unsigned int stealCounter;
 	HP::HPLocal hpLoc;
 protected:
-	virtual Task* takeTask(SwNode* n);
+	virtual Task* takeTask(SwNode* n, AtomicStatistics* stat);
 	SwNode* getStealNode(int &stealQueueID);
-	void reclaimChunk(SwNode* n, SPChunk* c, int QueueID);
+	void reclaimChunk(SwNode* n, SPChunk* c, int QueueID, AtomicStatistics* stat);
 };
 
 #endif /* NOFIFOPOOL_H_ */

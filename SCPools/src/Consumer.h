@@ -30,6 +30,7 @@ protected:
 	int stealIterations;
 	AtomicStatistics* stat;
 	unsigned long stealingCounter;
+	SCTaskPool* curStealPool;
 };
 
 #endif /* CONSUMER_H_ */

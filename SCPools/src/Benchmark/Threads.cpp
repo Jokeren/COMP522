@@ -140,7 +140,6 @@ void* consRun(void* _arg){
 	if(poolType.compare("MSQTaskPool") == 0)
 	{
 		*(arg->poolPtr) = new MSQTaskPool();
-		cout << "MSQTaskPool created" << endl;
 	}
 	else if (poolType.compare("NoFIFOPool") == 0)
 	{

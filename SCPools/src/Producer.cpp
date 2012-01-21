@@ -21,6 +21,9 @@ Producer::Producer(int _id)
 	this->curProdContext = consumers[0]->getProducerContext(*this);
 	assert(Configuration::getInstance()->getVal(this->consumersNum, "consumersNum"));
 	this->stat = new AtomicStatistics();
+
+	this->producerMigrate = true;
+	Configuration::getInstance()->getVal(this->producerMigrate, "producerMigrate");
 }
 
 Producer::~Producer() {
@@ -28,7 +31,10 @@ Producer::~Producer() {
 }
 
 void Producer::produce(Task& t) {
-//	curProdContext->produceForce(t, stat);
+	if (!producerMigrate) {
+		curProdContext->produceForce(t, stat);
+		return;
+	}
 
 	bool changeConsumer = false;
 	OpResult res = curProdContext->produce(t, changeConsumer, stat);

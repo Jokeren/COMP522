@@ -63,7 +63,7 @@ SCTaskPool::ProducerContext* NoFIFOPool::getProducerContext(const Producer& prod
 
 OpResult NoFIFOPool::consume(Task*& t, AtomicStatistics* stat) {
 	if (currentNode != NULL) { // common case
-		Task* res = takeTask(currentNode);
+		Task* res = takeTask(currentNode, stat);
 		if (res != NULL) {
 			t = res;
 			return SUCCESS;
@@ -83,7 +83,7 @@ OpResult NoFIFOPool::consume(Task*& t, AtomicStatistics* stat) {
 			SwNode* n = NULL;
 			OpResult iterationStatus;
 			while ((iterationStatus = iter.next(n)) != FAILURE && n != NULL) { // checks that there were no concurrent modifications and found some non-empty node
-				Task* resTask = takeTask(n);
+				Task* resTask = takeTask(n, stat);
 				if (resTask != NULL) {
 					t = resTask;
 					currentNode = n;
@@ -108,7 +108,7 @@ OpResult NoFIFOPool::consume(Task*& t, AtomicStatistics* stat) {
 
 }
 
-Task* NoFIFOPool::takeTask(SwNode* n) {
+Task* NoFIFOPool::takeTask(SwNode* n, AtomicStatistics* stat) {
 	SPChunk* chunk = n->chunk;
 	setHP(3, chunk, hpLoc);
 	if (n->chunk != chunk || chunk == NULL)
@@ -123,12 +123,12 @@ Task* NoFIFOPool::takeTask(SwNode* n) {
 	if (SPChunk::getOwner(chunk->getCountedOwner()) == consumerID) { //fast path:
 		chunk->markTaken(n->consumerIdx);
 		if (n->consumerIdx + 1 == TASKS_PER_CHUNK) {
-			reclaimChunk(n, chunk, currentQueueID);
+			reclaimChunk(n, chunk, currentQueueID, stat);
 		}
 		return task;
 	}
 	// the chunk was stolen:
-	bool success = (task != TAKEN && (chunk->markTaken(n->consumerIdx, task)));
+	bool success = (task != TAKEN && (chunk->markTaken(n->consumerIdx, task, stat)));
 	n->chunk = NULL;
 	currentNode = NULL;
 	return success ? task : NULL;
@@ -141,10 +141,10 @@ int NoFIFOPool::getEmptynessCounter() const {
 }
 
 
-void NoFIFOPool::reclaimChunk(SwNode* n, SPChunk* c, int QueueID) {
+void NoFIFOPool::reclaimChunk(SwNode* n, SPChunk* c, int QueueID, AtomicStatistics* stat) {
 	n->chunk = NULL;
 	currentNode = NULL;
-	FAS(&(chunkListSizes[QueueID]), 1);
+	FAS(&(chunkListSizes[QueueID]), 1); stat->FetchAndIncCount_inc();
 	retireNode(c, reclaimChunkFunc, hpLoc);
 }
 

@@ -14,12 +14,15 @@ Consumer::Consumer(int _id)
 {
 	consumers = ArchEnvironment::getInstance()->getSortedConsumers(*this);
 	myPool = consumers[0];
+
 	assert(Configuration::getInstance()->getVal(this->consumersNum, "consumersNum"));
 	if (Configuration::getInstance()->getVal(stealIterations, "stealIterations") == false) {
 		stealIterations = 2; // default
 	}
 	stat = new AtomicStatistics();
+	myPool->setAtomicStatistics(stat);
 	stealingCounter = 0;
+	curStealPool = NULL;
 }
 
 Consumer::~Consumer() {
@@ -41,14 +44,19 @@ OpResult Consumer::consume(Task*& t) {
 	}
 
 	float stealThreshold = myPool->getStealingThreshold();
+	if (curStealPool != NULL && curStealPool->getStealingScore() >= stealThreshold) {
+		t = myPool->steal(curStealPool, stat);
+		if (t != NULL) return SUCCESS;
+	}
+
 	for(int c = 1; c < consumersNum; c++) {
 		if (consumers[c]->getStealingScore() >= stealThreshold) {
 			// try to steal from that pool
 			stealingCounter++;
-			Task* stolenTask = myPool->steal(consumers[c],stat);
-			if (stolenTask != NULL) {
+			t = myPool->steal(consumers[c],stat);
+			if (t != NULL) {
 				// successful stealing
-				t = stolenTask;
+				curStealPool = consumers[c];
 				return SUCCESS;
 			}
 		}

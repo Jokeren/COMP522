@@ -11,19 +11,19 @@ NoFIFOPool::ProdCtx::ProdCtx(SwLinkedList& l, unsigned int& c, ChunkPool& _chunk
 }
 
 OpResult NoFIFOPool::ProdCtx::produce(Task& t, bool& changeConsumer, AtomicStatistics* stat) {
-	return produceImpl(t, changeConsumer, false);
+	return produceImpl(t, changeConsumer, false, stat);
 }
 
 void NoFIFOPool::ProdCtx::produceForce(Task& t, AtomicStatistics* stat) {
 	bool dummy;
-	produceImpl(t, dummy, true);
+	produceImpl(t, dummy, true, stat);
 }
 
-OpResult NoFIFOPool::ProdCtx::produceImpl(Task& t, bool& changeConsumer, bool force) {
+OpResult NoFIFOPool::ProdCtx::produceImpl(Task& t, bool& changeConsumer, bool force, AtomicStatistics* stat) {
 	if (curChunk == NULL) {
 		// The previous chunk is full
 		// Try to get a new chunk from the chunk pool
-		SPChunk* newChunk = chunkPool.getChunk();
+		SPChunk* newChunk = chunkPool.getChunk(stat);
 		if (newChunk == NULL) {
 			// no free chunks in the pool
 			if (!force) {
@@ -32,7 +32,7 @@ OpResult NoFIFOPool::ProdCtx::produceImpl(Task& t, bool& changeConsumer, bool fo
 				newChunk = new SPChunk(chunkPool.getOwner());
 			}
 		}
-		FAA(&chunkCount, 1);
+		FAA(&chunkCount, 1); stat->FetchAndIncCount_inc();
 		chunkList.append(newChunk, hpLoc);
 		curChunk = newChunk;
 	}

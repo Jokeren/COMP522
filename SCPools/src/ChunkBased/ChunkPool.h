@@ -17,13 +17,12 @@ public:
 	ChunkPool(int owner, int initialSize);
 	virtual ~ChunkPool();
 
-	SPChunk* getChunk(); // returns NULL if no chunk available
-	void putChunk(SPChunk* c);
+	SPChunk* getChunk(AtomicStatistics* stat); // returns NULL if no chunk available
+	void putChunk(SPChunk* c, AtomicStatistics* stat);
 	int getOwner() const;
 
 protected:
 	int owner;
-	AtomicStatistics* atomicStat;
 	MSQueue<SPChunk*>* chunkQueue;
 };
 

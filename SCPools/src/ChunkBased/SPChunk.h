@@ -10,6 +10,7 @@
 
 #include "commons.h"
 #include "Task.h"
+#include "AtomicStatistics.h"
 
 //TODO: const for now, maybe changed later.
 #define TASKS_PER_CHUNK 1000 //1020 // (4KB / 4B) - 2 = 1022
@@ -28,14 +29,14 @@ public:
 	bool isTaken(int idx);
 	bool hasTask(int idx);
 	void markTaken(int idx);
-	bool markTaken(int idx, Task* t);
+	bool markTaken(int idx, Task* t, AtomicStatistics* stat);
 	int getMaxSize();
 
 
 	static int getOwner(int countedOwner);
 	void setOwner(int owner); // will reset the ownership and put the counter to zero
 	int getCountedOwner() const;
-	bool changeCountedOwner(int prevOwner, int newOwner);
+	bool changeCountedOwner(int prevOwner, int newOwner, AtomicStatistics* stat);
 
 
 protected:

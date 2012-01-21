@@ -7,11 +7,11 @@ chips=0 8 16 24:1 9 17 25:2 10 18 26:3 11 19 27:4 12 20 28:5 13 21 29:6 14 22 30
 
 #number of producer/consumer threads
 producersNum=1
-consumersNum=16
+consumersNum=4
 
 #type of container
-#poolType=NoFIFOCASPool
-poolType=NoFIFOPool
+poolType=NoFIFOCASPool
+#poolType=NoFIFOPool
 #poolType=MSQTaskPool
 
 #Producers input intervals
@@ -21,9 +21,14 @@ timeBetweenPeaks=0
 #Test runtime
 timeToRun=10000
 
-# no stealing
+# stealing on/off
 stealIterations=1
 
-# with fluctuations
-withFluctuations=false
-pausedThreads=1
+# fluctuations
+prodFluctuations=false
+consFluctuations=false
+pausedThreads=2
+
+# producer migration on/off
+producerMigrate=false
+

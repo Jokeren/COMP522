@@ -16,38 +16,82 @@ void run(int consNum, consumerArg* consArgs, int prodNum, producerArg* prodArgs)
 	assert(Configuration::getInstance()->getVal(timeToRun, "timeToRun"));
 	cout << "Time to run = " << timeToRun << " msec" << endl;
 
-	bool withFluctuations = false;
-	Configuration::getInstance()->getVal(withFluctuations, "withFluctuations");
-	cout << "Fluctuations are turned " << (withFluctuations ? "on" : "off") << endl;
+	bool prodFluctuations = false;
+	Configuration::getInstance()->getVal(prodFluctuations, "prodFluctuations");
+	cout << "Producer fluctuations are turned " << (prodFluctuations ? "on" : "off") << endl;
+
+	bool consFluctuations = false;
+	Configuration::getInstance()->getVal(prodFluctuations, "consFluctuations");
+	cout << "Consumer fluctuations are turned " << (prodFluctuations ? "on" : "off") << endl;
+
 	int pausedThreads=1;
 	Configuration::getInstance()->getVal(pausedThreads, "pausedThreads");
-	if (withFluctuations) {
+	if (prodFluctuations || consFluctuations) {
 		cout << "Threads to pause = " << pausedThreads << endl;
 	}
 
 
 	syncFlags::start();
 	cout << "Starting the run..." << endl;
-	if (withFluctuations) {
-		for(int i = 0; i < 10; i++) {
-			int prodIdx = (rand()%prodNum);
-			//int consIdx = (rand()%consNum);
-
+	for(int i = 0; i < 10; i++) {
+		int prodIdx = 0;
+		int consIdx = 0;
+		if (prodFluctuations) {
+			prodIdx = (rand()%prodNum);
 			for(int p = 0; p < pausedThreads; p++) {
-				//consArgs[(consIdx + (p<<1))%consNum].pause = true;
 				prodArgs[(prodIdx + (p<<1))%prodNum].pause = true;
 			}
+		}
+		if (consFluctuations) {
+			consIdx = (rand()%consNum);
+			for(int c = 0; c < pausedThreads; c++) {
+				consArgs[(consIdx + (c<<1))%consNum].pause = true;
+			}
+		}
 
-			usleep(100*timeToRun);
+		usleep(100*timeToRun);
 
+		if (prodFluctuations) {
 			for(int p = 0; p < pausedThreads; p++) {
-				//consArgs[(consIdx + (p<<1))%consNum].pause = false;
 				prodArgs[(prodIdx + (p<<1))%prodNum].pause = false;
 			}
 		}
-	} else {
-		usleep(1000*timeToRun);
+		if (consFluctuations) {
+			for(int c = 0; c < pausedThreads; c++) {
+				consArgs[(consIdx + (c<<1))%consNum].pause = false;
+			}
+		}
 	}
+
+//	if (prodFluctuations) {
+//		for(int i = 0; i < 10; i++) {
+//			int prodIdx = (rand()%prodNum);
+//			for(int p = 0; p < pausedThreads; p++) {
+//				prodArgs[(prodIdx + (p<<1))%prodNum].pause = true;
+//			}
+//
+//			usleep(100*timeToRun);
+//
+//			for(int p = 0; p < pausedThreads; p++) {
+//				prodArgs[(prodIdx + (p<<1))%prodNum].pause = false;
+//			}
+//		}
+//	} else if (consFluctuations) {
+//		for(int i = 0; i < 10; i++) {
+//			int consIdx = (rand()%consNum);
+//			for(int c = 0; c < pausedThreads; c++) {
+//				consArgs[(consIdx + (c<<1))%consNum].pause = true;
+//			}
+//
+//			usleep(100*timeToRun);
+//
+//			for(int c = 0; c < pausedThreads; c++) {
+//				consArgs[(consIdx + (c<<1))%consNum].pause = false;
+//			}
+//		}
+//	} else {
+//		usleep(1000*timeToRun);
+//	}
 
 	cout << "Terminating threads..." << endl;
 	syncFlags::stop();
@@ -66,6 +110,14 @@ int main(int argc, char* argv[])
 	assert(Configuration::getInstance()->getVal(consNum, "consumersNum"));
 	
 	cout << "producersNum = " << prodNum << " , consumersNum = " << consNum << endl;
+
+	string poolType;
+	assert(Configuration::getInstance()->getVal(poolType, "poolType"));
+	cout << "poolType is " << poolType << endl;
+
+	bool producerMigrate = true;
+	Configuration::getInstance()->getVal(producerMigrate, "producerMigrate");
+	cout << "producerMigrate = " << producerMigrate << endl;
 
 	ArchEnvironment::getInstance()->threadToCoreChipMapping();
 	
@@ -153,22 +205,67 @@ int main(int argc, char* argv[])
 		TotalNumOfRetrievedTasks += stats->numOfRetrievedTasks;
 		TotalSystemThroughput += stats->consumerThroughput;
 		consStats->add(&(stats->atomicStats));
-		cout << "Consumer " << i << ": stealingCounter = " << stats->stealingCounter << endl;
+		//cout << "Consumer " << i << ": stealingCounter = " << stats->stealingCounter << endl;
 		stealingCounter += stats->stealingCounter;
 		delete stats;
 	}
-	prodStats->normalize(prodNum);
-	consStats->normalize(consNum);
-	cout << "Total number of inserted tasks = " << TotalNumOfProducedTasks << endl;
-	cout << "Peak Insertion throughput = " << TotalInsertionThroughput << endl;
-	cout << "Total Number of retrieved tasks = " << TotalNumOfRetrievedTasks << endl;
-	cout << "System Throughput = " << TotalSystemThroughput << endl;
-	cout << "Average Number of Work Stealing Attempts per Consumer = " << (double)stealingCounter/consNum << endl;
-	cout << "Average Producer Atomic Statistics:" << endl;
-	prodStats->print();
-	cout << "Average Consumer Atomic Statistics:" << endl;
-	consStats->print();
 	
+	//cout << "Total number of inserted tasks = " << TotalNumOfProducedTasks << endl;
+	cout << "Peak Insertion throughput (tasks/msec) = " << TotalInsertionThroughput << endl;
+	//cout << "Total Number of retrieved tasks = " << TotalNumOfRetrievedTasks << endl;
+	cout << "System Throughput (tasks/msec) = " << TotalSystemThroughput << endl;
+	double avgStealingAttempts = ((double)stealingCounter)/consNum;
+	cout << "Average Number of Work Stealing Attempts per Consumer = " << avgStealingAttempts << endl;
+
+//  prodStats->normalize(prodNum);
+//  consStats->normalize(consNum);
+//	cout << "Average Producer Atomic Statistics:" << endl;
+//	prodStats->print();
+//	cout << "Average Consumer Atomic Statistics:" << endl;
+//	consStats->print();
+
+	cout << "Producer Atomic Statistics:" << endl;
+	cout << "\t CAS operations per inserted task: "
+			<< ((double)prodStats->getCASTotal())/TotalNumOfProducedTasks << endl;
+	cout << "\t CAS failures per inserted task: "
+				<< ((double)prodStats->getCASFailures())/TotalNumOfProducedTasks << endl;
+	cout << "Consumer Atomic Statistics:" << endl;
+	cout << "\t CAS operations per retrieved task: "
+			<< ((double)consStats->getCASTotal())/TotalNumOfRetrievedTasks << endl;
+	cout << "\t CAS failures per inserted task: "
+			<< ((double)consStats->getCASFailures())/TotalNumOfRetrievedTasks << endl;
+
+
+	cout << "CSV Formatting: " <<
+			"PoolType,ProdNum,ConsNum," <<
+			"ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure," <<
+			"Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads" << endl;
+
+	bool affinity=false;
+	Configuration::getInstance()->getVal(affinity, "forceAssignment");
+	bool prodFluctuations = false;
+	Configuration::getInstance()->getVal(prodFluctuations, "prodFluctuations");
+	bool consFluctuations = false;
+	Configuration::getInstance()->getVal(consFluctuations, "consFluctuations");
+	int pausedThreads=1;
+	Configuration::getInstance()->getVal(pausedThreads, "pausedThreads");
+	cout << "CSV:" << poolType << "," <<
+			prodNum << "," <<
+			consNum << "," <<
+			TotalInsertionThroughput << "," <<
+			TotalSystemThroughput << "," <<
+			avgStealingAttempts << "," <<
+			((double)prodStats->getCASTotal())/TotalNumOfProducedTasks << "," <<
+			((double)prodStats->getCASFailures())/TotalNumOfProducedTasks << "," <<
+			((double)consStats->getCASTotal())/TotalNumOfRetrievedTasks << "," <<
+			((double)consStats->getCASFailures())/TotalNumOfRetrievedTasks << "," <<
+			affinity << "," <<
+			producerMigrate << "," <<
+			prodFluctuations << "," <<
+			consFluctuations << "," <<
+			pausedThreads << endl;
+
+
 	// free allocated memory
 	delete prodStats;
 	delete consStats;
