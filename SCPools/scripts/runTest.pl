@@ -67,7 +67,7 @@ close OUT;
 
 my $res = `./$fileName ./tmpConf`;
 #print $res;
-$res =~ /CSV:([A-Za-z0-9-,\.]+)/;
+$res =~ /CSV:([A-Za-z0-9-\+,\.]+)/;
 print $1 . "\n"; 
 
 unlink("./tmpConf");

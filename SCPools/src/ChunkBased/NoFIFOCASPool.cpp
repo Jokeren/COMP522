@@ -68,7 +68,8 @@ Task* NoFIFOCASPool::stealFromList(SwLinkedList* l, AtomicStatistics* stat) {
 				SPChunk* chunk = node->chunk;
 				setHP(3, chunk, hpLoc);
 				if (node->chunk != chunk || chunk == NULL) continue; // that was an empty node
-				return stealFromChunk(chunk, node->consumerIdx, stat);
+				Task* t = stealFromChunk(chunk, node->consumerIdx, stat);
+				if (t != NULL) return t;
 			}
 		}
 	}
