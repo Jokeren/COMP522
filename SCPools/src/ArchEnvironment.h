@@ -29,6 +29,7 @@ public:
 	void threadToCoreChipMapping();
 
 private:
+	bool forceAssignment;
 	int producersNum;
 	int consumersNum;
 	int producerCoresNum;

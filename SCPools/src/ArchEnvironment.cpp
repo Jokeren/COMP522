@@ -27,6 +27,9 @@ ArchEnvironment::ArchEnvironment() {
 	producerCores = parseThreadCores(prodString, producerCoresNum);
 	chips = parseChipCores(chipString, chipsNum, coresPerChip);
 	consumerToPool = NULL;
+	string force = "";
+	Configuration::getInstance()->getVal(force, "forceAssignment");
+	forceAssignment = (force.compare("yes") == 0);
 }
 
 string* ArchEnvironment::stringSplit(const string str, const char seperator, int& arrLen)
@@ -149,24 +152,26 @@ SCTaskPool** ArchEnvironment::getSortedConsumers(int tid, bool producer){
 	}
 	
 	int insertIdx = 0;
-	for(int i = 0; i < consumersNum; i++)
-	{
-		int next = (tid + i) % consumersNum;
-		if(consumerToCore->find(next)->second == coreId)
+	if (forceAssignment) {
+		for(int i = 0; i < consumersNum; i++)
 		{
-			taken[next] = true;
-			resIds[insertIdx] = next;
-			insertIdx++;
+			int next = (tid + i) % consumersNum;
+			if(consumerToCore->find(next)->second == coreId)
+			{
+				taken[next] = true;
+				resIds[insertIdx] = next;
+				insertIdx++;
+			}
 		}
-	}
-	for(int i = 0; i < consumersNum; i++)
-	{
-		int next = (tid + i) % consumersNum;
-		if(!taken[next] && consumerToChip->find(next)->second == chipId)
+		for(int i = 0; i < consumersNum; i++)
 		{
-			taken[next] = true;
-			resIds[insertIdx] = next;
-			insertIdx++;
+			int next = (tid + i) % consumersNum;
+			if(!taken[next] && consumerToChip->find(next)->second == chipId)
+			{
+				taken[next] = true;
+				resIds[insertIdx] = next;
+				insertIdx++;
+			}
 		}
 	}
 	for(int i = 0; i < consumersNum; i++)
