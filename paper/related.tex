@@ -1,43 +1,45 @@
-There is a large body of work on lock-free unbounded FIFO queues and LIFO stacks, the linked-list
-based implementation of Micheal and Scott \cite{Michael:1996:SFP:248052.248106} is one of the
-well-known algorithms. In this queue, there is a pointer to the head of the queue and a pointer to
-the tail of the queue, the enqueue and dequeue operation are performed by using the
-compare-and-swap (\emph{cas}) operation on those pointers. The problem with such algorithms is
-that they scale poorly due to high-contention and low locality. Some works try to reduced the
-contention on the queue \cite{Moir:2005:UEI:1073970.1074013,Hoffman:2007:BQ:1782394.1782423},
-however due to the same inherent problems, those works are still not scalable when many threads are
-used.  Other works increased locality by using linked-list of chunks where each chunk contains
-multiple objects \cite{Gidenstam:2010:CLQ:1940234.1940266,Braginsky:2011:LLL:1946143.1946153}, we
-use a similar technique in order to improve locality but also to allow stealing of whole chunks. 
+\paragraph{Task pools\\}
+There is a large body of work on lock-free unbounded FIFO queues and LIFO
+stacks\cite{Gidenstam:2010:CLQ:1940234.1940266,Hendler:2004:SLS:1007912.1007944,
+Hoffman:2007:BQ:1782394.1782423, Michael:1996:SFP:248052.248106,Moir:2005:UEI:1073970.1074013},
+The problem with such algorithms is that due to the inherent need for ordering of operations they
+scale poorly and provide low locality, and are therefore not useful as a consumer-producer task
+pool. 
 
-Since the performance cost of FIFO semantics are high, some works relaxed their guaranties and
-gave a weaker semantic. The Elimination-diffraction tree of Afek et al.
-\cite{Afek:2010:SPP:1885276.1885295} is a non-FIFO producer-consumer pool based on using several
-lock-free queues, and it uses randomized elimination to reduce contention. The \emph{Concurrent
-Bag} of Sundell et al. \cite{Sundell:2011:LAC:1989493.1989550} is a non-FIFO producer-consumer pool,
-which, like our pool, is composed of list of chunks per producer. Unlike our pool, the consume
-operation requires a strong atomic operations and steals are done in granularity of single tasks and
-not whole chunks. Moreover those pools are not scalable (i.e. the system throughput doesn't increase
-as more threads are added).
+A number of previous works have recognized this limitation of FIFO, and observed that strict FIFO
+order is seldom needed in multi-core systems
+\cite{Afek:2010:SPP:1885276.1885295,springerlink:10.1007/978-3-642-17653-1_29,
+Basin:2011:CST:2075029.2075087,Sundell:2011:LAC:1989493.1989550}. 
 
-In \cite{Basin:2011:CST:2075029.2075087,springerlink:10.1007/978-3-642-17653-1_29} the authors
-used lists of bounded non-FIFO containers that aim to reduce contention, while allowing some weak
-FIFO property for the entire pool. These algorithms are somewhat scalable but when a large number
-of threads is introduced performance of these pools drop. Also, unlike our pool, the consume and
-produce operations require synchronization operations.
+The closest such system to our implementation is to our work is the Concurrent Bag of Sundell et al.
+\cite{Sundell:2011:LAC:1989493.1989550}, a non-FIFO producer-consumer pool, which, like SALSA, is
+composed of per-producer chunk lists. Unlike our pool however, their consume operation requires a
+strong atomic operation and steals are performed in the granularity of single tasks and not whole
+chunks. Moreover, those pools are not scalable (i.e., the in system throughput does not increase as
+more threads are added).
 
-Work-stealing is another way to reduce contention. When using work-stealing, each consumer holds
-one pool of task and when this pool is empty the consumer may steal tasks from other
-consumers. The goal is to make the consume and produce operations fast in the common case where no
-steals are done. This is called the \emph{fast-path} of the algorithm. The concept
-of no-synchronization in the fast-path appeared in works that implement work-stealing dequeues for
-thread scheduling which are based on the work-stealing dequeue of Arora et
-al.\cite{Arora:1998:TSM:277651.277678}. These dequeues use a different semantic than we do, 
-where a single thread is both the only producer and the only consumer of the dequeue (except when
-work stealing is done), therefore the fast-path always contain a single
-thread. \cite{Hendler:2002:NSW:571825.571876} is a dequeue which allows steals of multiple items,
-however it handles only static-sized arrays and uses synchronization operations in the fast-path. 
-In our pool,there is a separation between producers and consumers, so more then one thread may work
-on the pool, even when no steal operations occur. Although the fast-path has more than one
-concurrent thread, in our algorithm it is still synchronization-free. Also our steal
-algorithms steals a whole chunk of tasks rather than just one task as most works do.
+Other pools provide similar properties, and are not scalable as well. And also use different
+techniques then we do in our work.
+
+\paragraph{Techniques\\}
+Some of the techniques used in our work were previously used in other works in different
+variations. Work-stealing is a standard way to reduce contention by using separate per-consumer
+pools \cite{Blumofe:1999:SMC:324133.324234} where task may be stolen from one pool to another.
+In the common case where no steals are made, the algorithm may ran a \emph{fast-path} with
+no synchronization. The concept of a synchronization-free fast-path appears in scheduling queues
+\cite{Arora:1998:TSM:277651.277678}. However, these works assumes the same process is both the
+producer and consumer, and hence synchronization-free operations were only used for a process to
+transfer data to \emph{itself}. In our pool on the other hand, there is a distinction between
+producers and consumers, and moreover, multiple producer may work on a single consumer pool even
+without stealing. We do not know of any other work that achieves a synchronization-free fast-path
+among multiple producers as we do. Furthermore, our steal algorithm steals a whole chunk of tasks
+rather than just one task as most works do. \cite{Hendler:2002:NSW:571825.571876} is the only
+exception we are familiar with which allows steals of multiple items, however it handles only
+static-sized arrays and uses synchronization operations in the fast-path. 
+
+Chunk-based data-structures
+\cite{Braginsky:2011:LLL:1946143.1946153, 
+Gidenstam:2010:CLQ:1940234.1940266,
+Hendler:2006:DNW:1160290.1160294, Sundell:2011:LAC:1989493.1989550} use linked-list of chunks so
+that the data structure will be of dynamic size while maintaining data-locality. We also use
+chunk-based lists for that reason, furthermore, in SALSA steals are done in resolution of chunks.
