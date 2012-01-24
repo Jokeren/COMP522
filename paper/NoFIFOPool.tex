@@ -126,7 +126,7 @@
   \STATE n.idx++ \comment {tell the world you're going to take a task from idx}
   \INDENT {{\bf if} (chunk.owner $=$ consumerId) {\bf then} \comment {common case}}
  		\STATE chunk.tasks[n.idx] $\leftarrow$ TAKEN
-  	\INDENT {{\bf if}(n.idx $+1 = $ CHUNK\_SIZE) {\bf then} \comment {finished the chunk}}
+  	\INDENT {{\bf if}(n.idx + 1 $=$ CHUNK\_SIZE) {\bf then} \comment {finished the chunk}}
   		\STATE n.c $\leftarrow \bot$; return the chunk to the chunkPool
   		\STATE currentNode $\leftarrow \bot$
   	\ENDINDENT
@@ -164,7 +164,7 @@
  		\STATE chunkLists[steal].{\bf remove}(prevNode)
  		\STATE {\bf return} $\bot$ \comment {failed to steal}
 	\ENDINDENT
-	
+	\STATE {\bf if}(prevNode.idx $+1$) {\bf then}
 	\smallskip
 	\STATE newNode $\leftarrow$ copy of prevNode
 	\STATE replace prevNode with newNode in chunkLists[steal]
@@ -178,6 +178,11 @@
 		\hspace{0.5cm} !CAS(c.tasks[idx+1], task, TAKEN)) {\bf then}} 
 		\STATE task $\leftarrow \bot$
 	\ENDINDENT
+	\STATE currentNode $\leftarrow$ newNode
+	\INDENT {{\bf if}(newNode.idx + 1 $=$ CHUNK\_SIZE) {\bf then}}
+  	\STATE newNode.c $\leftarrow \bot$; return the chunk to the chunkPool
+  	\STATE currentNode $\leftarrow \bot$
+  \ENDINDENT
 	\STATE newNode.idx $\leftarrow$ newNode.idx+1
 	\STATE {\bf return} task
 \ENDINDENT

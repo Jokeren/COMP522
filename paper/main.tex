@@ -1,4 +1,10 @@
 \documentclass[11pt]{article}
+
+% American letter size:
+\textwidth6.5in \textheight9in \oddsidemargin 0pt \evensidemargin 0pt
+\topmargin -47pt
+
+
 \usepackage{times}
 \usepackage{fullpage}
 \usepackage{epic}
@@ -49,7 +55,7 @@
 \usepackage[noend]{algorithmic}
 \usepackage{distribalgo}
 
-\usepackage{setspace}
+%\usepackage{setspace}
 %\doublespacing
 
 \newtheorem{thm}{Theorem}
@@ -86,9 +92,95 @@
 %\setlength\topmargin{-0.025in}
 %\setlength\textheight{8.75in}
 
+%%=======================================================================
+%% Latex template for SPAA 2012
+%%=======================================================================
+%
+%% remember to compile with dvips -t letter for US letter style
+%
+%\documentclass[11pt]{article}
+%
+%% American letter size:
+%\textwidth6.5in \textheight9in \oddsidemargin 0pt \evensidemargin 0pt
+%\topmargin -47pt
+%
+%\usepackage{times}
+%
+%\newtheorem{theorem}{Theorem}[section]
+%\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem{claim}[theorem]{Claim}
+%\newtheorem{fact}[theorem]{Fact}
+%
+%\newcommand{\sq}{\hbox{\rlap{$\sqcap$}$\sqcup$}}
+%\newcommand{\qed}{\hspace*{\fill}\sq}
+%\newenvironment{proof}{\noindent {\bf Proof.}\ }{\qed\par\vskip 4mm\par}
+%\newenvironment{proofof}[1]{\bigskip \noindent {\bf Proof of #1:}\quad }
+%{\qed\par\vskip 4mm\par}
+
+
+
 \begin{document}
-\input{SCPoolAPI}
+
+\begin{titlepage}
+
+\title{A Low Synchronization NUMA-aware Algorithm for Producer-Consumer Pools \\
+       {\Large (Regular Submission)}}
+
+\author{Elad Gidron \\
+   eladgi@cs.technion.ac.il \\
+   \and
+   Idit Keidar \\
+   idish@ee.technion.ac.il \\
+   \and
+   Dmitri Perelman \\
+   dima39@tx.technion.ac.il \\
+   \and
+   Yonathan Perez \\
+   yonathan0210@gmail.com
+   } 
+
+\date{Department of Electrical Engineering, Technion, Haifa, Israel}
+
+\maketitle \thispagestyle{empty}
+
+\begin{abstract}
+We present a non-blocking starvation-free producer-consumer task pool, designed with a special emphasis on lightweight synchronization and data locality.
+The core building block of our pool is SALSA, Scalable And Low Synchronization Algorithm for a single-consumer container with the task stealing support. Each consumer operates its own SALSA container, stealing the tasks from other containers if necessary. An elegant self-stabilizing policy for task insertion does not push tasks to the overloaded SALSA containers, thus decreasing the possibility of stealing transactions. 
+
+SALSA organizes tasks in large chunks improving locality properties and simplifying the stealing. The use of page-size chunks perfectly suits the data migration schemes among the processor nodes available in NUMA architectures. 
+Thanks to the novel approach for coordination among consumers, our system does not use strong atomic operations or memory barriers in the fast path and invokes only a single CAS operation during the chunk steal. 
+
+The evaluation experiments demonstrate that the pool built upon SALSA containers scales linearly with the number of threads and significantly outperforms other non-FIFO alternatives.
+
+\end{abstract}
+
+\bigskip
+
+\centerline{{\bf Keywords}: multi-core, concurrent data structures.}
+
+\end{titlepage}
+
+\section{Introduction}
+\label{sec:intro}
+
+\section{Related Work}
+\label{sec:related}
+
+\section{System Overview}
+\label{sec:system}
+\input{system}
+
+\section{Algorithm Description}
+\label{sec:algo}
 \input{NoFIFOPool}
-\input{FIFOPool}
+
+\section{Evaluation}
+\label{sec:evaluation}
+
+\section{Conclusions}
+\label{sec:conclusions}
+
+\bibliographystyle{plain}
+\bibliography{references}
 
 \end{document}
