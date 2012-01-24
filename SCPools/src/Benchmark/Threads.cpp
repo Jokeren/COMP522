@@ -2,6 +2,7 @@
 #include "MSQTaskPool.h"
 #include "NoFIFOPool.h"
 #include "NoFIFOCASPool.h"
+#include "LIFOPool.h"
 #include "hp/hp.h"
 #include <pthread.h>
 #include <sched.h>
@@ -148,6 +149,10 @@ void* consRun(void* _arg){
 	else if (poolType.compare("NoFIFOCASPool") == 0)
 	{
 		*(arg->poolPtr) = new NoFIFOCASPool(arg->numOfProducers, arg->id);
+	}
+	else if (poolType.compare("LIFOPool") == 0)
+	{
+		*(arg->poolPtr) = new LIFOPool();
 	}
 	else
 	{

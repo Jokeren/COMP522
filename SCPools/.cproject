@@ -24,6 +24,7 @@
 <tool id="cdt.managedbuild.tool.gnu.cpp.compiler.base.489472190" name="GCC C++ Compiler" superClass="cdt.managedbuild.tool.gnu.cpp.compiler.base">
 <option id="gnu.cpp.compiler.option.include.paths.851022356" name="Include paths (-I)" superClass="gnu.cpp.compiler.option.include.paths" valueType="includePath">
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/src}&quot;"/>
+<listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/src/LIFOPool}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/src/Benchmark}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/src/MSQPool}&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${workspace_loc:/SCPools/src/ChunkBased}&quot;"/>
