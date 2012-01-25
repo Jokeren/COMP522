@@ -16,22 +16,23 @@ The pool must guarantee the following \emph{stealing property}, which is necessa
 If a pool is not empty at the beginning of the steal operation, then either the steal operation retrieves a task, or another thread retrieves a task during the steal execution.
 \end{property}
 
-
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.7\textwidth]{figures/system-fig}
-	\caption{\footnotesize{System overview: process $p_i$ observes a proximity list of available consumers sorted according to their distance from $p_i$. Locality groups are important both for task insertions (insert a task to the closest consumer), and for task stealing (steal a task from the closest consumer).}}
+	\caption{\footnotesize{System overview of the management framework. A producer $p_i$ observes an access list of available consumers for task insertion ordered according to their distance from $p_i$. A consumer $c_i$ observes a steal list of available consumers for task stealing ordered according to their distance from $c_i$. }}
 	\label{fig:system-fig}
 \end{figure}
 
+As mentioned earlier, a management policy operates the SCPools in a way that is appropriate for the given desired system properties.
+It is generally defined by the way a producer inserts a task to one of the SCPools and a consumer retrieves a task from its own pool / steal tasks from other pools. 
+Note that the policy is independent of the underlying SCPool implementation, we believe that it is a subject for engineering optimizations, based on specific workloads and demands.
 
-As mentioned earlier, an inter-pool communication policy operates the SCPools in a way that is appropriate for the given desired system properties. 
-We believe that such a policy is a subject to engineering optimizations and its behavior primarily depends on the specific workloads and demands.
-In the current work, we propose a policy for a lock-free starvation-free pool, which exploits the locality properties of NUMA architectures and is aimed for achieving maximal throughput (note that a policy is independent from the underlying SCPool implementations):
+
+In the current work, we present a policy that exploits the locality properties of NUMA architectures and is aimed at achieving maximal throughput. If the individual SCPools themselves are lock-free and starvation-free (in the sense that no task remains untaken forever), then our policy preserves these properties at the system level. 
 \begin{itemize}
-	\item {\bf Proximity lists.} The consumers participating in the system are aware of their current processor affinity. This way, each process in the system (producer or consumer) can observe the list of all the consumers sorted according to their distance from that process (see Figure~\ref{fig:system-fig}). Intuitively, we build a system in which a producer mostly interacts with the closest consumer, and the stealing mainly happens inside the same processor node. 
-	\item {\bf Producer's policy.} A producer inserting a task first call the \emph{produce} function of the closest SCPool. Note that a produce operation might fail if the pool is full (an evidence of the overload on the corresponding consumer).  In this case, the producer tries to insert a task to other pools, in the order defined by its proximity list. If all the pools are full, then the producer invokes the \emph{produceForce} operation on the closest SCPool, which always succeeds and expands the pool by demand. 
-	\item {\bf Consumer's policy.} A consumer works in a loop of consuming the tasks of its own SCPool. If the consumer's SCPool is empty, a consumer tries to steal tasks from other pools in the order defined by its proximity list. 
+	\item {\bf Access order list.} Each process in the system (producer or consumer) is provided with an ordered list of consumers, sorted according to their distance from that process (see Figure~\ref{fig:system-fig}). Intuitively, we build a system in which a producer mostly interacts with the closest consumer, and stealing mainly happens inside the same processor node. 
+	\item {\bf Producer's policy.} A producer inserting a task first calls the \emph{produce} function of the first SCPool in the list. Note that a produce operation might fail if the pool is full, (which can be seen as evidence of that the corresponding consumer is overloaded).  In this case, the producer tries to insert the task into other pools, in the order defined by its proximity list. If all the pools are full, the producer invokes the \emph{produceForce} operation on the closest SCPool, which always succeeds (expanding the pool if needed). 
+	\item {\bf Consumer's policy.} A consumer consumes tasks from its own SCPool. If its SCPool is empty, the consumer tries to steal tasks from other pols in the order defined by its proximity list. 
 \end{itemize}
 
 
