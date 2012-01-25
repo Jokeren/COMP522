@@ -123,7 +123,7 @@
 
 \begin{titlepage}
 
-\title{A Low Synchronization NUMA-aware Algorithm for Producer-Consumer Pools \\
+\title{SALSA: Scalable and Low Synchronization NUMA-aware Algorithm for Producer-Consumer Pools \\
        {\Large (Regular Submission)}}
 
 \author{Elad Gidron \\
@@ -144,19 +144,19 @@
 \maketitle \thispagestyle{empty}
 
 \begin{abstract}
-We present a non-blocking starvation-free producer-consumer task pool, designed with a special emphasis on lightweight synchronization and data locality.
-The core building block of our pool is SALSA, Scalable And Low Synchronization Algorithm for a single-consumer container with the task stealing support. Each consumer operates its own SALSA container, stealing the tasks from other containers if necessary. An elegant self-stabilizing policy for task insertion does not push tasks to the overloaded SALSA containers, thus decreasing the possibility of stealing transactions. 
+We present a highly-scalable non-blocking producer-consumer task pool, designed with a special emphasis on lightweight synchronization and data locality.
+The core building block of our pool is \emph{SALSA, Scalable And Low Synchronization Algorithm} for a single-consumer container with task stealing support. Each consumer operates on its own SALSA container, stealing tasks from other containers if necessary. We implement an elegant self-tuning policy for task insertion, which does not push tasks to overloaded SALSA containers, thus decreasing the likelihood of stealing. 
 
-SALSA organizes tasks in large chunks improving locality properties and simplifying the stealing. The use of page-size chunks perfectly suits the data migration schemes among the processor nodes available in NUMA architectures. 
-Thanks to the novel approach for coordination among consumers, our system does not use strong atomic operations or memory barriers in the fast path and invokes only a single CAS operation during the chunk steal. 
+SALSA manages large chunks of tasks, which improves locality and facilitates stealing. The use of page-size chunks is perfectly suitable for data migration among processor nodes in NUMA architectures. 
+SALSA uses a novel approach for coordination among consumers, without strong atomic operations or memory barriers in the fast path. It invokes only a single CAS operation during a chunk steal. 
 
-The evaluation experiments demonstrate that the pool built upon SALSA containers scales linearly with the number of threads and significantly outperforms other non-FIFO alternatives.
+Our evaluation demonstrates that a pool built using SALSA containers scales \emph{linearly} with the number of threads and significantly outperforms other FIFO and non-FIFO alternatives.
 
 \end{abstract}
 
 \bigskip
 
-\centerline{{\bf Keywords}: multi-core, concurrent data structures.}
+\centerline{{\bf Keywords}: multi-core, concurrent data structures, producer-consumer pools, non-blocking synchronization.}
 
 \end{titlepage}
 
