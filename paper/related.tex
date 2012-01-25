@@ -2,44 +2,50 @@
 There is a large body of work on lock-free unbounded FIFO queues and LIFO
 stacks\cite{Gidenstam:2010:CLQ:1940234.1940266,Hendler:2004:SLS:1007912.1007944,
 Hoffman:2007:BQ:1782394.1782423, Michael:1996:SFP:248052.248106,Moir:2005:UEI:1073970.1074013},
-The problem with such algorithms is that due to the inherent need for ordering of operations they
-scale poorly and provide low locality, and are therefore not useful as a consumer-producer task
-pool. 
+The problem with such algorithms is that due to the inherent need for ordering of operations, they
+generally have high contention and therefore do not scale well, and are less appealing for use as 
+consumer-producer task pools. 
 
 A number of previous works have recognized this limitation of FIFO, and observed that strict FIFO
 order is seldom needed in multi-core systems
 \cite{Afek:2010:SPP:1885276.1885295,springerlink:10.1007/978-3-642-17653-1_29,
 Basin:2011:CST:2075029.2075087,Sundell:2011:LAC:1989493.1989550}. 
 
-The closest such system to our implementation is to our work is the Concurrent Bag of Sundell et al.
+The closest such system to our implementation is the Concurrent Bags of Sundell et al.
 \cite{Sundell:2011:LAC:1989493.1989550}, a non-FIFO producer-consumer pool, which, like SALSA, is
-composed of per-producer chunk lists. Unlike our pool however, their consume operation requires a
-strong atomic operation and steals are performed in the granularity of single tasks and not whole
-chunks. Moreover, those pools are not scalable (i.e., the in system throughput does not increase as
-more threads are added).
-
-Other pools provide similar properties, and are not scalable as well. And also use different
-techniques then we do in our work.
+composed of per-producer chunk lists. Unlike our pool however, their algorithm uses strong
+atomic operations upon each consume. In addition to that, steals are performed in the granularity
+of single tasks and not whole chunks. Moreover, these pools are not scalable (i.e., their system
+throughput does not increase as more threads are added).
 
 \paragraph{Techniques\\}
 Some of the techniques used in our work were previously used in other works in different
 variations. Work-stealing is a standard way to reduce contention by using separate per-consumer
-pools \cite{Blumofe:1999:SMC:324133.324234} where task may be stolen from one pool to another.
-In the common case where no steals are made, the algorithm may ran a \emph{fast-path} with
-no synchronization. The concept of a synchronization-free fast-path appears in scheduling queues
-\cite{Arora:1998:TSM:277651.277678}. However, these works assumes the same process is both the
-producer and consumer, and hence synchronization-free operations were only used for a process to
-transfer data to \emph{itself}. In our pool on the other hand, there is a distinction between
-producers and consumers, and moreover, multiple producer may work on a single consumer pool even
-without stealing. We do not know of any other work that achieves a synchronization-free fast-path
-among multiple producers as we do. Furthermore, our steal algorithm steals a whole chunk of tasks
-rather than just one task as most works do. \cite{Hendler:2002:NSW:571825.571876} is the only
-exception we are familiar with which allows steals of multiple items, however it handles only
-static-sized arrays and uses synchronization operations in the fast-path. 
+pools \cite{Blumofe:1999:SMC:324133.324234}, where tasks may be stolen from one pool to another.
 
-Chunk-based data-structures
-\cite{Braginsky:2011:LLL:1946143.1946153, 
-Gidenstam:2010:CLQ:1940234.1940266,
-Hendler:2006:DNW:1160290.1160294, Sundell:2011:LAC:1989493.1989550} use linked-list of chunks so
-that the data structure will be of dynamic size while maintaining data-locality. We also use
-chunk-based lists for that reason, furthermore, in SALSA steals are done in resolution of chunks.
+The separation to per-consumer pools allows optimizations in the case a consumer is working on its
+own pool without being interrupted by stealing. We refer to this case as \emph{fast-path}.
+The concept of a synchronization-free fast-path appears in the works about scheduling queues
+\cite{Arora:1998:TSM:277651.277678}. However, these works assume the same process performs as both
+the producer and consumer, and hence the synchronization-free fast-path is actually used only when a
+process transfers data to \emph{itself}. On the other hand, our pool is synchronization-free even
+when the tasks are passed between multiple threads -- the case of multiple producers working with a
+single consumer is on the fast-path. We do not know of any other work being synchronization-free in
+case of data transfered between threads.
+
+One of the straightforward techniques for improving the efficiency of stealing is transferring a
+number of tasks on every steal operation. Hendler et al.~\cite{Hendler:2002:NSW:571825.571876},
+propose stealing of multiple items by copying a range of tasks from one dequeue to another.
+Unfortunately, this approach inherently requires costly CAS operations on the fast-path and
+introduces non-negligible overhead of item copying. In contrast, our approach of chunk-based
+stealing goes well together with synchronization-free fast path technique and steals whole chunks of
+tasks in O(1). 
+
+The technique of organizing data in chunks allows building dynamically sized data structures while
+preserving data locality.
+Chunk-based data structures were previously used in
+\cite{Braginsky:2011:LLL:1946143.1946153, Gidenstam:2010:CLQ:1940234.1940266,
+Hendler:2006:DNW:1160290.1160294, Sundell:2011:LAC:1989493.1989550}. 
+SALSA extends the use of chunk-based data structures by using chunks for
+efficient stealing.
+
