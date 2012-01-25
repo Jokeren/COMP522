@@ -1,4 +1,4 @@
-\paragraph{Task pools\\}
+\paragraph{Task pools.}
 There is a large body of work on lock-free unbounded FIFO queues and LIFO
 stacks~\cite{Gidenstam:2010:CLQ:1940234.1940266,Hendler:2004:SLS:1007912.1007944,
 Hoffman:2007:BQ:1782394.1782423, Michael:1996:SFP:248052.248106,Moir:2005:UEI:1073970.1074013}.
@@ -9,11 +9,11 @@ consumer-producer task pools.
 A number of previous works have recognized this limitation, and observed that strict FIFO
 order is seldom needed in multi-core systems
 \cite{Afek:2010:SPP:1885276.1885295,springerlink:10.1007/978-3-642-17653-1_29,
-Basin:2011:CST:2075029.2075087,Sundell:2011:LAC:1989493.1989550}. However, all of these use strong
-atomic operations at least in every consume. Most of them
-\cite{Afek:2010:SPP:1885276.1885295,springerlink:10.1007/978-3-642-17653-1_29,
-Basin:2011:CST:2075029.2075087} do not partition the pool among chips, and therefore do not achive
-good locality and cache-friendliness, limiting their scalability on NUMA systems
+Basin:2011:CST:2075029.2075087,Sundell:2011:LAC:1989493.1989550}. However, all of these solutions
+use strong atomic operations, at least in every consume operation. Most of
+them \cite{Afek:2010:SPP:1885276.1885295,springerlink:10.1007/978-3-642-17653-1_29,
+Basin:2011:CST:2075029.2075087} do not partition the pool among chips, and therefore do not achieve
+good locality and cache-friendliness, which limits their scalability on NUMA systems
 \cite{Basin:Thesis:2011}.
 
 The non-FIFO pool that is closest to our work is the Concurrent Bags of
@@ -23,33 +23,32 @@ upon each consume. In addition, steals are performed in the granularity of singl
 not whole chunks as in SALSA. Overall, Concurrent Bags are not scalable, i.e., their system
 throughput does not increase as more threads are added.
 
-\paragraph{Techniques\\}
-Some of the techniques used in our work were previously used in different
-variations. Work-stealing is a standard way to reduce contention by using individual per-consumer
-pools~\cite{Blumofe:1999:SMC:324133.324234}, where tasks may be stolen from one pool to another.
+\paragraph{Techniques.}
+Some of the techniques employ were previously used in different
+variations. First, work-stealing~\cite{Blumofe:1999:SMC:324133.324234} is a standard way to reduce
+contention by using individual per-consumer pools, where tasks may be stolen from one pool to
+another. Second, this partitioning into per-consumer pools allows for optimizing performance in the
+case that a consumer is working on its own pool without being interrupted by stealing; we refer to
+this case as the \emph{fast-path}. The concept of a synchronization-free fast-path has previously
+appeared in works about scheduling queues
+e.g.,~\cite{Arora:1998:TSM:277651.277678,Hendler:2006:DNW:1160290.1160294}. However, these works
+assume that the same process is both the producer and the consumer, and hence the
+synchronization-free fast-path is actually used only when a process transfers data to \emph{itself}.
+On the other hand, our pool is synchronization-free even when tasks are passed between multiple
+threads: our synchronization-free fast-path is used also when multiple producers produce data for
+a single consumer. We do not know of any other work that support synchronization-free data
+transfer between different threads.
 
-This partitioning into per-consumer pools allows for optimizing performance in the case that a
-consumer is working on its own pool without being interrupted by stealing. We refer to this case as
-the \emph{fast-path}. The concept of a synchronization-free fast-path has appeared in works about
-scheduling queues e.g.,~\cite{Arora:1998:TSM:277651.277678,Hendler:2006:DNW:1160290.1160294}.
-However, these works assume that the same process is both the producer and the consumer, and
-hence the synchronization-free fast-path is actually used only when a process transfers data to
-\emph{itself}. On the other hand, our pool is synchronization-free even when the tasks are passed
-between multiple threads -- the synchronization-free fast-path is used also when multiple producers
-produce data for a single consumer. We do not know of any other work that is synchronization-free in
-case of data transfered between different threads.
+Third, we improve the efficiency of stealing by transferring a chunk of tasks on every steal
+operation. Hendler et al.~\cite{Hendler:2002:NSW:571825.571876} have proposed stealing of multiple
+items by copying a range of tasks from one dequeue to another. Unfortunately, this approach requires
+costly CAS operations on the fast-path and introduces non-negligible overhead for item copying. In
+contrast, our approach of chunk-based stealing coincides with our synchronization-free fast-path,
+and steals whole chunks in O(1) steps. Furthermore, our use of page-size chunks allows for data
+migration in NUMA architectures to improve locality.
 
-One technique we use to improve the efficiency of stealing is transferring a
-number of tasks on every steal operation. Hendler et al.~\cite{Hendler:2002:NSW:571825.571876}
-propose stealing of multiple items by copying a range of tasks from one dequeue to another.
-Unfortunately, this approach requires costly CAS operations on the fast-path and introduces
-non-negligible overhead of item copying. In contrast, our approach of chunk-based stealing
-coincides with our synchronization-free fast-path and steals whole chunks in
-O(1) steps. Furthermore, our use of page-size chunks allows for data migration in NUMA
-architectures to improve locality.
-
-The technique of organizing data in chunks allows building dynamically sized data structures while
-preserving data locality. Chunk-based data structures were previously used
+Finally, the technique of organizing data in chunks allows building dynamically sized data
+structures while preserving data locality. Chunk-based data structures were previously used
 in \cite{Braginsky:2011:LLL:1946143.1946153, Gidenstam:2010:CLQ:1940234.1940266,
 Hendler:2006:DNW:1160290.1160294, Sundell:2011:LAC:1989493.1989550}. SALSA extends on the idea of
 using chunk-based data structures by using chunks also for efficient stealing.
