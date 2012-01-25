@@ -1,0 +1,12 @@
+
+
+
+
+The local variables and algorithms of the producer appear in
+Algorithm~\ref{alg:producer-non-fifo}. The producer's code is fairly simple, the producer first
+attempt to add tasks to the chunks it previously used, if this is the first produce action or the
+previous chunk was already filled, the producer will attempt to take a chunk from the chunk pool and
+add it to its list on the pool of the given consumer. If the pool is empty the operation will fail
+with a FULL message, if produceForce was called the operation will not fail, instead a new chunk
+will be allocated. 
+
