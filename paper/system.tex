@@ -1,21 +1,25 @@
-In the current section we present the framework for scalable and NUMA-aware producer-consumer data exchange. 
-Our system follows the principles of mechanism and policy separation.
+In the current section we present our framework for scalable and NUMA-aware producer-consumer data exchange. 
+Our system follows the principle of separating mechanism and policy.
 To this end, we consider two independent logical entities: 
 \begin{enumerate}
-	\item \emph{An extended single consumer pool (SCPool)} mechanism manages the tasks arriving to a given consumer while introducing the possibility of stealing some tasks by other consumers.
-	\item An inter-pool communication policy is responsible for operating SCPools: the policy routes producers' requests to the corresponding consumers and initiates stealing transactions between the pools. This way, the policy controls the system's behavior according to considerations of load-balancing, throughput, fairness, etc.
+	\item \emph{A single consumer pool (SCPool)} mechanism manages the tasks arriving to a given consumer while introducing the possibility of stealing some tasks by other consumers.
+	\item A management policy is responsible for operating SCPools: the policy routes producers' requests to the appropriate consumers and initiates stealing between the pools. This way, the policy controls the system's behavior according to considerations of load-distribution, throughput, fairness, locality, etc.
 \end{enumerate} 
 
 \input{SCPoolAPI}
 
-SCPool provides an abstraction of a single-consumer task pool with the stealing support, see Algorithm~\ref{alg:scpool-api}.
+The SCPool API provides the abstraction of a single-consumer task pool with stealing support, see Algorithm~\ref{alg:scpool-api}.
 A producer can invoke two types of insertion operations: \emph{produce}, which attempts to insert a task to the given pool and fails if the pool is full, and \emph{produceForce}, which always succeeds by expanding the pool on demand.
-There are also two ways to retrieve a task from the pool: the owner of the pool can call the \emph{consume} function; while any other thread can invoke the \emph{steal} function, which tries to transfer a number of tasks between the pools and to return one of the stolen tasks. The stealing property, which is necessary for system liveness, states that
-if a pool is not empty at the beginning of the steal operation, then either the steal operation retrieves a task, or another thread retrieves a task during the steal execution.
+There are also two ways to retrieve a task from the pool: the owner of the pool (only) can call the \emph{consume} function; while any other thread can invoke the \emph{steal} function, which tries to transfer a number of tasks between the pools and to return one of the stolen tasks. 
+The pool must guarantee the following \emph{stealing property}, which is necessary for system liveness:
+\begin{property}
+If a pool is not empty at the beginning of the steal operation, then either the steal operation retrieves a task, or another thread retrieves a task during the steal execution.
+\end{property}
+
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[width=0.7\textwidth]{system-fig}
+	\includegraphics[width=0.7\textwidth]{figures/system-fig}
 	\caption{\footnotesize{System overview: process $p_i$ observes a proximity list of available consumers sorted according to their distance from $p_i$. Locality groups are important both for task insertions (insert a task to the closest consumer), and for task stealing (steal a task from the closest consumer).}}
 	\label{fig:system-fig}
 \end{figure}

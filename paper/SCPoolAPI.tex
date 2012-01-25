@@ -7,9 +7,9 @@
 \INDENT {\bf SCPool API:}
 	\STATE produce(Task) \elcomment {Insert the task to the pool, returns false if no space left in the pool.}
 	\STATE produceForce(Task) \elcomment {Inserts the task to the pool, expanding the pool if necessary. }
-	\STATE consume() \elcomment {Retrieves a task from the pool, returns $\bot$ if no tasks in the pool detected.}
+	\STATE consume() \elcomment {Retrieves a task from the pool, returns $\bot$ if no tasks in the pool are detected.}
 	%\STATE getStealingScore() \elcomment {Returns a score corresponding to the amount of tasks to steal.}
-	\STATE steal(SCPool from) \elcomment{Tries to steal a number of tasks from the given pool and returns one of the stolen tasks or $\bot$. We guarantee that if there are tasks in the \emph{from} pool at the beginning of steal invocation, then either steal function returns a task, or there is another thread that returns a task during the steal execution.}
+	\STATE steal(SCPool from) \elcomment{Tries to steal a number of tasks from the given pool and move them to the current pool. Returns one of the stolen tasks or $\bot$. }%We guarantee that if there are tasks in the \emph{from} pool at the beginning of steal invocation, then either steal function returns a task, or there is another thread that returns a task during the steal execution.}
 \ENDINDENT
 
 \end{distribalgo}
