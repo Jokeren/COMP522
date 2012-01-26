@@ -4,23 +4,21 @@ To this end, we consider two independent logical entities:
 \begin{enumerate}
 	\item \emph{A single consumer pool (SCPool)} mechanism manages the tasks arriving to a given consumer while introducing the possibility of stealing some tasks by other consumers.
 	\item A management policy is responsible for operating SCPools: the policy routes producers' requests to the appropriate consumers and initiates stealing between the pools. This way, the policy controls the system's behavior according to considerations of load-distribution, throughput, fairness, locality, etc.
-	We are especially interested in a management policy suitable for Non-Uniform Memory Access (NUMA) architectures (see Figure~\ref{fig:system-fig}), where each CPU has its own memory, such that accessing memory of other CPUs is executed via interconnect. As excessive rate of remote memory accesses can decrease the overall performance, it is highly desirable for an SCPool of a consumer to reside at the RAM close to its own CPU. 
+	We are especially interested in a management policy suitable for Non-Uniform Memory Access (NUMA) architectures (see Figure~\ref{fig:system-fig}), where each CPU has its own memory, and accessing the memory of other CPUs is executed over an interconnect. As a high rate of remote memory accesses can decrease the overall performance, it is highly desirable for an SCPool of a consumer to reside at the RAM close to its own CPU. 
 \end{enumerate} 
 
 \paragraph{SCPool abstraction.}
 \input{SCPoolAPI}
 The SCPool API provides the abstraction of a single-consumer task pool with stealing support, see Algorithm~\ref{alg:scpool-api}.
 A producer can invoke two types of insertion operations: \emph{produce}, which attempts to insert a task to the given pool and fails if the pool is full, and \emph{produceForce}, which always succeeds by expanding the pool on demand.
-There are also two ways to retrieve a task from the pool: the owner of the pool (only) can call the \emph{consume} function; while any other thread can invoke the \emph{steal} function, which tries to transfer a number of tasks between the pools and to return one of the stolen tasks. 
+There are also two ways to retrieve a task from the pool: the owner of the pool (only) can call the \emph{consume} function; while any other thread can invoke the \emph{steal} function, which tries to transfer a number of tasks between the pools and return one of the stolen tasks. 
 The pool must guarantee the following \emph{stealing property}, which is necessary for system liveness:
 \begin{property}
-If a pool is not empty at the beginning of the steal operation, then either the steal operation retrieves a task, or another thread retrieves a task during the steal execution.
+If an SCPool is not empty at the beginning of a steal operation, then either the steal operation retrieves a task, or another thread retrieves a task during the steal execution.
 \end{property}
 
-A straightforward way to implement an API described above is to use a dynamic-size multi-producer multi-consumer FIFO queue (e.g., Michael-Scott queue).
-In this case both produce() and produceForce() functions enqueue a new task to the given queue, while both consume() and steal() functions dequeue a task from the queue. While being conceptually simple, the performance of such FIFO implementation is far from being optimal. As we demonstrate in Section~\ref{sec:evaluation}, our SALSA algorithm improves its performance by an order of magnitude. 
-
-The desired properties of any SCPool implementation are lock-freedom and starvation-freedom (every inserted task is eventually taken). A non-blocking FIFO queue clearly satisfies both of these properties; as we show in Section~\ref{sec:algo} SALSA does it as well. 
+A straightforward way to implement the API described above is to use a dynamic-size multi-producer multi-consumer FIFO queue (e.g., Michael-Scott queue~\cite{Michael:1996:SFP:248052.248106}).
+In this case, both produce() and produceForce() enqueue a new task, while both consume() and steal() dequeue a task. In the next section we present SALSA, a much more efficient SCPool.
 
 \begin{figure}[htb]
 	\centering
@@ -30,15 +28,14 @@ The desired properties of any SCPool implementation are lock-freedom and starvat
 \end{figure}
 
 \paragraph {Management policy.}
-As mentioned earlier, a management policy operates the SCPools in a way that is appropriate for the given desired system properties.
-It is generally defined by the way a producer inserts a task to one of the SCPools and a consumer retrieves a task from its own pool / steal tasks from other pools. 
+A management policy is generally defined by the way in which: (1) a producer chooses one of the SCPools to insert a task to, and when it chooses to use produce force; and (2) a consumer decides when to retrieve a task from its own pool and steal tasks from other pools. 
 Note that the policy is independent of the underlying SCPool implementation. We believe that it is a subject for engineering optimizations, based on specific workloads and demands.
 
 
-In the current work, we present a policy that exploits the locality properties of NUMA architectures and is aimed at achieving maximal throughput. If the individual SCPools themselves are lock-free and starvation-free, then our policy preserves these properties at the system level. 
+In the current work, we present a policy that exploits the locality properties of NUMA architectures and is aimed at achieving maximal throughput. If the individual SCPools themselves are lock-free and starvation-free, then our policy preserves these properties at the system level. Our policy is as follows:
 \begin{itemize}
-	\item {\bf Access order lists.} Each process in the system (producer or consumer) is provided with an ordered list of consumers, sorted according to their distance from that process (see Figure~\ref{fig:system-fig}). Intuitively, our policy is to have a producer mostly interact with the closest consumer, while stealing mainly happens inside the same processor node. 
-	\item {\bf Producer's policy.} A producer inserting a task first calls the \emph{produce} function of the first SCPool in its access list. Note that a produce operation might fail if the pool is full, (which can be seen as evidence of that the corresponding consumer is overloaded).  In this case, the producer tries to insert the task into other pools, in the order defined by its access list. If all the pools are full, the producer invokes the \emph{produceForce} operation on the closest SCPool, which always succeeds (expanding the pool if needed). 
+	\item {\bf Access lists.} Each process in the system (producer or consumer) is provided with an \emph{access list}, an ordered list of consumers, sorted according to their distance from that process (see Figure~\ref{fig:system-fig}). Intuitively, our policy is to have a producer mostly interact with the closest consumer, while stealing mainly happens inside the same processor node. 
+	\item {\bf Producer's policy.} A producer inserting a task first calls the \emph{produce} function of the first SCPool in its access list. Note that a produce operation might fail if the pool is full, (which can be seen as evidence of that the corresponding consumer is overloaded).  In this case, the producer tries to insert the task into other pools, in the order defined by its access list. If all insertions fail, the producer invokes the \emph{produceForce} operation on the closest SCPool, which always succeeds (expanding the pool if needed). 
 	\item {\bf Consumer's policy.} A consumer consumes tasks from its own SCPool. If its SCPool is empty, the consumer tries to steal tasks from other pools in the order defined by its access list. 
 \end{itemize}
 
