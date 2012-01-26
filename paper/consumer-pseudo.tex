@@ -1,0 +1,111 @@
+\begin{algo}[!ht]
+\caption{SALSA implementation of SCPool: Consumer Functions.} 
+\label{alg:non-fifo}
+\scriptsize
+\begin{minipage}[t]{0.48\textwidth}
+\begin{distribalgo}[1]
+\setcounter{ALC@line}{\value{alg:non-fifo:lines}}
+\smallskip
+
+
+\INDENT {{\bf Function consume}():}
+  \INDENT {{\bf if}(currentNode $\neq \bot$) {\bf then} \comment {common case}}
+		\STATE t $\leftarrow$ {\bf takeTask}(currentNode)
+		\STATE {\bf if} (t $\neq \bot$) {\bf then return} t
+	\ENDINDENT
+	\comment {Iterate over other chunk lists}
+	\INDENT {{\bf foreach} cl {\bf in} chunkLists {\bf do} \comment {fair traversal}} 
+  	\INDENT {{\bf foreach} node {\bf in} cl {\bf do}}
+  	  \INDENT {{\bf if}(node.c $\neq \bot \wedge \textrm{node.c.owner} = \textrm{consumerId}$) {\bf then}}
+  			\STATE t $\leftarrow$ {\bf takeTask}(node)
+				\STATE {\bf if} (t $\neq \bot$) {\bf then} currentNode $\leftarrow$ node; {\bf return} t
+			\ENDINDENT
+  	\ENDINDENT
+	\ENDINDENT
+	\STATE currentNode $\leftarrow \bot$; {\bf return} $\bot$
+\ENDINDENT
+
+\medskip
+
+\INDENT {{\bf Function takeTask}(Node n):}
+  \STATE chunk $\leftarrow$ n.c
+  \STATE {{\bf if} (chunk $= \bot$) {\bf then return $\bot$} \comment{this chunk has been stolen}}
+ 
+  \STATE task $\leftarrow$ chunk.tasks[n.idx + 1]
+  \STATE {\bf if} (task $= \bot$) {\bf then return} $\bot$ \comment{no inserted tasks}
+ 	
+ 	\smallskip 
+  \STATE n.idx++ \comment {tell the world you're going to take a task from idx}
+  \INDENT {{\bf if} (chunk.owner $=$ consumerId) {\bf then} \comment {common case}}
+ 		\STATE chunk.tasks[n.idx] $\leftarrow$ TAKEN
+  	\STATE {\bf checkEmpty}(n)
+  	\STATE {\bf return} task 
+  \ENDINDENT
+  
+  \smallskip
+  \comment {the chunk has been stolen, CAS the last task and go away}
+ 	\STATE success $\leftarrow$ (task $\neq$ TAKEN $\wedge$ \\
+ 		\hspace{0.5cm} CAS(chunk.tasks[n.idx], task, TAKEN))
+ 	\STATE {\bf if}(success) {\bf then checkEmpty}(n) 
+	\STATE currentNode $\leftarrow \bot$
+ 	\STATE {\bf return} (success) ? task : $\bot$
+\ENDINDENT
+
+\setcounter{alg:non-fifo:lines}{\value{ALC@line}} % store the line number
+\end{distribalgo}
+\end{minipage}%
+%
+\hfill
+%
+\begin{minipage}[t]{0.48\textwidth}
+%
+\begin{distribalgo}[1]
+\setcounter{ALC@line}{\value{alg:non-fifo:lines}}
+\smallskip
+
+\INDENT {{\bf Function steal}(SCPool from):}
+	\STATE prevNode $\leftarrow$ a node holding tasks from some list \comment {different policies possible}
+	\STATE c $\leftarrow$ prevNode.c; {\bf if} (c = $\bot$) {\bf then return} $\bot$
+
+	\STATE chunkLists[steal].{\bf append}(prevNode) \comment {make it restealable}
+  \INDENT {{\bf if} ({\bf CAS}(c.owner, from.consumerId, consumerId) $=$ false)}
+ 		\STATE chunkLists[steal].{\bf remove}(prevNode)
+ 		\STATE {\bf return} $\bot$ \comment {failed to steal}
+	\ENDINDENT
+
+	\smallskip
+	\STATE {\bf if}(prevNode.idx+1 $=$ CHUNK\_SIZE) {\bf then return} $\bot$
+	\STATE newNode $\leftarrow$ copy of prevNode
+	\STATE replace prevNode with newNode in chunkLists[steal]
+	\STATE prevNode.c $\leftarrow \bot$ 
+	
+	\smallskip
+	\comment {done stealing the chunk, take its task}
+	\STATE idx $\leftarrow$ newNode.idx
+	\STATE task $\leftarrow$ c.tasks[idx+1] 
+	\STATE {\bf if} (task $= \bot$) {\bf then return} $\bot$ \comment {still no task at idx+1}
+	\INDENT {{\bf if} (task $=$ TAKEN $\vee$ \\
+		\hspace{0.5cm} !CAS(c.tasks[idx+1], task, TAKEN)) {\bf then}} 
+		\STATE task $\leftarrow \bot$
+	\ENDINDENT
+	\STATE currentNode $\leftarrow$ newNode
+	\STATE {\bf if} (task $\neq \bot$) {\bf then checkEmpty}(newNode)
+	\STATE newNode.idx $\leftarrow$ newNode.idx+1
+	\STATE {\bf return} task
+\ENDINDENT
+
+
+\medskip
+
+\INDENT {{\bf Function checkEmpty}(Node n):}
+	\INDENT {{\bf if}(n.idx + 1 $=$ CHUNK\_SIZE) {\bf then} \comment {finished the chunk}}
+  	\STATE n.c $\leftarrow \bot$; return the chunk to the chunkPool
+  	\STATE currentNode $\leftarrow \bot$
+  \ENDINDENT
+\ENDINDENT
+
+\setcounter{alg:non-fifo:lines}{\value{ALC@line}}
+\end{distribalgo}
+\end{minipage}
+\end{algo}
+

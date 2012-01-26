@@ -1,0 +1,18 @@
+\subsubsection {SALSA producer operations}
+\input{producer-pseudo}
+The description of SALSA producer functions is depicted in Algorithm~\ref{alg:producer-non-fifo}. 
+Generally, the insertion of a new task by a producer consists of two stages: 
+1) finding a chunk to insert a task to, and 2) inserting a task to the chunk. 
+
+\paragraph {Finding a chunk.}
+The local producer variable \emph{chunk} keeps a current chunk to insert the tasks to (line~\ref{} in Algorithm~\ref{}). 
+When a producer starts working on a chunk $c$, the \emph{chunk} variable points to $c$ and the producer continues inserting the tasks to $c$ until it fills all the chunk entries. 
+Note that according to this approach a producer is oblivious to chunk stealing -- it is not aware of the fact that the chunk might be moved from one pool to another.  
+If the \emph{chunk}'s value is $\bot$, it means that the previous chunk has been filled up. In this case a producer should get a new chunk (Function \emph{getChunk} in Algorithm~\ref{}). 
+To this end, the producer tries to get a chunk from the chunk pool, which is implemented as a FIFO non-blocking queue, and append it to the appropriate chunk list. If the chunk pool is empty then the producer either allocates a new chunk by itself (\emph{produceForce()} function), or fails to insert the task and return $\bot$ (\emph{produce()} function) (lines~\ref{}--\ref{} in Algorithm~\ref{}). 
+
+\paragraph {Inserting a task to the chunk.}
+As previously described in Section~\ref{alg-structure}, different producers insert tasks to different chunk lists, which essentially removes the need for synchronization among producers. 
+The local producer variable \emph{prodIdx} indicates the insertion entry in the chunk's task array.
+All that the insertion function has to do is to put a task in the entry pointed by the \emph{prodIdx} and to increment this index.
+If the index arrives to the maximal value, \emph{chunk} variable is set to $\bot$, indicating that the next insertion operation should start a new chunk. 
