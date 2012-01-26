@@ -7,14 +7,12 @@ generally have high contention and therefore do not scale well, and are less app
 consumer-producer task pools. 
 
 A number of previous works have recognized this limitation, and observed that strict FIFO
-order is seldom needed in multi-core systems
-\cite{Afek:2010:SPP:1885276.1885295,springerlink:10.1007/978-3-642-17653-1_29,
+order is seldom needed in multi-core systems~\cite{Afek:2010:SPP:1885276.1885295,springerlink:10.1007/978-3-642-17653-1_29,
 Basin:2011:CST:2075029.2075087,Sundell:2011:LAC:1989493.1989550}. However, all of these solutions
 use strong atomic operations, at least in every consume operation. Most of
-them \cite{Afek:2010:SPP:1885276.1885295,springerlink:10.1007/978-3-642-17653-1_29,
+them~\cite{Afek:2010:SPP:1885276.1885295,springerlink:10.1007/978-3-642-17653-1_29,
 Basin:2011:CST:2075029.2075087} do not partition the pool among chips, and therefore do not achieve
-good locality and cache-friendliness, which limits their scalability on NUMA systems
-\cite{Basin:Thesis:2011}.
+good locality and cache-friendliness, which limits their scalability on NUMA systems~\cite{Basin:Thesis:2011}.
 
 The non-FIFO pool that is closest to our work is the Concurrent Bags of
 Sundell et al.~\cite{Sundell:2011:LAC:1989493.1989550}, which, like SALSA, is composed of
@@ -49,7 +47,7 @@ migration in NUMA architectures to improve locality.
 
 Finally, the technique of organizing data in chunks allows building dynamically sized data
 structures while preserving data locality. Chunk-based data structures were previously used
-in \cite{Braginsky:2011:LLL:1946143.1946153, Gidenstam:2010:CLQ:1940234.1940266,
+in~\cite{Braginsky:2011:LLL:1946143.1946153, Gidenstam:2010:CLQ:1940234.1940266,
 Hendler:2006:DNW:1160290.1160294, Sundell:2011:LAC:1989493.1989550}. SALSA extends on the idea of
 using chunk-based data structures by using chunks also for efficient stealing.
 

@@ -74,8 +74,8 @@
 	\ENDINDENT
 
 	\smallskip
-	\STATE {\bf if}(prevNode.idx+1 $=$ CHUNK\_SIZE) {\bf then return} $\bot$
 	\STATE newNode $\leftarrow$ copy of prevNode
+	\STATE {\bf if}(newNode.idx+1 $=$ CHUNK\_SIZE) {\bf then} chunkLists[steal].{\bf remove}(prevNode) {\bf return} $\bot$
 	\STATE replace prevNode with newNode in chunkLists[steal]
 	\STATE prevNode.c $\leftarrow \bot$ 
 	

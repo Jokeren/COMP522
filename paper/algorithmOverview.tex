@@ -16,3 +16,7 @@ As previously described in Section~\ref{alg-structure}, different producers inse
 The local producer variable \emph{prodIdx} indicates the insertion entry in the chunk's task array.
 All that the insertion function has to do is to put a task in the entry pointed by the \emph{prodIdx} and to increment this index.
 If the index arrives to the maximal value, \emph{chunk} variable is set to $\bot$, indicating that the next insertion operation should start a new chunk. 
+
+\subsubsection {SALSA consumer operations}
+
+\input{consumer-pseudo}
