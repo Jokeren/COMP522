@@ -1,6 +1,6 @@
 #!/bin/bash
    				  
-for poolType in "MSQTaskPool" "NoFIFOPool" "NoFIFOCASPool" "LIFOPool"; do
+for poolType in "NoFIFOCASPool" "LIFOPool" "NoFIFOPool" "MSQTaskPool" ; do
 	for prodMigrate in "true" "false"; do
 		for t in 1 2 4 8 16 32; do
 			echo "$poolType,$t,$t"
