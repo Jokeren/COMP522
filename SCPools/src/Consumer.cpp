@@ -45,6 +45,7 @@ OpResult Consumer::consume(Task*& t) {
 
 	float stealThreshold = myPool->getStealingThreshold();
 	if (curStealPool != NULL && curStealPool->getStealingScore() >= stealThreshold) {
+		stealingCounter++;
 		t = myPool->steal(curStealPool, stat);
 		if (t != NULL) return SUCCESS;
 	}
