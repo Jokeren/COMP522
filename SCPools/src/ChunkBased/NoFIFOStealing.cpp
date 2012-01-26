@@ -50,6 +50,7 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 	// obtain a non-empty node or NULL if there are no nodes.
 	int stealQueueID = -1;
 	SwNode* const prevNode = from->getStealNode(stealQueueID);
+	setHP(2,prevNode,hpLoc);
 	if (prevNode == NULL) {
 		return NULL;
 	}
