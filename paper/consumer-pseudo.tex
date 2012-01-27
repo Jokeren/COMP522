@@ -68,14 +68,17 @@
 	\STATE c $\leftarrow$ prevNode.c; {\bf if} (c = $\bot$) {\bf then return} $\bot$
 
 	\STATE chunkLists[steal].{\bf append}(prevNode) \comment {make it restealable}
-  \INDENT {{\bf if} ({\bf CAS}(c.owner, from.consumerId, consumerId) $=$ false)}
+	\INDENT {{\bf if} ({\bf CAS}(c.owner, from.consumerId, consumerId) $=$ false)}
  		\STATE chunkLists[steal].{\bf remove}(prevNode)
  		\STATE {\bf return} $\bot$ \comment {failed to steal}
 	\ENDINDENT
 
 	\smallskip
 	\STATE newNode $\leftarrow$ copy of prevNode
-	\STATE {\bf if}(newNode.idx+1 $=$ CHUNK\_SIZE) {\bf then} chunkLists[steal].{\bf remove}(prevNode) {\bf return} $\bot$
+	\INDENT {{\bf if} (newNode.idx+1 $=$ CHUNK\_SIZE)} 
+	  \STATE chunkLists[steal].{\bf remove}(prevNode)
+	  \STATE {\bf return} $\bot$
+	\ENDINDENT
 	\STATE replace prevNode with newNode in chunkLists[steal]
 	\STATE prevNode.c $\leftarrow \bot$ 
 	
