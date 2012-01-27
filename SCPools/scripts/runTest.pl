@@ -16,6 +16,7 @@ my $consCores="17 18 19 20 21 22 23 24 25 26 27 28 29 30 31";
 my $chips="0 8 16 24:1 9 17 25:2 10 18 26:3 11 19 27:4 12 20 28:5 13 21 29:6 14 22 30:7 15 23 31";
 my $affinity_str="x";
 my @affinity;
+my $affinityIdx="0";
 
 GetOptions( "consumers=i" => \$consNum,
 	    "producers=i" => \$prodNum,
@@ -26,7 +27,8 @@ GetOptions( "consumers=i" => \$consNum,
 		"consFluct=s" => \$consFluct,
 		"pausedThreads=i" => \$pausedThreads,
 		"prodMigrate=s" => \$prodMigrate,
-		"affinity=s" => \$affinity_str
+		"affinity=s" => \$affinity_str,
+		"affinityIdx=s" => \$affinityIdx
 		);
 		
 if($affinity_str ne "x")
@@ -85,7 +87,7 @@ close OUT;
 my $res = `./$fileName ./tmpConf`;
 #print $res;
 $res =~ /CSV:([A-Za-z0-9-\+,\.]+)/;
-print $1 . "\n"; 
+print "$affinityIdx,$1\n"; 
 
 unlink("./tmpConf");
 
