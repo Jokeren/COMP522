@@ -15,7 +15,7 @@ There are also two ways to retrieve a task from the pool: the owner of the pool 
 The pool must guarantee the following \emph{stealing property}, which is necessary for system liveness:
 \begin{property}
 \label{steal-progress-property}
-If an SCPool is not empty at the beginning of a steal operation, then either the steal operation retrieves a task, or another thread retrieves a task during the steal execution.
+If an SCPool is not empty at the beginning of a steal operation, then either the steal operation retrieves a task, or another thread started an operation $op$ during the steal execution, such that $op$ is guaranteed to retrieve a task.
 \end{property}
 
 A straightforward way to implement the API described above is to use a dynamic-size multi-producer multi-consumer FIFO queue (e.g., Michael-Scott queue~\cite{Michael:1996:SFP:248052.248106}).

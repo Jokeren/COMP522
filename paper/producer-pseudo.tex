@@ -8,7 +8,7 @@
 
 \INDENT {{\bf Producer local variables}:}
 	\STATE int producerId
-	\STATE Chunk chunk; initially $\bot$ \comment {the chunk to insert to}
+	\STATE Chunk chunk; initially $\bot$ \comment {the chunk to insert to} \label{alg:line:chunk}
 	\STATE int prodIdx; initially $0$ \comment {the prefix of inserted tasks}
 \ENDINDENT
 
@@ -24,7 +24,7 @@
 	\INDENT {{\bf if} (chunk $= \bot$) {\bf then}}
 		\STATE {\bf if} ({\bf getChunk}(scPool, force) $=$ {\bf FULL}) {\bf then return FULL}
 	\ENDINDENT
-	\STATE chunk.tasks[prodIdx] $\leftarrow$ t; prodIdx++
+	\STATE chunk.tasks[prodIdx] $\leftarrow$ t; prodIdx++ \label{alg:line:chunk-insert}
 	\INDENT {{\bf if}(prodIdx $=$ CHUNK\_SIZE) {\bf then}}
 	  \STATE chunk $\leftarrow \bot$ \comment {the chunk is full}
 	\ENDINDENT
@@ -50,9 +50,9 @@
 
 \INDENT {{\bf Function getChunk}(SALSA scPool, bool force)}
 	\STATE newChunk $\leftarrow$ a chunk from scPool.chunkPool
-	\INDENT {{\bf if} (chunk $= \bot$) \comment {no available chunks in this pool}}
+	\INDENT {{\bf if} (chunk $= \bot$) \comment {no available chunks in this pool}} \label{alg:line:no-chunk-start}
 		 \STATE {\bf if}(force $=$ false) {\bf then return FULL} 
-		 \STATE newChunk $\leftarrow$ allocate a new chunk
+		 \STATE newChunk $\leftarrow$ allocate a new chunk \label{alg:line:no-chunk-end}
 	\ENDINDENT
 	\STATE newChunk.owner $\leftarrow$ scPool.consumerId
 	\STATE node $\leftarrow$ new node with idx $=-1$ and c $=$ newChunk

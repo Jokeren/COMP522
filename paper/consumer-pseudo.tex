@@ -13,15 +13,21 @@
 		\STATE t $\leftarrow$ {\bf takeTask}(currentNode)
 		\STATE {\bf if} (t $\neq \bot$) {\bf then return} t
 	\ENDINDENT
-	\comment {Iterate over other chunk lists}
-	\INDENT {{\bf foreach} cl {\bf in} chunkLists {\bf do} \comment {fair traversal}} 
-  	\INDENT {{\bf foreach} node {\bf in} cl {\bf do}}
-  	  \INDENT {{\bf if}(node.c $\neq \bot \wedge \textrm{node.c.owner} = \textrm{consumerId}$) {\bf then}}
-  			\STATE t $\leftarrow$ {\bf takeTask}(node)
-				\STATE {\bf if} (t $\neq \bot$) {\bf then} currentNode $\leftarrow$ node; {\bf return} t
+	\INDENT {{\bf foreach} node $n$ in the pool {\bf do:} \comment {fair traversal}}
+	  \INDENT {{\bf if}(n.c $\neq \bot \wedge \textrm{n.c.owner} = \textrm{consumerId}$) {\bf then}}
+  			\STATE t $\leftarrow$ {\bf takeTask}(n)
+				\STATE {\bf if} (t $\neq \bot$) {\bf then} currentNode $\leftarrow$ n; {\bf return} t
 			\ENDINDENT
-  	\ENDINDENT
 	\ENDINDENT
+% 	\comment {Iterate over other chunk lists}
+% 	\INDENT {{\bf foreach} cl {\bf in} chunkLists {\bf do} \comment {fair traversal}} 
+%   	\INDENT {{\bf foreach} node {\bf in} cl {\bf do}}
+%   	  \INDENT {{\bf if}(node.c $\neq \bot \wedge \textrm{node.c.owner} = \textrm{consumerId}$) {\bf then}}
+%   			\STATE t $\leftarrow$ {\bf takeTask}(node)
+% 				\STATE {\bf if} (t $\neq \bot$) {\bf then} currentNode $\leftarrow$ node; {\bf return} t
+% 			\ENDINDENT
+%   	\ENDINDENT
+% 	\ENDINDENT
 	\STATE currentNode $\leftarrow \bot$; {\bf return} $\bot$
 \ENDINDENT
 
