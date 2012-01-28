@@ -65,4 +65,4 @@ The per-producer chunk lists are kept in the array \emph{chunkLists} (see Figure
 
 In addition to the chunk pointer, each node keeps an index of the latest taken task. As we show in Section~\ref{alg-stealing}, this index plays a crucial role in chunk stealing. Safe memory reclamation is provided by using hazard pointers~\cite{Michael:2004:HPS:987524.987595} both for the nodes and the chunks.
 
-The free/reclaimed chunks in SALSA are kept inside the SCPools in chunkPool, a lock-free queue~\cite{Michael:1996:SFP:248052.248106}. These pools serve two purposes. First, they enable efficient memory reuse. Second, as we show in Section~\ref{alg-pools}, managing per-consumer chunk pools are good for load balancing. 
+The free/reclaimed chunks in SALSA are kept inside the SCPools in chunkPool, a lock-free queue~\cite{Michael:1996:SFP:248052.248106}. These pools serve two purposes. First, they enable efficient memory reuse. Second, as we show in Section~\ref{alg-pools}, managing per-consumer chunk pools is good for load balancing. 
