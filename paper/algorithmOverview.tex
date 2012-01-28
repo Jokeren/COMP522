@@ -1,15 +1,15 @@
-\subsubsection {SALSA producer algorithm}
+\subsubsection {SALSA producer overview}
 \input{producer-pseudo}
 The description of SALSA producer functions is presented in Algorithm~\ref{alg:producer-non-fifo}. 
-The insertion of a new task by a producer consists of two stages: 
-1) finding a chunk to insert a task to, and 2) inserting a task to the chunk. 
+The insertion of a new task consists of two stages: 
+1) finding a chunk for task insertion, and 2) adding a task to the chunk. 
 
 \paragraph {Finding a chunk.}
-The producer local variable \emph{chunk} keeps the chunk to insert the tasks to (line~\ref{alg:line:chunk} in Algorithm~\ref{alg:producer-non-fifo}). 
-When a producer starts working on a chunk $c$ it continues inserting the tasks to $c$ until it is full. 
-Note that the producer is oblivious to the fact that the chunk might be moved from one pool to another.
-If the \emph{chunk}'s value is $\bot$, it means that the previous chunk has been filled up, and the producer should get a new chunk (Function \emph{getChunk}). 
-In this case, the producer tries to get a chunk from the chunk pool and append it to the appropriate chunk list. If the chunk pool is empty then the producer either allocates a new chunk by itself (\emph{produceForce()} function), or returns $\bot$ (\emph{produce()} function) (lines~\ref{alg:line:no-chunk-start}--\ref{alg:line:no-chunk-end}). 
+The chunk for task insertions is kept at the local producer variable \emph{chunk} (line~\ref{alg:line:chunk} in Algorithm~\ref{alg:producer-non-fifo}). 
+Once a producer starts working with a chunk $c$, it continues putting the tasks to $c$ until it is full. 
+Note that the producer is oblivious to chunk stealing and is not aware of chunks moving from one pool to another. 
+If the \emph{chunk}'s value is $\bot$, then the producer should find a new chunk (function \emph{getChunk}). 
+In this case, the it tries to retrieve a chunk from the chunk pool and append it to the appropriate chunk list. If the chunk pool is empty then the producer either allocates a new chunk by itself (\emph{produceForce()} function), or returns $\bot$ (\emph{produce()} function) (lines~\ref{alg:line:no-chunk-start}--\ref{alg:line:no-chunk-end}). 
 
 \paragraph {Inserting a task to the chunk.}
 As previously described in Section~\ref{alg-structure}, different producers insert tasks to different chunks, which removes the need for synchronization among producers. 
@@ -17,15 +17,14 @@ The producer local variable \emph{prodIdx} indicates the next free slot in the c
 All that the insertion function has to do is to put a task in that slot and to increment \emph{prodIdx} (line~\ref{alg:line:chunk-insert}).
 Once the index reaches the maximal value, the \emph{chunk} variable is set to $\bot$, indicating that the next insertion operation should start a new chunk. 
 
-\subsubsection {SALSA consumer fast-path}
+\subsubsection {SALSA consumer overview}
 \input{consumer-pseudo}
-We now describe the way the consumer retrieves a task from the chunk in the common case, when no simultaneous stealing. 
+We now describe the way the consumer retrieves a task from the chunk in the fast path with no stealing. 
 Unlike producers that operate solely on the chunks, a consumer should take into consideration the possibility of stealing. 
 Therefore, it should notify other processes about the task it is about to take. 
 
 Each node in the chunk list keeps an index of the taken prefix of its chunk (\emph{idx} variable, which is initiated to $-1$). 
-A consumer that wants to take a task $T$ first increments the index, checks the ownership and then changes the chunk entry from $T$ to a special value \emph{TAKEN}. According to this algorithm, \emph{idx} always points to the last taken task or to a task that is about to be taken. 
-This way, a process that is stealing a chunk from the node with $\textit{idx} = i$ can assume that the tasks in the range $[0 \ldots i]$ have already been taken.
+A consumer that wants to take a task $T$ first increments the index, checks the ownership and then changes the chunk entry from $T$ to a special value \emph{TAKEN}. By doing this, a consumer guarantees that \emph{idx} always points to the last taken task or to a task that is about to be taken. Hence, a process that is stealing a chunk from the node with $\textit{idx} = i$ can assume that the tasks in the range $[0 \ldots i)$ have already been taken.
 
 
 

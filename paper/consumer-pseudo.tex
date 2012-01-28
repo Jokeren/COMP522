@@ -41,20 +41,20 @@
   \STATE {\bf if} (task $= \bot$) {\bf then return} $\bot$ \comment{no inserted tasks}
  	
  	\smallskip 
-  \STATE n.idx++ \comment {tell the world you're going to take a task from idx}
+  \STATE n.idx++ \comment {tell the world you're going to take a task from idx} \label{alg:lines:ind-inc}
   \INDENT {{\bf if} (chunk.owner $=$ consumerId) {\bf then} \comment {common case}}
- 		\STATE chunk.tasks[n.idx] $\leftarrow$ TAKEN
+ 		\STATE chunk.tasks[n.idx] $\leftarrow$ TAKEN \label{alg:lines:fast-path}
   	\STATE {\bf checkEmpty}(n)
   	\STATE {\bf return} task 
   \ENDINDENT
   
   \smallskip
-  \comment {the chunk has been stolen, CAS the last task and go away}
- 	\STATE success $\leftarrow$ (task $\neq$ TAKEN $\wedge$ \\
- 		\hspace{0.5cm} CAS(chunk.tasks[n.idx], task, TAKEN))
+  \comment {the chunk has been stolen, CAS the last task and go away} 
+ 	\STATE success $\leftarrow$ (task $\neq$ TAKEN $\wedge$ \\ \label{alg:lines:stolen-chunk-begin}
+ 		\hspace{0.5cm} CAS(chunk.tasks[n.idx], task, TAKEN)) \label{alg:line:cas-consumer}
  	\STATE {\bf if}(success) {\bf then checkEmpty}(n) 
 	\STATE currentNode $\leftarrow \bot$
- 	\STATE {\bf return} (success) ? task : $\bot$
+ 	\STATE {\bf return} (success) ? task : $\bot$ \label{alg:lines:stolen-chunk-end}
 \ENDINDENT
 
 \setcounter{alg:non-fifo:lines}{\value{ALC@line}} % store the line number
@@ -73,20 +73,20 @@
 	\STATE prevNode $\leftarrow$ a node holding tasks from some list \comment {different policies possible}
 	\STATE c $\leftarrow$ prevNode.c; {\bf if} (c = $\bot$) {\bf then return} $\bot$
 
-	\STATE chunkLists[steal].{\bf append}(prevNode) \comment {make it restealable}
-	\INDENT {{\bf if} ({\bf CAS}(c.owner, from.consumerId, consumerId) $=$ false)}
+	\STATE chunkLists[steal].{\bf append}(prevNode) \comment {make it restealable} \label{alg:line:resteal-begin}
+	\INDENT {{\bf if} ({\bf CAS}(c.owner, from.consumerId, consumerId) $=$ false)} \label{alg:line:chown}
  		\STATE chunkLists[steal].{\bf remove}(prevNode)
  		\STATE {\bf return} $\bot$ \comment {failed to steal}
 	\ENDINDENT
 
 	\smallskip
-	\STATE newNode $\leftarrow$ copy of prevNode
+	\STATE newNode $\leftarrow$ copy of prevNode \label{alg:line:copy-prev-node}
 	\INDENT {{\bf if} (newNode.idx+1 $=$ CHUNK\_SIZE)} 
 	  \STATE chunkLists[steal].{\bf remove}(prevNode)
 	  \STATE {\bf return} $\bot$
 	\ENDINDENT
 	\STATE replace prevNode with newNode in chunkLists[steal]
-	\STATE prevNode.c $\leftarrow \bot$ 
+	\STATE prevNode.c $\leftarrow \bot$ \label{alg:line:remove-chunk} \label{alg:line:resteal-end}
 	
 	\smallskip
 	\comment {done stealing the chunk, take its task}
@@ -94,7 +94,7 @@
 	\STATE task $\leftarrow$ c.tasks[idx+1] 
 	\STATE {\bf if} (task $= \bot$) {\bf then return} $\bot$ \comment {still no task at idx+1}
 	\INDENT {{\bf if} (task $=$ TAKEN $\vee$ \\
-		\hspace{0.5cm} !CAS(c.tasks[idx+1], task, TAKEN)) {\bf then}} 
+		\hspace{0.5cm} !CAS(c.tasks[idx+1], task, TAKEN)) {\bf then}} \label{alg:line:cas-steal} 
 		\STATE task $\leftarrow \bot$
 	\ENDINDENT
 	\STATE currentNode $\leftarrow$ newNode
