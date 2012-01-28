@@ -23,8 +23,8 @@ public:
 	virtual Task* steal(SCTaskPool* from, AtomicStatistics* stat);
 
 protected:
-	virtual Task* stealFromList(SwLinkedList* l, AtomicStatistics* stat);
-	virtual Task* stealFromChunk(SPChunk* n, int startIdx, AtomicStatistics* stat);
+	virtual Task* stealFromList(SwLinkedList* l, int listIdx, AtomicStatistics* stat);
+	virtual Task* stealFromChunk(SPChunk* n, SwNode* node, int queueId, int startIdx, AtomicStatistics* stat);
 	virtual Task* takeTask(SwNode* n, AtomicStatistics* stat);
 };
 

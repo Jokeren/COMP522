@@ -48,11 +48,11 @@ float NoFIFOCASPool::getStealingThreshold() const {
 Task* NoFIFOCASPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 	NoFIFOCASPool* from = (NoFIFOCASPool*)from_;
 
-	int idx = getLongestListIdx();
-	return stealFromList(&(from->chunkLists[idx]), stat);
+	int idx = from->getLongestListIdx();
+	return stealFromList(&(from->chunkLists[idx]), idx, stat);
 }
 
-Task* NoFIFOCASPool::stealFromList(SwLinkedList* l, AtomicStatistics* stat) {
+Task* NoFIFOCASPool::stealFromList(SwLinkedList* l, int listIdx, AtomicStatistics* stat) {
 	// iterate over the list of nodes, try to steal from each one of them
 	SwLinkedList::SwLinkedListIterator iter(l,hpLoc);
 	SwNode* node;
@@ -68,7 +68,7 @@ Task* NoFIFOCASPool::stealFromList(SwLinkedList* l, AtomicStatistics* stat) {
 				SPChunk* chunk = node->chunk;
 				setHP(3, chunk, hpLoc);
 				if (node->chunk != chunk || chunk == NULL) continue; // that was an empty node
-				Task* t = stealFromChunk(chunk, node->consumerIdx, stat);
+				Task* t = stealFromChunk(chunk, node, listIdx, node->consumerIdx, stat);
 				if (t != NULL) return t;
 			}
 		}
@@ -76,8 +76,8 @@ Task* NoFIFOCASPool::stealFromList(SwLinkedList* l, AtomicStatistics* stat) {
 }
 
 
-Task* NoFIFOCASPool::stealFromChunk(SPChunk* chunk, int startIdx, AtomicStatistics* stat) {
-	int idx = startIdx;
+Task* NoFIFOCASPool::stealFromChunk(SPChunk* chunk, SwNode* node, int queueId, int startIdx, AtomicStatistics* stat) {
+	int idx = startIdx + 1;
 	Task* t;
 	while(true) {
 		// iterate to the end of TAKEN values
