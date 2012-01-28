@@ -1,2 +1,8 @@
-As described in Section~\ref{alg-structure}, each consumer has a pool of chunks of a limited size.
-When a producer needs a new chunk to add to its list in consumer $c_i$, it tries to get a chunk from $c_i$'s chunk pool. If the pool doesn't contain any chunks, the the operation fails (if {\it produce}() was invoked) or it creates a new chunk (if {\it produceForce}() was invoked). As described in Section~\ref{sec:system}, our policy is first to invoke {\it produce}() on all the pools by order of distance from the producer, and only after the producer fails to insert the task to all pools it calls {\it produceForce}() on the closest pool. This policy reduces the number of steal operation by making producers balance the load, rather than the consumers. In addition, in SALSA a chunk is returned to the pool of the consumer which took the last task in that chunk. This balances the pool sizes, by making pools of overloaded consumers smaller and thus cause producers to move to other consumers.
+As described in Section~\ref{alg-structure}, each consumer keeps a pool of free chunks.
+When a producer needs a new chunk for adding a task to consumer $c_i$, it tries to get a chunk from $c_i$'s chunk pool -- if no free chunks are available, the {\bf produce()} operation fails.
+
+As described in Section~\ref{sec:system}, our system-wide policy defines that if an insertion operation fails, then the producer tries to insert a task to other pools. Thus, the producer avoids adding tasks to overloaded consumers, which in turn decreases the amount of costly steal operations. 
+
+Another SALSA property is that a chunk is returned to the pool of a consumer that retrieves the latest task of this chunk. 
+Therefore, the size of the chunk pool of consumer $c_i$ is proportional to the rate of $c_i$'s task consumption.
+This property is especially appealing for heterogeneous systems -- a faster consumer $c_i$ (e.g., the one running on stronger or less loaded core) will have a larger pool chunk, such that more {\bf produce()} operations will insert tasks to $c_i$, automatically balancing the overall system. 
