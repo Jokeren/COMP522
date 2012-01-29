@@ -18,8 +18,7 @@ The non-FIFO pool that is closest to our work is the Concurrent Bags of
 Sundell et al.~\cite{Sundell:2011:LAC:1989493.1989550}, which, like SALSA, is composed of
 per-producer chunk lists. Unlike our pool, however, their algorithm uses strong atomic operations
 upon each consume. In addition, steals are performed in the granularity of single tasks and
-not whole chunks as in SALSA. Overall, Concurrent Bags are not scalable, i.e., their system
-throughput does not increase as more threads are added.
+not whole chunks as in SALSA. Overall, Concurrent Bags are not linear-scalable.
 
 \paragraph{Techniques.}
 Some of the techniques employ were previously used in different

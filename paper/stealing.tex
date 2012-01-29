@@ -1,41 +1,18 @@
-The stealing algorithm is presented in a function {\bf steal()} in Algorithm~\ref{alg:non-fifo}. 
-We refer to the stealing consumer as $c_s$, the victim process whose chunk is being stolen is called $c_v$, and the stolen chunk is referred to as $ch$.
+The stealing algorithm is given in the function {\bf steal()} in Algorithm~\ref{alg:non-fifo}. 
+We refer to the stealing consumer as $c_s$, the victim process whose chunk is being stolen as $c_v$, and the stolen chunk as $ch$.
 
-The idea is to turn $c_s$ to the exclusive consumer of $ch$, such that $s_c$ will be able to take tasks from the chunk without synchronization. 
-In order to do that, $c_s$ changes the ownership of $ch$ (line~\ref{alg:line:chown}) and removes the chunk from the list of $c_v$ (line~\ref{alg:line:remove-chunk}). 
-Once $c_v$ notices the change in the ownership it stops taking tasks from $ch$ (lines~\ref{alg:lines:stolen-chunk-end}--\ref{alg:lines:stolen-chunk-begin}). 
+The idea is to turn $c_s$ to the exclusive owner of $ch$, such that $c_s$ will be able to take tasks from the chunk without synchronization. 
+In order to do that, $c_s$ changes the ownership of $ch$ from $c_v$ to $c_s$ using CAS (line~\ref{alg:line:chown}) and removes the chunk from $c_v$'s list (line~\ref{alg:line:remove-chunk}). 
+Once $c_v$ notices the change in the ownership it can take at most one more task from $ch$ (lines~\ref{alg:lines:stolen-chunk-begin}--\ref{alg:lines:stolen-chunk-end}). 
 
-When the {\bf steal()} operation of $c_s$ occurs simultaneously with the {\bf takeTask()} operation of $c_v$, both $c_s$ and $c_v$ might try to retrieve the same task. Hence, $c_v$ notifies potential stealers of the task it is about to take by incrementing the \emph{idx} value of the $ch$'s node (line~\ref{alg:lines:ind-inc}). This value is later read by $c_s$ in line~\ref{alg:line:copy-prev-node} when creating a copy of $ch$'s node.
+When the {\bf steal()} operation of $c_s$ occurs simultaneously with the {\bf takeTask()} operation of $c_v$, both $c_s$ and $c_v$ might try to retrieve the same task. We now explain why this might happen. Recall that $c_v$ notifies potential stealers of the task it is about to take by incrementing the \emph{idx} value in $ch$'s node (line~\ref{alg:lines:ind-inc}). This value is copied by $c_s$ in line~\ref{alg:line:copy-prev-node} when creating a copy of $ch$'s node for its steal list.
 
-%Consider, for example, a scenario in which the $idx$ value is incremented from $10$ to $11$ during $c_v$'s {\bf takeTask()} operation.
 Consider, for example, a scenario in which the $idx$ is incremented by $c_v$ from $10$ to $11$. 
-If $c_v$ checks the ownership before it is changed by $c_s$, then $c_v$ takes the task at $11$ without synchronization (see line~\ref{alg:lines:fast-path}). Therefore, $c_s$ is never allowed to take a task pointed by \emph{idx}, and hence $c_v$ has to take the task at $11$ even if it observes the ownership change. 
-After taking the chunk, $c_s$ will eventually try to take a task pointed by $idx+1$. However, if $c_s$ read $idx$ before it was incremented by $c_v$, $c_s$ might think that the value of $idx+1$ is $11$. In this case, both $c_s$ and $c_v$ will try to retrieve the task at $11$, hence both should use CAS operation in order to retrieve a task: line~\ref{alg:line:cas-steal} for $c_s$ and line~\ref{alg:line:cas-consumer} for $c_v$. 
+If $c_v$ checks $ch$'s ownership before it is changed by $c_s$, then $c_v$ takes the task at index $11$ \emph{without synchronization} (line~\ref{alg:lines:fast-path}). Therefore, $c_s$ cannot be allowed to take the task pointed by \emph{idx}. Hence, $c_v$ has to take the task at index $11$ even if it does observe the ownership change. 
+After stealing the chunk, $c_s$ will eventually try to take the task pointed by $idx+1$. However, if $c_s$ copies the node before $idx$ is incremented by $c_v$, $c_s$ might think that the value of $idx+1$ is $11$. In this case, both $c_s$ and $c_v$ will try to retrieve the task at index $11$, To ensure that the task is no retrieved twice, both use a CAS operation in order to retrieve the task (line~\ref{alg:line:cas-steal} for $c_s$, line~\ref{alg:line:cas-consumer} for $c_v$). 
 
 The above algorithm works correctly as long as the stealing consumer can observe the node with the updated index value. 
-This might not be a case if the same chunk is concurrently stolen by another consumer because the \emph{idx} of the original node would be obsolete. 
-In order to prevent this situation, stealing a chunk from the pool of consumer $c_v$ is allowed only if $c_v$ is the owner of this chunk (line~\ref{alg:line:chown}). 
+This might not be the case if the same chunk is concurrently stolen by another consumer rendering the \emph{idx} of the original node obsolete. 
+In order to prevent this situation, stealing a chunk from the pool of consumer $c_v$ is allowed only if $c_v$ is the owner of this chunk (line~\ref{alg:line:chown}). This approach is prone to the ABA problem: Consider a scenario where consumer $c_a$ tries to steal from $c_b$ but before the CAS in line~\ref{alg:line:chown} the chunk stolen by $c_c$ and then stolen back by $c_b$. In this case $c_a$'s CAS will succeed but $c_a$ will have an old value of $idx$. To prevent this ABA problem, the owner field contains a ``tag'' which is incremented on every CAS operation.
 
-A naive way for $c_s$ to steal the chunk from $c_v$ would be first to change the ownership and then to move the chunk to the steal list. However, that would make our algorithm blocking because there exists a time that the chunk is unaccessible via the lists of $c_s$ and yet $c_s$ is its owner. In this case, as we explained above, the chunk cannot be stolen, which prevents taking the tasks from this chunk by other consumers. Therefore, our solution is to first add the original node to the steal list of $c_s$, change the ownership, and only then to replace the original node with a new node (lines~\ref{alg:line:resteal-begin}--\ref{alg:line:resteal-end}). 
- 
-
-% change the ownership (the consumer will check the ownership change)
-% what about the first task retrieval? (the description includes the explanation about idx+1)
-% what about concurrent stealing? (I want to see the updated idx value, the updated idx value is kept at node, hence I need to steal from the owner only)
-% what about non-blocking properties? (want to allow others to always find a task...) 
-
-
-
-
-
-
-% \paragraph{Stealing the chunk.} Before stealing a chunk, $c_1$ has to make sure $c_2$ will not take any more tasks from that chunk, so the $c_1$ may later take tasks with no need for synchronization. To achieve this $c_1$ must change the owner field of the chunk. Changing the ownership will prevent $c_2$ from taking tasks as a consumer always checks that he is the owner of the chunk before taking tasks. 
-% 
-% Before changing the ownership we must relate to two issues: (1) Stealing a chunk from the pool of consumer $c_2$ is allowed only if $c_2$ is the owner of the chunk that we steal, this is needed so it is guaranteed that $c_2$ reads the latest value of the idx, which is only found in the owner's node. (2) We want that other consumers would be able to steal the chunk during the process, so that the algorithm will stay lock-free. 
-% 
-% For those two reasons we must make the chunk accessible via $c_1$'s pool before changing ownership. However, we cannot simply add a new node to $c_1$'s steal list, as that node's idx field will not be updated if $c_2$ changes his idx field. Therefore, before changing ownership, $c_1$ adds $c_2$'s node to his steal list (Line~\ref{} in Algorithm~\ref{}). Now $c_1$ takes ownership (Line~\ref{}) and creates a new node with the updated idx that will replace the $c_2$'s node (Line~\ref{}), as the original idx may only change by one pending operation at most. Finally $c_1$ changes $c_2$'s node to point to NULL (Line~\ref{}) so that this node will not be used and will be lazily removed.
-% 
-% \paragraph{Taking the first task.} After the $c_1$ stole the chunk, he must attempt to take a task, so Property~\ref{steal-progress-property} will hold. $c_1$ will try to take the task at $idx+1$, however, this task may be also taken by $c_2$ if he started a consume operation before $c_1$ completed the node transfer. This is why $c_1$ must use a CAS operation to take this node (Line~\ref{}). $c_2$ must also attempt to take this node (Line~\ref{}) even if he noticed the ownership change, since he does not know if $c_1$ read the idx value before or after $c_2$ increased it Line~\ref{}.
-
-% \vspace{5mm}\noindent
-% We claim that the steal operation hold Property~\ref{steal-progress-property}. In line~\ref{} a chunk with at least one task is taken, therefore there is a task at $idx+1$. if $idx$ is updated during the stealing operation it means that the original consumer is taking that task and therefore the property holds. Otherwise, either the CAS in line~\ref{} failed and another consumer successfully stole the chunk and will return a task, or the current producer will reach line~\ref{}. In this line the CAS will be executed if the task wasn't already taken, and since either the stealing consumer or the original consumer will succeed performing the CAS.
+A na\"{i}ve way for $c_s$ to steal the chunk from $c_v$ would be first to change the ownership and then to move the chunk to the steal list. However, this approach may cause the chunk to ``disappear'' if $c_s$ now crushes or sleeps for a long time, because there exists a time when the chunk is inaccessible via the lists of $c_s$ and yet $c_s$ is its owner. In this case, as we explained above, the chunk cannot be stolen, which prevents other consumers from taking tasks from this chunk. Therefore, our solution is to first add the original node to the steal list of $c_s$, then change the ownership, and only then replace the original node with a new node (lines~\ref{alg:line:resteal-begin}--\ref{alg:line:resteal-end}).

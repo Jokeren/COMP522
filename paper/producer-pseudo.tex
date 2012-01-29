@@ -14,21 +14,15 @@
 
 \medskip
 
-\INDENT {{\bf Function produce}(Task t, SALSA scPool):}
-	\STATE {\bf return insert}(t, scPool, false)
-\ENDINDENT
-
-\medskip
-
-\INDENT {{\bf Function insert}(Task t, SCPool scPool, bool force):}
-	\INDENT {{\bf if} (chunk $= \bot$) {\bf then}}
-		\STATE {\bf if} ({\bf getChunk}(scPool, force) $=$ {\bf FULL}) {\bf then return FULL}
+\INDENT {{\bf Function produce}(Task t, SCPool scPool, bool force):}
+	\INDENT {{\bf if} (chunk $= \bot$) {\bf then} \comment {allocate new chunk}}
+		\STATE {\bf if} ({\bf getChunk}(scPool, force) $=$ {\bf false}) {\bf then return false}
 	\ENDINDENT
 	\STATE chunk.tasks[prodIdx] $\leftarrow$ t; prodIdx++ \label{alg:line:chunk-insert}
 	\INDENT {{\bf if}(prodIdx $=$ CHUNK\_SIZE) {\bf then}}
 	  \STATE chunk $\leftarrow \bot$ \comment {the chunk is full}
 	\ENDINDENT
-	\STATE {\bf return SUCCESS}
+	\STATE {\bf return true}
 \ENDINDENT
 
 \setcounter{alg:non-fifo:lines}{\value{ALC@line}} % store the line number
@@ -42,23 +36,17 @@
 \begin{distribalgo}[1]
 \setcounter{ALC@line}{\value{alg:non-fifo:lines}}
 
-\INDENT {{\bf Function produceForce}(Task t, SALSA scPool):}
-	\STATE {\bf return insert}(t, scPool, true)
-\ENDINDENT
-
-\medskip
-
 \INDENT {{\bf Function getChunk}(SALSA scPool, bool force)}
-	\STATE newChunk $\leftarrow$ a chunk from scPool.chunkPool
+	\STATE newChunk $\leftarrow$ dequeue chunk from scPool.chunkPool
 	\INDENT {{\bf if} (chunk $= \bot$) \comment {no available chunks in this pool}} \label{alg:line:no-chunk-start}
-		 \STATE {\bf if}(force $=$ false) {\bf then return FULL} 
+		 \STATE {\bf if} (force $=$ false) {\bf then return false} 
 		 \STATE newChunk $\leftarrow$ allocate a new chunk \label{alg:line:no-chunk-end}
 	\ENDINDENT
 	\STATE newChunk.owner $\leftarrow$ scPool.consumerId
 	\STATE node $\leftarrow$ new node with idx $=-1$ and c $=$ newChunk
 	\STATE scPool.chunkLists[producerId].{\bf append}(node)
 	\STATE chunk $\leftarrow$ newChunk; prodIdx $\leftarrow 0$ 
-	\STATE {\bf return SUCCESS}
+	\STATE {\bf return true}
 \ENDINDENT
 
 \setcounter{alg:non-fifo:lines}{\value{ALC@line}}

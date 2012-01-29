@@ -5,4 +5,4 @@ As described in Section~\ref{sec:system}, our system-wide policy defines that if
 
 Another SALSA property is that a chunk is returned to the pool of a consumer that retrieves the latest task of this chunk. 
 Therefore, the size of the chunk pool of consumer $c_i$ is proportional to the rate of $c_i$'s task consumption.
-This property is especially appealing for heterogeneous systems -- a faster consumer $c_i$ ", (e.g., one running on a stronger or less loaded core), will have a larger chunk pool, and so more {\bf produce()} operations will insert tasks to $c_i$, automatically balancing the overall system load. 
+This property is especially appealing for heterogeneous systems -- a faster consumer $c_i$, (e.g., one running on a stronger or less loaded core), will have a larger chunk pool, and so more {\bf produce()} operations will insert tasks to $c_i$, automatically balancing the overall system load. 

@@ -10,16 +10,16 @@ To this end, we consider two independent logical entities:
 \paragraph{SCPool abstraction.}
 \input{SCPoolAPI}
 The SCPool API provides the abstraction of a single-consumer task pool with stealing support, see Algorithm~\ref{alg:scpool-api}.
-A producer can invoke two types of insertion operations: \emph{produce}, which attempts to insert a task to the given pool and fails if the pool is full, and \emph{produceForce}, which always succeeds by expanding the pool on demand.
-There are also two ways to retrieve a task from the pool: the owner of the pool (only) can call the \emph{consume} function; while any other thread can invoke the \emph{steal} function, which tries to transfer a number of tasks between the pools and return one of the stolen tasks. 
-The pool must guarantee the following \emph{stealing property}, which is necessary for system liveness:
-\begin{property}
-\label{steal-progress-property}
-If an SCPool is not empty at the beginning of a steal operation, then either the steal operation retrieves a task, or another thread started an operation $op$ during the steal execution, such that $op$ is guaranteed to retrieve a task.
-\end{property}
+A producer can invoke two types of insertion operations: {\bf produce()} with force$=$false, which attempts to insert a task to the given pool and fails if the pool is full, and {\bf produce()} with force$=$true, which always succeeds by expanding the pool on demand.
+There are also two ways to retrieve a task from the pool: the owner of the pool (only) can call the {\bf consume()} function; while any other thread can invoke the {\bf steal()} function, which tries to transfer a number of tasks between the pools and return one of the stolen tasks. 
+% The pool must guarantee the following \emph{stealing property}, which is necessary for system liveness:
+% \begin{property}
+% \label{steal-progress-property}
+% If an SCPool is not empty at the beginning of a steal operation, then either the steal operation retrieves a task, or another thread started an operation $op$ during the steal execution, such that $op$ is guaranteed to retrieve a task.
+% \end{property}
 
 A straightforward way to implement the API described above is to use a dynamic-size multi-producer multi-consumer FIFO queue (e.g., Michael-Scott queue~\cite{Michael:1996:SFP:248052.248106}).
-In this case, both produce() and produceForce() enqueue a new task, while both consume() and steal() dequeue a task. In the next section we present SALSA, a much more efficient SCPool.
+In this case, {\bf produce()} enqueue a new task, while both {\bf consume()} and {\bf steal()} dequeue a task. In the next section we present SALSA, a much more efficient SCPool.
 
 \begin{figure}[htb]
 	\centering
@@ -36,8 +36,8 @@ Note that the policy is independent of the underlying SCPool implementation. We 
 In the current work, we present a policy that exploits the locality properties of NUMA architectures and is aimed at achieving maximal throughput. If the individual SCPools themselves are lock-free, then our policy preserves this property at the system level. Our policy is as follows:
 \begin{itemize}
 	\item {\bf Access lists.} Each process in the system (producer or consumer) is provided with an \emph{access list}, an ordered list of consumers, sorted according to their distance from that process (see Figure~\ref{fig:system-fig}). Intuitively, our policy is to have a producer mostly interact with the closest consumer, while stealing mainly happens inside the same processor node. 
-	\item {\bf Producer's policy.} A producer inserting a task first calls the \emph{produce} function of the first SCPool in its access list. Note that a produce operation might fail if the pool is full, (which can be seen as evidence of that the corresponding consumer is overloaded).  In this case, the producer tries to insert the task into other pools, in the order defined by its access list. If all insertions fail, the producer invokes the \emph{produceForce} operation on the closest SCPool, which always succeeds (expanding the pool if needed). 
-	\item {\bf Consumer's policy.} A consumer consumes tasks from its own SCPool. If its SCPool is empty, the consumer tries to steal tasks from other pools in the order defined by its access list. 
+	\item {\bf Producer's policy.} A producer inserting a task first calls the {\bf produce)()} function with force$=$false of the first SCPool in its access list. Note that this operation might fail if the pool is full, (which can be seen as evidence of that the corresponding consumer is overloaded).  In this case, the producer tries to insert the task into other pools, in the order defined by its access list. If all insertions fail, the producer invokes the {\bf produce)()} operation force$=$true on the closest SCPool, which always succeeds (expanding the pool if needed). 
+	\item {\bf Consumer's policy.} A consumer consumes tasks from its own SCPool. If its SCPool is empty, the consumer tries to steal tasks from other pools in the order defined by its access list. Stealing can serve two purposes: first, it is important for distributing the load among all available consumers. Second, it ensures that tasks are not lost in case the consumer whose pool they were inserted into is crushed or simply very slow.
 \end{itemize}
 
 
