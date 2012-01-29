@@ -63,38 +63,44 @@ void* prodRun(void* _arg){
 	struct timespec* ts = new timespec();
 	Producer* producer = new Producer(id);
 	DummyTask* task = new DummyTask();
-	// peak-silence loop
-	while(!syncFlags::getStopFlag())
-	{
-		while(arg->pause == true) {} // wait if you're paused
-		// peak period
-		/* sample peak start time */
-		clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
-		unsigned long start_ns = ts->tv_nsec;
-		unsigned long start_sec = ts->tv_sec;
-		/* task generation and insertion */
-		for(int i = 0; i < peakLength; i++)
+	
+	int disable = 0;
+	Configuration::getInstance()->getVal(disable, "prodDisable");
+	if(id >= disable)
+	{	
+		// peak-silence loop
+		while(!syncFlags::getStopFlag())
 		{
-			// if i%100 == 0 - set task insertion time to current time in ms
-			if(i%100 == 0)
+			while(arg->pause == true) {} // wait if you're paused
+			// peak period
+			/* sample peak start time */
+			clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
+			unsigned long start_ns = ts->tv_nsec;
+			unsigned long start_sec = ts->tv_sec;
+			/* task generation and insertion */
+			for(int i = 0; i < peakLength; i++)
 			{
-				clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
-				task->insertionTime_sec = ts->tv_sec;
-				task->insertionTime_ns = ts->tv_nsec;
+				// if i%100 == 0 - set task insertion time to current time in ms
+				if(i%100 == 0)
+				{
+					clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
+					task->insertionTime_sec = ts->tv_sec;
+					task->insertionTime_ns = ts->tv_nsec;
+				}
+				producer->produce(*task);
 			}
-			producer->produce(*task);
+			/* sample peak end time and update timeMeasurements */
+			clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
+			unsigned long finish_ns = ts->tv_nsec;
+			unsigned long finish_sec = ts->tv_sec;
+			if(start_sec < finish_sec)
+			{
+				finish_ns += 1000000000;
+			}
+			timeMeasurements->push_front(finish_ns-start_ns);
+			// silent period
+			if(timeBetweenPeaks > 0){1000*usleep(timeBetweenPeaks);}
 		}
-		/* sample peak end time and update timeMeasurements */
-		clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
-		unsigned long finish_ns = ts->tv_nsec;
-		unsigned long finish_sec = ts->tv_sec;
-		if(start_sec < finish_sec)
-		{
-			finish_ns += 1000000000;
-		}
-		timeMeasurements->push_front(finish_ns-start_ns);
-		// silent period
-		if(timeBetweenPeaks > 0){1000*usleep(timeBetweenPeaks);}
 	}
 	delete ts;
 	
@@ -102,15 +108,23 @@ void* prodRun(void* _arg){
 	// build the returned stats
 	producerStats* prodStats = new producerStats();
 	prodStats->id = id;
-	prodStats->numOfProducedTasks = peakLength*timeMeasurements->size();
-	list<long>::iterator it;
-	double sum = 0;
-	for(it = timeMeasurements->begin(); it !=  timeMeasurements->end(); it++)
+	if(id >= disable)
 	{
-		sum += ((double)*it)/1000000;
+		prodStats->numOfProducedTasks = peakLength*timeMeasurements->size();
+		list<long>::iterator it;
+		double sum = 0;
+		for(it = timeMeasurements->begin(); it !=  timeMeasurements->end(); it++)
+		{
+			sum += ((double)*it)/1000000;
+		}
+		double averageInsertionTime = sum/timeMeasurements->size(); // average burst length in [ms]
+		prodStats->producerThroughput = peakLength *(1/averageInsertionTime);  //insertion throughput in tasks/ms
 	}
-	double averageInsertionTime = sum/timeMeasurements->size(); // average burst length in [ms]
-	prodStats->producerThroughput = peakLength *(1/averageInsertionTime);  //insertion throughput in tasks/ms
+	else
+	{
+		prodStats->numOfProducedTasks = 0;
+		prodStats->producerThroughput = 0;
+	}
 	prodStats->atomicStats = *(producer->getStat());
 	delete producer;
 	delete timeMeasurements;
@@ -174,37 +188,43 @@ void* consRun(void* _arg){
 	double throughput = 0;
 	struct timespec* ts = new timespec();
 	Consumer* consumer = new Consumer(id);
-	// retrieve tasks in a loop
-	/* sample loop start time */
-	clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
-	unsigned long start_sec = ts->tv_sec;
-	unsigned long start_ns = ts->tv_nsec;
-	/* retrieval loop */
-	while(!syncFlags::getStopFlag())
-	{
-		while(arg->pause == true) {} // wait if you're paused
-		Task* task;
-		if(consumer->consume(task) != SUCCESS)
+	
+	int disable = 0;
+	Configuration::getInstance()->getVal(disable, "consDisable");
+	if(id >= disable)
+	{	
+		// retrieve tasks in a loop
+		/* sample loop start time */
+		clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
+		unsigned long start_sec = ts->tv_sec;
+		unsigned long start_ns = ts->tv_nsec;
+		/* retrieval loop */
+		while(!syncFlags::getStopFlag())
 		{
-			continue;
+			while(arg->pause == true) {} // wait if you're paused
+			Task* task;
+			if(consumer->consume(task) != SUCCESS)
+			{
+				continue;
+			}
+			numOfTasks++;
+			//DummyTask* dt = (DummyTask*)task;
+			//dt->run(NULL);  // run task
+			//delete dt;  // delete task
 		}
-		numOfTasks++;
-		//DummyTask* dt = (DummyTask*)task;
-		//dt->run(NULL);  // run task
-		//delete dt;  // delete task
+		/* sample loop end time */
+		clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
+		unsigned long finish_sec = ts->tv_sec;
+		unsigned long finish_ns = ts->tv_nsec;
+		/* update throughput */
+		if(finish_sec > start_sec)  
+		{
+			finish_ns += 1000000000;
+			finish_sec--;
+		}
+		double loopTime = 1000*(finish_sec - start_sec) + ((double)(finish_ns-start_ns))/1000000;
+		throughput = ((double)numOfTasks)/loopTime;
 	}
-	/* sample loop end time */
-	clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
-	unsigned long finish_sec = ts->tv_sec;
-	unsigned long finish_ns = ts->tv_nsec;
-	/* update throughput */
-	if(finish_sec > start_sec)  
-	{
-		finish_ns += 1000000000;
-		finish_sec--;
-	}
-	double loopTime = 1000*(finish_sec - start_sec) + ((double)(finish_ns-start_ns))/1000000;
-	throughput = ((double)numOfTasks)/loopTime;
 	delete ts;
 		
 	// build the returned stats
