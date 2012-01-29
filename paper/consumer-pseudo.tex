@@ -82,7 +82,7 @@
 \smallskip
 
 \INDENT {{\bf Function steal}(SCPool from):}
-	\STATE prevNode $\leftarrow$ a node holding tasks from some list \comment {different policies possible}
+	\STATE prevNode $\leftarrow$ a node holding tasks from some list \comment {different policies possible} \label{alg:line:take-steal-chunk}
 	\STATE c $\leftarrow$ prevNode.c; {\bf if} (c = $\bot$) {\bf then return} $\bot$
 
 	\STATE chunkLists[steal].{\bf append}(prevNode) \comment {make it restealable} \label{alg:line:resteal-begin}
@@ -93,7 +93,7 @@
 
 	\smallskip
 	\STATE newNode $\leftarrow$ copy of prevNode \label{alg:line:copy-prev-node}
-	\INDENT {{\bf if} (newNode.idx+1 $=$ CHUNK\_SIZE) \comment {Chunk is empty}} 
+	\INDENT {{\bf if} (newNode.idx+1 $=$ CHUNK\_SIZE) \comment {Chunk is empty}} \label{alg:line:steal-node-empty}
 	  \STATE chunkLists[steal].{\bf remove}(prevNode)
 	  \STATE {\bf return} $\bot$
 	\ENDINDENT
@@ -104,9 +104,9 @@
 	\comment {done stealing the chunk, take one task from it}
 	\STATE idx $\leftarrow$ newNode.idx
 	\STATE task $\leftarrow$ c.tasks[idx+1] 
-	\STATE {\bf if} (task $= \bot$) {\bf then return} $\bot$ \comment {still no task at idx+1}
+	\STATE {\bf if} (task $= \bot$) {\bf then return} $\bot$ \comment {still no task at idx+1} \label{alg:line:steal-chunk-not-full}
 	\INDENT {{\bf if} (task $=$ TAKEN $\vee$ \\
-		\hspace{0.5cm} !CAS(c.tasks[idx+1], task, TAKEN)) {\bf then}} \label{alg:line:cas-steal} 
+		\hspace{0.5cm} !{\bf CAS}(c.tasks[idx+1], task, TAKEN)) {\bf then}} \label{alg:line:cas-steal} 
 		\STATE task $\leftarrow \bot$
 	\ENDINDENT
 	\STATE currentNode $\leftarrow$ newNode
