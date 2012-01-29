@@ -28,6 +28,7 @@ print AVG_CSV "Pool Type,Producers,Consumers,ProdMigrate,Affinity,Insertion Thro
 
 my $count = 0;
 my $affinity = 1000;
+my $curMigrate = 1000;
 
 #define as many lists as the number of iterations with the same set of config parameters. we use 5.
 my @cols0;
@@ -73,24 +74,18 @@ while($line = <RAW_CSV>)
 	chomp($line);
 	next if($line eq "");
 	@cols = split(',',$line);
-	if(($cols[$AffinityIdx] != $affinity) && ($count > 0))
+	if((($cols[$AffinityIdx] != $affinity) || ($curMigrate != $cols[$ProdMigrate])) && ($count > 0))
 	{
 		calcAvg();
 		$count = 0;
-		for($i = 0; $i < $fields; $i++)
-		{
-			$cols0[$i] = $cols[$i];
-		}
 	}
-	else
+	for($i = 0; $i < $fields; $i++)
 	{
-		for($i = 0; $i < $fields; $i++)
-		{
-			$allCols[$count]->[$i] = $cols[$i];
-		}
-		$count = $count + 1;
-		$affinity = $cols[$AffinityIdx];
+		$allCols[$count]->[$i] = $cols[$i];
 	}
+	$count = $count + 1;
+	$affinity = $cols[$AffinityIdx];
+	$curMigrate = $cols[$ProdMigrate];
 }
 calcAvg();
 
