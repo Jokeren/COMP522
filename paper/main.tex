@@ -58,7 +58,7 @@
 \usepackage{distribalgo}
 
 \usepackage{setspace}
-\doublespacing
+%\doublespacing
 
 \newtheorem{thm}{Theorem}
 \newtheorem{lemma}{Lemma}
@@ -186,5 +186,14 @@ Our evaluation demonstrates that a pool built using SALSA containers scales \emp
 
 \bibliographystyle{abbrv}
 \bibliography{refs}
+
+\pagebreak \small
+
+\begin{appendix}
+
+\section{Lock-freedom proof}
+\label{appendix:lock-freedom}
+\input{appendix-claim1-proof}
+\end{appendix}
 
 \end{document}

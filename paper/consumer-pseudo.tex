@@ -81,12 +81,12 @@
 \setcounter{ALC@line}{\value{alg:non-fifo:lines}}
 \smallskip
 
-\INDENT {{\bf Function steal}(SCPool from):}
-	\STATE prevNode $\leftarrow$ a node holding tasks from some list \comment {different policies possible} \label{alg:line:take-steal-chunk}
+\INDENT {{\bf Function steal}(SCPool p):}
+	\STATE prevNode $\leftarrow$ a node holding tasks, whose owner is $p$, from some list in $p$'s pool \comment {different policies possible} \label{alg:line:take-steal-chunk}
 	\STATE c $\leftarrow$ prevNode.c; {\bf if} (c = $\bot$) {\bf then return} $\bot$
 
 	\STATE chunkLists[steal].{\bf append}(prevNode) \comment {make it restealable} \label{alg:line:resteal-begin}
-	\INDENT {{\bf if} ({\bf CAS}(c.owner, from.consumerId, consumerId) $=$ false)} \label{alg:line:chown}
+	\INDENT {{\bf if} ({\bf CAS}(c.owner, p.consumerId, consumerId) $=$ false)} \label{alg:line:chown}
  		\STATE chunkLists[steal].{\bf remove}(prevNode)
  		\STATE {\bf return} $\bot$ \comment {failed to steal}
 	\ENDINDENT
