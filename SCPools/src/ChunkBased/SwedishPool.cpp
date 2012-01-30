@@ -30,9 +30,9 @@ SwedishPool::SwedishPool(int _numProducers, int consId, bool createSingleton)
 	SwedishPool::getInstance(_numProducers);
 	lastStealingChunk = NULL;
 	lastStealingIdx = -1;
-	lastQueueId = -1;
+	lastQueueId = consumerID % _numProducers;
 	lastStealingNode = NULL;
-
+	deleteChunkFunc = new DeleteChunkFunc();
 };
 
 SwedishPool::SwedishPool(int _numProducers, int consId)
@@ -40,8 +40,9 @@ SwedishPool::SwedishPool(int _numProducers, int consId)
 {
 	lastStealingChunk = NULL;
 	lastStealingIdx = -1;
-	lastQueueId = -1;
+	lastQueueId = consumerID % _numProducers;
 	lastStealingNode = NULL;
+	deleteChunkFunc = new DeleteChunkFunc();
 };
 
 
@@ -60,7 +61,7 @@ Task* SwedishPool::steal(SCTaskPool* from, AtomicStatistics* stat) {
 	}
 
 	// should always steal from SwedishPool::getInstance() (all the tasks are inserted to there)
-	int idx = consumerID % numProducers;//SwedishPool::getInstance()->getLongestListIdx();
+	int idx = lastQueueId;
 	for(int i = 0; i < numProducers; i++) {
 		Task* res = stealFromList(&(SwedishPool::getInstance()->chunkLists[idx]), idx, stat);
 		if (res != NULL) {
@@ -98,7 +99,8 @@ Task* SwedishPool::stealFromChunk(SPChunk* chunk, SwNode* node, int queueId, int
 				node->chunk = NULL;
 				currentNode = NULL;
 				FAS(&(SwedishPool::getInstance()->chunkListSizes[queueId]), 1); stat->FetchAndIncCount_inc();
-				retireNode(chunk, SwedishPool::getInstance()->reclaimChunkFunc, hpLoc);
+				retireNode(chunk, deleteChunkFunc, hpLoc);
+				//retireNode(chunk, SwedishPool::getInstance()->reclaimChunkFunc, hpLoc);
 				lastStealingChunk = NULL;
 			}
 			return t;

@@ -23,6 +23,7 @@ protected:
 	static volatile bool locked;
 
 protected:
+	DeleteChunkFunc* deleteChunkFunc;
 	SPChunk* lastStealingChunk;
 	int lastStealingIdx;
 	int lastQueueId;

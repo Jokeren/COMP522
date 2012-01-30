@@ -14,7 +14,7 @@ using namespace std;
 int NoFIFOPool::getLongestListIdx() const {
 	unsigned int maxScore = 0;
 	int idx = 0;
-	for(int i = 0; i < numProducers; i++) {
+	for(int i = 0; i <= numProducers; i++) {
 		if (chunkListSizes[i] > maxScore) {
 			maxScore = chunkListSizes[i];
 			idx = i;

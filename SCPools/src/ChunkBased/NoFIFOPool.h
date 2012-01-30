@@ -35,6 +35,13 @@ public:
 		AtomicStatistics* stat;
 	};
 
+	class DeleteChunkFunc : public HP::ReclaimationFunc {
+
+	public:
+		void operator() (void* chunk) {
+			delete (SPChunk*)chunk;
+		}
+	};
 
 	class ProdCtx : public SCTaskPool::ProducerContext {
 	public:
