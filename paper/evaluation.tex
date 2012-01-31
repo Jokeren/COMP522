@@ -88,14 +88,28 @@ Figure~\ref{fig:1-n-cas} evaluates this contention by measuring the average numb
     \includegraphics[width=0.45\textwidth]{figures/1-n-salsa}
     \label{fig:1-n-salsa-perf}
   }
-  \subfigure [\scriptsize{CAS operations per task retrieval -- 1 Producer, N consumers.}] {
-    \includegraphics[width=0.45\textwidth]{figures/1-n-salsa-cas}
-    \label{fig:1-n-salsa-cas}
+  \subfigure [\scriptsize{System throughput as a function of stalled threads ($16/16$ workload). Black dashed lines show the theoretical throughput degradation proportional to the number of stalled threads.}] {
+    \includegraphics[width=0.45\textwidth]{figures/stalled-threads}
+    \label{fig:stalled-threads}
   }
-	\caption{\footnotesize{SALSA techniques in the workloads with a single producer and multiple consumers. The producers in our framework try to avoid inserting tasks to the overloaded consumers, thus decreasing stealing frequency (bold lines behave similarly). If this migration mechanism is disabled, stealing becomes prevalent and the chunk stealing technique becomes important (dashed lines behave differently). }}
+	\caption{\footnotesize{The effects of chunk-based stealing and producer-based balancing on system throughput in imbalanced scenarios. Producer-based balancing contributes to the robustness of the framework and prevents excessive stealing. With no balancing, chunk-based stealing becomes important. }}
 	\label{fig:1-n-salsa}
 \end{figure}
-We now study empirically the influence of SALSA techniques for its performance. 
+In this section we study empirically the influence of the two techniques used in WS-SALSA: 1) chunk based stealing with a low-synchronization fast path (see Section~\ref{alg-stealing}), and 2) producer-based balancing (see Section~\ref{alg-pools}). 
+To this end, we compare four SALSA variations: 1) the original WS-SALSA, 2) WS-SALSA with producer-based balancing disabled (a producer always inserts tasks to the same consumer), 3) WS-SALSAwCAS, in which the chunk based stealing technique is disabled, and 4) WS-SALSAwCAS with disabled producer-based balancing. 
+
+Figure~\ref{fig:1-n-salsa-perf} depicts the behavior of the four alternatives in the single producer / multiple consumers workloads. 
+The producer-based balancing contributes to the robustness of the framework: both WS-SALSA and WS-SALSAwCAS do not suffer from throughput degradation. This is because the producer-based balancing reduces the need for stealing in most cases by automatically distributing tasks among consumers. 
+When the producer-based balancing is disabled, the stealing becomes prevalent and therefore the stealing mechanisms are more important: 
+the chunk based stealing of WS-SALSA clearly outperforms the na\"{i}ve task-based approach of WS-SALSAwCAS. 
+
+Figure~\ref{fig:stalled-threads} shows the behavior of the SALSA variations in the case an equal number of producer and consumer threads is stalled in the $16/16$ workload. This simulates the scenario of an overloaded machine in which some threads can be starved for long periods of time. 
+The stalled threads are chosen in a way that the default producers of the frozen consumers are not stalled, which might cause imbalance in the number of tasks among the SALSA pools. 
+Reducing the number of participating threads clearly degrades the performance. The black dashed lines indicate the theoretical performance degradation in proportion to the number of stalled threads, for both SALSA and SALSAwCAS. 
+The graphs demonstrate that the producer-based balancing technique helps both the algorithms in keeping performance close to that of the theoretical bounds. This is due to the low number of steals, which are prevented in most cases.
+
+When the producer-based balancing is disabled, excessive stealing is inevitable, which causes throughput degradation below the expected values. We see that the na\"{i}ve task-based stealing of SALSAwCAS degrades the throughput by $50\%$ below the theoretical expectation, while the chunk-based stealing of SALSA helps to keep the degradation at $30\%$ only. 
+
 %
 %\begin{wrapfigure}{r}{0.47\textwidth}
 %  \vspace{-20pt}
