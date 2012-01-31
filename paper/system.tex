@@ -24,7 +24,7 @@ In this case, {\bf produce()} enqueue a new task, while both {\bf consume()} and
 \begin{figure}[htb]
 	\centering
 	\includegraphics[width=0.7\textwidth]{figures/system-fig}
-	\caption{\footnotesize{System overview of the management framework. In the given example the system is composed of two processors that are connected to their own memory banks (NUMA architecture). There are two producers and two consumers running on each processor, the data of each consumer is allocated at the closest available physical memory. A producer $p_i$ has an access list of consumers for task insertion. A consumer $c_i$ has an access list of consumers for task stealing. }}
+	\caption{\footnotesize{Producer-consumer system overview. In the given example, the system is composed of two processors connected to two memory banks (NUMA architecture). There are two producers and two consumers running on each processor, and the data of each consumer is allocated at the closest available physical memory. A producer $p_i$ has an access list of consumers for task insertion. A consumer $c_i$ has an access list of consumers for task stealing. }}
 	\label{fig:system-fig}
 \end{figure}
 
@@ -37,7 +37,7 @@ In the current work, we present a policy that exploits the locality properties o
 \begin{itemize}
 	\item {\bf Access lists.} Each process in the system (producer or consumer) is provided with an \emph{access list}, an ordered list of consumers, sorted according to their distance from that process (see Figure~\ref{fig:system-fig}). Intuitively, our policy is to have a producer mostly interact with the closest consumer, while stealing mainly happens inside the same processor node. 
 	\item {\bf Producer's policy.} A producer inserting a task first calls the {\bf produce()} function with force$=$false of the first SCPool in its access list. Note that this operation might fail if the pool is full, (which can be seen as evidence of that the corresponding consumer is overloaded).  In this case, the producer tries to insert the task into other pools, in the order defined by its access list. If all insertions fail, the producer invokes the {\bf produce()} operation force$=$true on the closest SCPool, which always succeeds (expanding the pool if needed). 
-	\item {\bf Consumer's policy.} A consumer consumes tasks from its own SCPool. If its SCPool is empty, the consumer tries to steal tasks from other pools in the order defined by its access list. Stealing can serve two purposes: first, it is important for distributing the load among all available consumers. Second, it ensures that tasks are not lost in case the consumer whose pool they were inserted into is crushed or simply very slow.
+	\item {\bf Consumer's policy.} A consumer consumes tasks from its own SCPool. If its SCPool is empty, the consumer tries to steal tasks from other pools in the order defined by its access list. The issue of when (after how many stealing attemps) a consumer gives up and returns $\bot$ is subtle, and we discuss it in Section~\ref{sec:correctness}. Stealing can serve two purposes: first, it is important for distributing the load among all available consumers. Second, it ensures that tasks are not lost in case they are inserted into  the SCPool of a crashed (or  very slow) consumer.
 \end{itemize}
 
 

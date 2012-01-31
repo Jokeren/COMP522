@@ -44,7 +44,7 @@
   \STATE n.idx++ \comment {tell the world you're going to take a task from idx} \label{alg:lines:ind-inc}
   \INDENT {{\bf if} (chunk.owner $=$ consumerId) {\bf then} \comment {common case}}
  		\STATE chunk.tasks[n.idx] $\leftarrow$ TAKEN \label{alg:lines:fast-path}
-  	\STATE {\bf checkEmpty}(n)
+  	\STATE {\bf checkLast}(n)
   	\STATE {\bf return} task 
   \ENDINDENT
   
@@ -52,7 +52,7 @@
   \comment {the chunk has been stolen, CAS the last task and go away} 
  	\STATE success $\leftarrow$ (task $\neq$ TAKEN $\wedge$ \\ \label{alg:lines:stolen-chunk-begin}
  		\hspace{0.5cm} CAS(chunk.tasks[n.idx], task, TAKEN)) \label{alg:line:cas-consumer}
- 	\STATE {\bf if}(success) {\bf then checkEmpty}(n) 
+ 	\STATE {\bf if}(success) {\bf then checkLast}(n) 
 	\STATE currentNode $\leftarrow \bot$
  	\STATE {\bf return} (success) ? task : $\bot$ \label{alg:lines:stolen-chunk-end}
 \ENDINDENT
@@ -61,7 +61,7 @@
 
 \medskip
 
-\INDENT {{\bf Function checkEmpty}(Node n):}
+\INDENT {{\bf Function checkLast}(Node n):}
 	\INDENT {{\bf if}(n.idx + 1 $=$ CHUNK\_SIZE) {\bf then} \comment {finished the chunk}}
   	\STATE n.c $\leftarrow \bot$; return chunk to chunkPool
   	\STATE currentNode $\leftarrow \bot$
@@ -83,6 +83,7 @@
 
 \INDENT {{\bf Function steal}(SCPool p):}
 	\STATE prevNode $\leftarrow$ a node holding tasks, whose owner is $p$, from some list in $p$'s pool \comment {different policies possible} \label{alg:line:take-steal-chunk}
+	\STATE {\bf if} (prevNode $= \bot$) {\bf return} $\bot$ \comment {No Chunk found} \label{alg:line:check-steal-chunk-null}
 	\STATE c $\leftarrow$ prevNode.c; {\bf if} (c = $\bot$) {\bf then return} $\bot$
 
 	\STATE chunkLists[steal].{\bf append}(prevNode) \comment {make it restealable} \label{alg:line:resteal-begin}
@@ -110,7 +111,7 @@
 		\STATE task $\leftarrow \bot$
 	\ENDINDENT
 	\STATE currentNode $\leftarrow$ newNode
-	\STATE {\bf if} (task $\neq \bot$) {\bf then checkEmpty}(newNode)
+	\STATE {\bf if} (task $\neq \bot$) {\bf then checkLast}(newNode)
 	\STATE newNode.idx $\leftarrow$ newNode.idx+1
 	\STATE {\bf return} task
 \ENDINDENT
