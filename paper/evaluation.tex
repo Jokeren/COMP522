@@ -3,7 +3,7 @@ We describe the experiment setup in Section~\ref{sec:exp-setup}, we show the ove
 
 \subsection {Experiment Setup}
 \label{sec:exp-setup}
-The implementation of the work-stealing framework used in our evaluation does not include the linearizability mechanisms described in~\ref{alg-safety}. We believe that these mechanisms have negligible effect on performance, moreover, in our simulations they are never invoked because the pool is never empty. We compare the following task pool implementations:
+The implementation of the work-stealing framework used in our evaluation does not include the linearizability mechanisms described in~\ref{alg-correctness}. We believe that these mechanisms have negligible effect on performance, moreover, in our simulations they are never invoked because the pool is never empty. We compare the following task pool implementations:
 \begin {itemize}
 \item
 {\bf WS-SALSA} -- our work-stealing framework with SCPools implemented by SALSA.
