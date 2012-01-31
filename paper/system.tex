@@ -29,7 +29,7 @@ In this case, {\bf produce()} enqueue a new task, while both {\bf consume()} and
 \end{figure}
 
 \paragraph {Management policy.}
-A management policy is generally defined by the way in which: (1) a producer chooses one of the SCPools to insert a task to, and when it chooses to use produce force; and (2) a consumer decides when to retrieve a task from its own pool and steal tasks from other pools. 
+A management policy is generally defined by the way in which: 1) a producer chooses one of the SCPools to insert a task to, and when it chooses to use produce force; and 2) a consumer decides when to retrieve a task from its own pool and steal tasks from other pools. 
 Note that the policy is independent of the underlying SCPool implementation. We believe that it is a subject for engineering optimizations, based on specific workloads and demands.
 
 

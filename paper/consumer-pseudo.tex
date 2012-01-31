@@ -110,9 +110,9 @@
 		\hspace{0.5cm} !{\bf CAS}(c.tasks[idx+1], task, TAKEN)) {\bf then}} \label{alg:line:cas-steal} 
 		\STATE task $\leftarrow \bot$
 	\ENDINDENT
-	\STATE currentNode $\leftarrow$ newNode
 	\STATE {\bf if} (task $\neq \bot$) {\bf then checkLast}(newNode)
 	\STATE newNode.idx $\leftarrow$ newNode.idx+1
+	\STATE {\bf if} (c.owner $=$ consumerId) currentNode $\leftarrow$ newNode
 	\STATE {\bf return} task
 \ENDINDENT
 
