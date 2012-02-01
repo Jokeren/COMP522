@@ -13,7 +13,7 @@ Note that disabling per-chunk stealing in SALSA annuls the idea of chunk ownersh
 \item
 {\bf ConcBag} -- an algorithm similar to the lock-free Concurrent Bags algorithm~\cite{Sundell:2011:LAC:1989493.1989550}. 
 It is worth noting that the original algorithm was optimized for the scenario where the same process is both a producer and a consumer (in essence producing tasks to itself), which we do not consider in this paper; in our system no thread acts as both a producer and a consumer, therefore every consume operation steals a task from some producer.
-We did not have access to the original code, and therefore reimplemented the algorithm in our framework. Our implementation is faithful to the algorithm in the paper, except in using a simpler and faster underlined linked list algorithm. All engineering decisions were made maximize performance. 
+We did not have access to the original code, and therefore reimplemented the algorithm in our framework. Our implementation is faithful to the algorithm in the paper, except in using a simpler and faster underlined linked list algorithm. All engineering decisions were made to maximize performance. 
 \item
 {\bf WS-MSQ} -- our work-stealing framework with SCPools implemented by Michael-Scott non-blocking queue~\cite{Michael:1996:SFP:248052.248106}. Both {\bf consume()} and {\bf steal()} operations invoke the {\bf dequeue()} function. 
 \item
@@ -25,7 +25,7 @@ Similarly, we did not evaluate {CAF\'E}\cite{Basin:2011:CST:2075029.2075087} poo
 
 All the pools are implemented in C++ and compiled with \texttt{-O2} optimization level. 
 In order to minimize scalability issues related to allocations, we use \texttt{jemalloc} allocator~\cite{citeulike:4951109}, which has been shown to be highly scalable in multi-threaded environments\footnote{\url{http://www.facebook.com/notes/facebook-engineering/scalable-memory-allocation-using-jemalloc/480222803919}}.
-Unless stated otherwise, chunks of SALSA and SALSA+CAS contain $1000$ tasks, and chunks of ConcBag contain $128$ tasks, which were the respective optimal values for each algorithms (see Appendix \ref{appendix:chunk-size}). 
+Unless stated otherwise, chunks of SALSA and SALSA+CAS contain $1000$ tasks, and chunks of ConcBag contain $128$ tasks, which were the respective optimal values for each algorithm (see Appendix \ref{appendix:chunk-size}). 
 
 We use a synthetic benchmark where 1) each producer works in a loop of inserting dummy items; 2) each consumer works in a loop of retrieving dummy items. Each data point shown is an average of $5$ runs, each with a duration of $20$ seconds. 
 The tests are run on a dedicated shared memory NUMA server with $8$ Quad Core AMD $2.3$GHz processors and $16$GB of memory attached to each processor. 
@@ -97,14 +97,14 @@ This degradation is caused by the increased contention among consumers that try 
 	\label{fig:1-n-salsa}
 \end{figure}
 In this section we study the influence of two of the techniques used in SALSA: 1) chunk-based-stealing with a low-synchronization fast path (Section~\ref{alg-stealing}), and 2) producer-based balancing (Section~\ref{alg-pools}). 
-To this end, we compare SALSA and SALSA+CAS bot with and without producer-based balancing (in the latter a producer always inserts tasks to the same consumer's pool).
+To this end, we compare SALSA and SALSA+CAS both with and without producer-based balancing (in the latter a producer always inserts tasks to the same consumer's pool).
 
 Figure~\ref{fig:1-n-salsa-perf} depicts the behavior of the four alternatives in single producer / multiple consumers workloads. 
 We see that producer-based balancing is instrumental in redistribute the load: neither SALSA nor SALSA+CAS suffers any degradation as the load increases. 
 When producer-based balancing is disabled, stealing becomes prevalent, and hence the stealing granularity becomes more important: 
 SALSA's chunk based stealing clearly outperforms the na\"{i}ve task-based approach of SALSA+CAS. 
 
-Figure~\ref{fig:stalled-threads} considers the case where an equal number of producer and consumer threads are stalled in $16/16$ workload. This simulates the scenario of an overloaded machine in which some threads can be starved for long periods of time, or a scenario where some threads are busy running excessively long tasks. 
+Figure~\ref{fig:stalled-threads} considers the case where an equal number of producer and consumer threads are stalled in $16/16$ workload (e.g., if $4$ threads are stalled then there are $2$ paused producers and $2$ paused consumers). This simulates the scenario of an overloaded machine in which some threads can be starved for long periods of time, or a scenario where some threads are busy running excessively long tasks. 
 The stalled threads are chosen so that the default producers of the frozen consumers are not stalled, which leads to imbalance in the number of tasks among the SALSA pools. 
 Reducing the number of participating threads inherently degrades performance; the black dashed lines indicate the theoretical performance degradation in proportion to the number of stalled threads.
 The graphs demonstrate that producer-based balancing contributes to the robustness of the framework, and allows both SALSA variants to achieve performance close to that of the theoretical bound.
