@@ -1,16 +1,16 @@
 %prod-cons pools are common, 
 The producer-consumer pool is a fundamental data structure consisting of an unordered collection of objects. Pools have a number of important
 applications in multiprocessor computing, e.g., transferring tasks in a parallel computation. 
-It is thus highly important to ensure that such a pool does not become a bottleneck when it is concurrently accessed 
-by a large number of threads. 
+It is thus highly important to ensure that such a pool does not become a bottleneck when concurrently accessed 
+by large number of threads. 
 
 %fifo is not needed: on the one hand it dofeks performance, on the other hand it is hardly usable (talk about the case with multiple consumers)
 One of the common approaches to implement a producer-consumer pool is using FIFO or LIFO queues. 
-However, this approach inherently suffers from poor scalability and high synchronization cost~\cite{Afek:2010:SPP:1885276.1885295,Basin:2011:CST:2075029.2075087,Sundell:2011:LAC:1989493.1989550}. 
-In addition to that, the FIFO/LIFO properties of the queue \emph{cannot be used in practice} if multiple consumers
+However, this approach inherently suffers from poor scalability and high synchronization costs~\cite{Afek:2010:SPP:1885276.1885295,Basin:2011:CST:2075029.2075087,Sundell:2011:LAC:1989493.1989550}. 
+In addition, FIFO/LIFO properties of the queues \emph{cannot be used in practice} if multiple consumers
 work on the same queue simultaneously.
-This happens because every consumer can be suspended by the OS scheduler for an unbounded period of time right after retrieving a task.
-This way, the first task can be ``bypassed'' by an arbitrary number of later tasks before actually being consumed. 
+This happens because every consumer can be suspended by the OS scheduler for an unbounded period of time after retrieving a task.
+This way, a task can be ``bypassed'' by an arbitrary number of later tasks before actually being consumed. 
 Hence, even if a multi-consumer queue guarantees an order on task retrieval, no simple way exists to exploit such an order. 
 
 %we want to achieve scalable and highly efficient prod-cons pool (no need for FIFO as state above)
@@ -28,22 +28,22 @@ Its operations in the common case are lightweight and synchronization free, the 
 
 %separate mechanism from policy, 
 %short description of what are the building blocks (per-consumer pools)
-Our system is composed of two independent logical entities: 1) \emph{SALSA, Scalable and Low Synchronization Algorithm}, a single-consumer pool that allows task stealing, and 2) a management policy that is responsible for operating multiple SALSA instances. 
+Our system is composed of two independent logical entities: 1) \emph{SALSA, Scalable and Low Synchronization Algorithm}, a single-consumer pool that supports task stealing, and 2) a management policy that is responsible for operating multiple SALSA instances. 
 
 % both produce and consume are lightweight
 SALSA tasks are kept in chunks, which are organized in per-producer chunk lists. Only the producer mapped to a given list can insert
-a task to any chunk in that list, which eliminates the need for synchronization among producers. In contrast, SALSA's consume operation must communicate with other consumers when they steal tasks and therefore cannot be fully synchronization free.
-We note, however, that it would be wasteful and not efficient to invoke costly atomic operations upon each task retrieval just because of relatively rare stealing occurrences. 
-Therefore, we propose a novel chunk-based stealing algorithm that allows consume operations to be lightweight and synchronization-free when no stealing happens. 
+tasks to chunks in this list, which eliminates the need for synchronization among producers. In contrast, SALSA's consume operation must communicate with other consumers when they steal tasks, and therefore cannot be fully synchronization free.
+However, it would be inefficient to use costly atomic operations upon each task retrieval just because of relatively rare steal operations. 
+To this end, we propose a novel chunk-based stealing algorithm that allows consume operations to be lightweight and synchronization-free when no stealing occurs. 
 
 % NUMA awareness
-In order to achieve the NUMA locality of memory accesses, SALSA chunks are allocated in the memory of the corresponding consumer's processor. 
-The management policy then matches producers and consumers according to their proximity, which causes most of the task transfers to happen inside the same NUMA node. As steal operations might spoil NUMA locality, SALSA reduces their rate by moving the whole chunks of tasks upon each steal, in a way that requires two CAS operations only.  
+In order to achieve the NUMA locality of memory accesses, SALSA chunks are allocated in the memory of the consumer's processor. 
+The management policy matches producers and consumers according to their proximity, which causes most of the task transfers to occur inside the same NUMA node. As steal operations might harm NUMA locality, SALSA reduces their rate by moving whole chunks of tasks when stealing, in a way that requires only two CAS operations.  
 % chunk pool producer-based balancing 
 
 Another way to reduce the number of steal operations is to feed the consumers with respect to their load and consumption rates.
-We introduce an elegant mechanism for maintaining dynamic per-consumer chunk pools, which enables producers to detect overloaded consumers. This way, producers auto-balance the load by inserting the tasks to the less loaded consumers and thus decrease the need for chunk stealing.
+We introduce an elegant mechanism for maintaining dynamic per-consumer chunk pools, which enables producers to detect overloaded consumers. This way, producers auto-balance the load by inserting tasks to less loaded consumers, and thus decreasing the need for chunk stealing.
 
-We have implemented SALSA in C++, and tested its performance on a $32$-cores machine. Our experiments demonstrate that the SALSA-based work stealing pool \emph{scales linearly} with the number of threads -- it is $\times20$ faster than other work-stealing alternatives and more than $\times5$ faster than the non-FIFO Concurrent Bags algorithm by Sundell et. al~\cite{Sundell:2011:LAC:1989493.1989550}. In addition, SALSA-based pools are robust to temporary stalls of participating threads and they scale well even in unbalanced scenarios with excessive number of steals. 
+We have implemented SALSA in C++, and tested its performance on a $32$-cores NUMA machine. Our experiments show that the SALSA-based work stealing pool \emph{scale linearly} with the number of threads -- it is $\times20$ faster than other work-stealing alternatives, and more than $\times5$ faster than the non-FIFO Concurrent Bags algorithm of Sundell et. al~\cite{Sundell:2011:LAC:1989493.1989550}. In addition, SALSA-based pools are robust to temporary stalls of participating threads and scale well even in unbalanced scenarios with excessive number of steals. 
 
-This paper proceeds as follows. Section~\ref{sec:related} describes related work. We give the system overview in Section~\ref{sec:system}. SALSA algorithm is described in Section~\ref{sec:algo} and its correctness is shown in Section~\ref{sec:correctness}. We discuss our experimental results in Section~\ref{sec:evaluation}, and finally conclude in Section~\ref{sec:conclusions}.
+This paper proceeds as follows. Section~\ref{sec:related} describes related work. We give the system overview in Section~\ref{sec:system}. The SALSA algorithm is described in Section~\ref{sec:algo} and its correctness is shown in Section~\ref{sec:correctness}. We discuss our experimental results in Section~\ref{sec:evaluation}, and finally conclude in Section~\ref{sec:conclusions}.
