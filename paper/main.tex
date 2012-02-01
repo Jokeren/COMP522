@@ -193,6 +193,13 @@ Our evaluation demonstrates that a pool built using SALSA containers scales \emp
 
 \section{Conclusions}
 \label{sec:conclusions}
+We present a highly-scalable task pool framework built upon SALSA.
+We employ a number of novel techniques for improving the system performance: 1) our consumers' coordination allows lightweight and synchronization-free produce and consume operations in the common case; 2) a NUMA-aware memory management keeps most of the data accesses inside NUMA nodes
+3) a chunk-based stealing approach that decreases the stealing cost and perfectly suits the NUMA migration schemes; 4) an elegant producer-based balancing for decreasing the likelihood of stealing.
+
+Our evaluation demonstrates that a pool built using SALSA containers scales \emph{linearly} with the number of threads outperforming other work-stealing techniques by a factor of $20$. 
+
+We believe that our approach of partitioning data structures into per-consumer pools with efficient synchronization-free fast-path is extremely appealing for building scalable high-performance algorithms and it can be applicable in other domains as well. 
 
 \bibliographystyle{abbrv}
 \bibliography{refs}
