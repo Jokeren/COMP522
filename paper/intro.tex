@@ -1,26 +1,66 @@
-%prod-cons pools are common, 
-The producer-consumer pool is a fundamental data structure consisting of an unordered collection of objects. Pools have a number of important
-applications in multiprocessor computing, e.g., transferring tasks in a parallel computation. 
-It is thus highly important to ensure that such a pool does not become a bottleneck when concurrently accessed 
-by large number of threads. 
+%As modern computing hardware constantly grows in the number of cores,
+%software written for emerging architectures must be highly scalable.
+%At the same time, memory access has become the principle bottleneck,
+%and new systems employ \emph{NUMA architectures}, where memory
+%access from different chips is asymmetric.
+%From the software's perspective, this increases the importance of
+%cache-friendliness, reduced contention on shared memory locations,
+%especially across chips, and local data access.
+%As systems get larger, their behavior becomes less predictable, and
+%so robustness to varying loads and unexpected thread stalls is
+%essential.
+%
+%One of the fundamental building blocks of highly parallel software is
+%a producer-consumer task pool. This paper presents a scalable and highly-efficient
+%non-blocking pool, with lightweight and synchronization free operations on the fast-path.
+%Its data allocation scheme is cache-friendly and highly suitable for NUMA environments. 
+%Moreover, our pool is robust in the face of imbalanced loads and unexpected thread stalls.
 
-%fifo is not needed: on the one hand it dofeks performance, on the other hand it is hardly usable (talk about the case with multiple consumers)
-One of the common approaches to implement a producer-consumer pool is using FIFO or LIFO queues. 
-However, this approach inherently suffers from poor scalability and high synchronization costs~\cite{Afek:2010:SPP:1885276.1885295,Basin:2011:CST:2075029.2075087,Sundell:2011:LAC:1989493.1989550}. 
-In addition, FIFO/LIFO properties of the queues \emph{cannot be used in practice} if multiple consumers
-work on the same queue simultaneously.
-This happens because every consumer can be suspended by the OS scheduler for an unbounded period of time after retrieving a task.
-This way, a task can be ``bypassed'' by an arbitrary number of later tasks before actually being consumed. 
-Hence, even if a multi-consumer queue guarantees an order on task retrieval, no simple way exists to exploit such an order. 
+Emerging computer architectures pose many new challenges for software
+development. First, as the number of computing elements constantly
+increases, the importance of \emph{scalability} of parallel programs
+becomes paramount. Second, accessing memory has become the principal
+bottleneck, while multi-CPU systems are based on NUMA architectures,
+where memory access from different chips is asymmetric.
+Therefore, it is instrumental to design software with
+\emph{local data access}, \emph{cache-friendliness}, and
+\emph{reduced contention} on shared memory locations, especially
+across chips. Furthermore, as systems get larger, their behavior
+becomes less predictable, underscoring the importance of \emph{robust}
+programs that can overcome unexpected thread stalls.
 
-%we want to achieve scalable and highly efficient prod-cons pool (no need for FIFO as state above)
-%the desired properties of the pool implementation are as follows:
-% - locality conscious (cache-friendly for each separate thread)
-% - NUMA awareness (each thread works with closest memory)
-% - low contention among threads (threads work in different memory areas)
-% - infrequent synchronization operations
-This paper presents a scalable and highly-efficient non-blocking producer-consumer pool that does not guarantee any order on task retrieval.
-Its operations in the common case are lightweight and synchronization free, the tasks are kept in a cache-friendly manner and its data allocation schemes are highly suitable for NUMA environments. 
+Our overarching goal is to devise a methodology for developing
+parallel algorithms addressing these challenges. In this paper,
+we focus on one of the fundamental building blocks of highly parallel software, namely a producer-consumer task pool. Specifically, we
+present a scalable and highly-efficient non-blocking pool, with
+lightweight synchronization-free operations in the common case. Its
+data allocation scheme is cache-friendly and highly suitable for NUMA
+environments. Moreover, our pool is robust in the face of imbalanced
+loads and unexpected thread stalls.
+
+%%prod-cons pools are common, 
+%The producer-consumer pool is a fundamental data structure consisting of an unordered collection of objects. Pools have a number of important
+%applications in multiprocessor computing, e.g., transferring tasks in a parallel computation. 
+%It is thus highly important to ensure that such a pool does not become a bottleneck when concurrently accessed 
+%by large number of threads. 
+%
+%%fifo is not needed: on the one hand it dofeks performance, on the other hand it is hardly usable (talk about the case with multiple consumers)
+%One of the common approaches to implement a producer-consumer pool is using FIFO or LIFO queues. 
+%However, this approach inherently suffers from poor scalability and high synchronization costs~\cite{Afek:2010:SPP:1885276.1885295,Basin:2011:CST:2075029.2075087,Sundell:2011:LAC:1989493.1989550}. 
+%In addition, FIFO/LIFO properties of the queues \emph{cannot be used in practice} if multiple consumers
+%work on the same queue simultaneously.
+%This happens because every consumer can be suspended by the OS scheduler for an unbounded period of time after retrieving a task.
+%This way, a task can be ``bypassed'' by an arbitrary number of later tasks before actually being consumed. 
+%Hence, even if a multi-consumer queue guarantees an order on task retrieval, no simple way exists to exploit such an order. 
+%
+%%we want to achieve scalable and highly efficient prod-cons pool (no need for FIFO as state above)
+%%the desired properties of the pool implementation are as follows:
+%% - locality conscious (cache-friendly for each separate thread)
+%% - NUMA awareness (each thread works with closest memory)
+%% - low contention among threads (threads work in different memory areas)
+%% - infrequent synchronization operations
+%This paper presents a scalable and highly-efficient non-blocking producer-consumer pool that does not guarantee any order on task retrieval.
+%Its operations in the common case are lightweight and synchronization free, the tasks are kept in a cache-friendly manner and its data allocation schemes are highly suitable for NUMA environments. 
 
 %Our system design follows the following principles: 
 %1) locality awareness: our algorithm is cache-friendly; 2) NUMA awareness: in the common case each thread works with the memory local to its processor; 3) low contention: in the common case consumers and producers access disjoint memory regions; 4) lightweight fast path: most of the time threads do not invoke strong atomic operations and have low step complexity.
@@ -28,22 +68,32 @@ Its operations in the common case are lightweight and synchronization free, the 
 
 %separate mechanism from policy, 
 %short description of what are the building blocks (per-consumer pools)
-Our system is composed of two independent logical entities: 1) \emph{SALSA, Scalable and Low Synchronization Algorithm}, a single-consumer pool that supports task stealing, and 2) a management policy that is responsible for operating multiple SALSA instances. 
+Our system is composed of two independent logical entities: 1) \emph{SALSA, Scalable and Low Synchronization Algorithm}, a single-consumer pool that exports a stealing operation, and 2) a work stealing framework implementing a management policy that operates multiple SALSA pools. 
 
 % both produce and consume are lightweight
-SALSA tasks are kept in chunks, which are organized in per-producer chunk lists. Only the producer mapped to a given list can insert
-tasks to chunks in this list, which eliminates the need for synchronization among producers. In contrast, SALSA's consume operation must communicate with other consumers when they steal tasks, and therefore cannot be fully synchronization free.
-However, it would be inefficient to use costly atomic operations upon each task retrieval just because of relatively rare steal operations. 
-To this end, we propose a novel chunk-based stealing algorithm that allows consume operations to be lightweight and synchronization-free when no stealing occurs. 
+In order to improve locality and facilitate stealing, SALSA keeps tasks in chunks, organized in per-producer chunk lists. Only the producer mapped to a given list can insert
+tasks to chunks in this list, which eliminates the need for synchronization among producers. 
+
+Though each consumer has its own task pool, inter-consumer synchronization is required in order to allow stealing. The challenge is to do so without resorting to costly atomic operations (such as CAS or memory fences) upon each task retrieval. We address this challenge via a novel chunk-based stealing algorithm that allows consume operations to be synchronization-free in the common case, when no stealing occurs, which we call the \emph{fast path}. 
+Moreover, SALSA reduces the stealing rate by moving entire chunks of tasks in one steal operation, which requires only two CAS operations. 
 
 % NUMA awareness
-In order to achieve the NUMA locality of memory accesses, SALSA chunks are allocated in the memory of the consumer's processor. 
-The management policy matches producers and consumers according to their proximity, which causes most of the task transfers to occur inside the same NUMA node. As steal operations might harm NUMA locality, SALSA reduces their rate by moving whole chunks of tasks when stealing, in a way that requires only two CAS operations.  
+In order to achieve locality of memory access on a NUMA architecture, SALSA chunks are kept in the consumer's local memory.
+The management policy matches producers and consumers according to their proximity, 
+which allows most task transfers to occur within a NUMA node.
+
 % chunk pool producer-based balancing 
+In many-core machines running multiple applications, system behavior
+becomes less predictable. Unexpected thread stalls may lead
+to an asymmetric load on consumers, which may in turn lead to high
+stealing rates, hampering performance. SALSA employs a novel
+auto-balancing mechanism that has producers insert tasks to
+less loaded consumers, and is thus robust to spurious load
+fluctuations.
+%In many-core machines running multiple applications, system behavior becomes less predictable.
+%Various fluctuations, e.g., stalled threads, may lead to asymmetric load on consumers, which increases the stealing rate and thus degrades the performance. 
+%In SALSA, we have producers auto-balance the load by inserting tasks to less loaded consumers, and therefore decrease the need for chunk stealing.
 
-Another way to reduce the number of steal operations is to feed the consumers with respect to their load and consumption rates.
-We introduce an elegant mechanism for maintaining dynamic per-consumer chunk pools, which enables producers to detect overloaded consumers. This way, producers auto-balance the load by inserting tasks to less loaded consumers, and thus decreasing the need for chunk stealing.
+We have implemented SALSA in C++, and tested its performance on a $32$-core NUMA machine. Our experiments show that the SALSA-based work stealing pool \emph{scales linearly} with the number of threads; it is $20$ times faster than other work-stealing alternatives, and shows more than a five-fold improvement over state-of-the-art non-FIFO alternatives. In addition, SALSA-based pools are robust to temporary stalls of participating threads and scale well even in unbalanced scenarios. 
 
-We have implemented SALSA in C++, and tested its performance on a $32$-cores NUMA machine. Our experiments show that the SALSA-based work stealing pool \emph{scale linearly} with the number of threads -- it is $\times20$ faster than other work-stealing alternatives, and more than $\times5$ faster than the non-FIFO Concurrent Bags algorithm of Sundell et. al~\cite{Sundell:2011:LAC:1989493.1989550}. In addition, SALSA-based pools are robust to temporary stalls of participating threads and scale well even in unbalanced scenarios with excessive number of steals. 
-
-This paper proceeds as follows. Section~\ref{sec:related} describes related work. We give the system overview in Section~\ref{sec:system}. The SALSA algorithm is described in Section~\ref{sec:algo} and its correctness is shown in Section~\ref{sec:correctness}. We discuss our experimental results in Section~\ref{sec:evaluation}, and finally conclude in Section~\ref{sec:conclusions}.
+This paper proceeds as follows. Section~\ref{sec:related} describes related work. We give the system overview in Section~\ref{sec:system}. The SALSA single-consumer algorithm is described in Section~\ref{sec:algo} and its correctness is discussed in Section~\ref{sec:correctness}. We discuss our experimental results in Section~\ref{sec:evaluation}, and finally conclude in Section~\ref{sec:conclusions}.

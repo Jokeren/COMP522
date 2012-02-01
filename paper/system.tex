@@ -39,6 +39,7 @@ In this case, {\bf produce()} enqueues a new task, while {\bf consume()} and {\b
 	\centering
 	\includegraphics[width=0.6\textwidth]{figures/system-fig}
 	\caption{\footnotesize{Producer-consumer framework overview. In this example, there are two processors connected to two memory banks (NUMA architecture). Two producers and two consumers running on each processor, and the data of each consumer is allocated at the closest physical memory. A producer (consumer) has a sorted access list of consumers for task insertion (respectively stealing). }}
+	\vspace{-10pt}
 	\label{fig:system-fig}
 \end{figure}
 
