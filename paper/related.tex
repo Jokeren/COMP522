@@ -21,7 +21,7 @@ upon each consume. In addition, steals are performed in the granularity of singl
 not whole chunks as in SALSA. Overall, Concurrent Bags are not linear-scalable.
 
 \paragraph{Techniques.}
-Some of the techniques employ were previously used in different
+Some of the techniques we employ were previously used in different
 variations. First, work-stealing~\cite{Blumofe:1999:SMC:324133.324234} is a standard way to reduce
 contention by using individual per-consumer pools, where tasks may be stolen from one pool to
 another. Second, this partitioning into per-consumer pools allows for optimizing performance in the
