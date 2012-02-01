@@ -5,8 +5,8 @@
 \scriptsize
 
 \INDENT {\bf SCPool API:}
-	\STATE boolean: produce(Task, SCPool, boolean force) \elcomment {Insert the task to the pool, if force=false returns false if no space left in the pool. if force=true expands the pool if necessary.}
-% 	\STATE void: produceForce(Task) \elcomment {Insert the task to the pool, expanding the pool if necessary. }
+	\STATE boolean: produce(Task, SCPool) \elcomment {Tries to insert the task to the pool, returns false if no space is available.}
+ 	\STATE void: produceForce(Task, SCPool) \elcomment {Insert the task to the pool, expanding the pool if necessary. }
 	\STATE \{Task $\cup \bot$\}: consume() \elcomment {Retrieve a task from the pool, returns $\bot$ if no tasks in the pool are detected.}
 	%\STATE getStealingScore() \elcomment {Returns a score corresponding to the amount of tasks to steal.}
 	\STATE \{Task $\cup \bot$\}: steal(SCPool from) \elcomment{Try to steal a number of tasks from the given pool and move them to the current pool. Return one of the stolen tasks or $\bot$. }%We guarantee that if there are tasks in the \emph{from} pool at the beginning of steal invocation, then either steal function returns a task, or there is another thread that returns a task during the steal execution.}
