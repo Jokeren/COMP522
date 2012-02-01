@@ -53,7 +53,7 @@
  	\STATE success $\leftarrow$ (task $\neq$ TAKEN $\wedge$ \\ \label{alg:lines:stolen-chunk-begin}
  		\hspace{0.5cm} CAS(chunk.tasks[n.idx], task, TAKEN)) \label{alg:line:cas-consumer}
  	\STATE {\bf if}(success) {\bf then checkLast}(n) 
-	\STATE currentNode $\leftarrow \bot$
+	\STATE currentNode $\leftarrow \bot$ \label{alg:lines:consume-null-currNode}
  	\STATE {\bf return} (success) ? task : $\bot$ \label{alg:lines:stolen-chunk-end}
 \ENDINDENT
 
@@ -110,8 +110,8 @@
 		\hspace{0.5cm} !{\bf CAS}(c.tasks[idx+1], task, TAKEN)) {\bf then}} \label{alg:line:cas-steal} 
 		\STATE task $\leftarrow \bot$
 	\ENDINDENT
-	\STATE {\bf if} (task $\neq \bot$) {\bf then checkLast}(newNode)
-	\STATE newNode.idx $\leftarrow$ newNode.idx+1
+	\STATE {\bf if} (task $\neq \bot$) {\bf then checkLast}(newNode) \label{alg:line:check-owner-stealer}
+	\STATE newNode.idx $\leftarrow$ newNode.idx+1  \label{alg:line:steal-idx-inc} 
 	\STATE {\bf if} (c.owner $=$ consumerId) currentNode $\leftarrow$ newNode
 	\STATE {\bf return} task
 \ENDINDENT

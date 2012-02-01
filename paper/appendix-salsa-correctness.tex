@@ -2,25 +2,38 @@
 \label{salsa-insert-claim}
  If a SALSA operation returned a task, this task was previously inserted to a pool in the system by a producer.
 \end{claim}
+\noindent
 The proof of Claim~\ref{salsa-insert-claim} is immediate.
 
-
-
-Before we proof the next cliam we proof the folowing lemma:
+\vspace{5pt}\noindent
+Before we proof the next claim we proof the following lemmas:
 
 \begin{lemma}
- After the ownership of a chunk changes, the previous owner may only take one task, and that task will be pointer .
+ \label{lemma:steal-take-bound}
+ Let $i$ be the $idx$ of the node used by a consumer that is about to execute line~\ref{alg:lines:fast-path}. Then consumers that steal the chunk pointed by that node can not take task from slots smaller than $i+1$. 
 \end{lemma}
 \begin{proof}
- 
+ If a consumer $c$ reached line~\ref{alg:lines:fast-path} then since the {\bf if} in line~\ref{alg:lines:consumer-owner-check} was true, we know that if a consumer stole the chunk it saw the value $i$ that $c$ uses in line~\ref{alg:lines:fast-path}, since the stealer reads this value \emph{after} changing ownership. Since the stealer only take tasks from slots greater then the value it read, we deduce that it only take tasks from slots grater than $i$
 \end{proof}
 
+\begin{lemma}
+ \label{lemma:no-inc-after-steal}
+ Let $i$ be the $idx$ of a node as read by a stealing consumer after changing chunk ownership in line~\ref{alg:line:chown}. Then the previous owner of the chunk can not take task in slots with index greater than $i+1$ as long as the ownership does not change.
+\end{lemma}
+\begin{proof}
+First we notice that once a consumer notices that its chunk was stolen it sets $currentNode$ to $\bot$ (line~\ref{alg:line:check-owner-stealer}) or leaves it as $\bot$ (line~\ref{alg:lines:stolen-chunk-end}). And when a consumer take a Node from its pool in the case $currentNode
+$ is $\bot$ it makes sure it is the owner of the chunk. i.e., when a consumer notices that a chunk was stolen it stops using the node that pointed to that task.
 
+Next we notice that if the a consumer increases the $idx$ of a Node, it then checks if it is still the owner (lines~\ref{alg:lines:consumer-owner-check} and~\ref{alg:line:check-owner-stealer}). Therefore we can deduce that after the ownership of a chunk changes, the $idx$ of a Node which pointed to the chunk before it was stolen can be increase by at most 1, and thus the value of $i$ is at least $idx-1$
 
+When a consumer takes a task in {\bf consume()} (lines~\ref{alg:lines:fast-path} and~\ref{alg:line:cas-consumer}) it takes them from slot $k$ where $k$ is the current $idx$ of the current Node this consumer is using. Since we saw that after a {\bf steal()} operation the $idx$ value $i$ that is read by the stealer is at least $k-1$, then in this case the previous owner of the chunk tasks only tasks from slots less than $i+1$, if it does not steals this chunk again.
+
+When a consumer takes a task in {\bf steal()} it takes it from slot $k+1$, however, we notice that later that steal operation increments $idx$, therefore when another consumer steals this chunk the value $i$ that its reads is at least $k$ and as we saw the original owner will not take a task greater then $k+1$ without stealing the chunk again. 
+\end{proof}
 
 \begin{claim}
 \label{salsa-consumer-claim}
-A task in a SALSA pool may be returned only once.
+A task in a SALSA pool may be only returned once.
 \end{claim}
 
 \begin{proof}
@@ -33,7 +46,13 @@ Consumers change the value of a slot to taken in three places in the code (see A
  \item Line~\ref{alg:lines:fast-path} -- this is the consumer fast-path, the consumer tries to take a task without synchronization.
 \end{enumerate}
 
-When multiple consumers try to take a task using CAS operations, only one can succeed, therefore we only have to show that the third operation, which does not use CAS, cannot execute simultaneously with other operations.
+When multiple consumers try to take a task using CAS operations, only one can succeed, therefore we only have to show that the operation which does not use CAS, cannot execute simultaneously with other operations.
+
+We now show that if the operation in line~\ref{alg:lines:fast-path} takes a task, no other operation takes this task. 
+Consider a consumer $a$ that is about to execute line~\ref{alg:lines:fast-path}.
+According to Lemma~\ref{lemma:steal-take-bound} consumers that steal the chunk $a$ is taking the task from, cannot take the task that $a$ is about to take.
+
+Note that after stealing a Node, the consumer increases $idx$ by 1 in line~\ref{alg:line:steal-idx-inc}, and therefore the next time it calls {\bf consume()} it will take the task from $i+2$ where $i$ is the value it read from the previous Node in line~\ref{alg:line:copy-prev-node}. Therefore, if $a$ stole from another consumer $b$, when it executes line~\ref{alg:line:copy-prev-node} according to Lemma~\ref{lemma:no-inc-after-steal} $b$ may only take tasks from slots smaller than $i+2$ and therefore cannot take the task that $a$ takes on line~\ref{alg:lines:fast-path} unless it resteals the chunk. 
 
 For the operation on line~\ref{alg:lines:fast-path} to complete, the {\bf if} on line~\ref{alg:lines:consumer-owner-check} must be true. Therefore, we know that the current consumer was the owner of the chunk on line~\ref{alg:lines:ind-inc}.
 
