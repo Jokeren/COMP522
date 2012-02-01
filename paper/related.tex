@@ -21,21 +21,21 @@ upon each consume. In addition, steals are performed in the granularity of singl
 not whole chunks as in SALSA. Overall, Concurrent Bags throughput does not scale linearly with the number of participating threads.
 
 \paragraph{Techniques.}
-Some of the variations of the techniques we employ were previously used in various contexts. 
+Variations of techniques we employ were previously used in various contexts. 
 Work-stealing~\cite{Blumofe:1999:SMC:324133.324234} is a standard way to reduce
 contention by using individual per-consumer pools, where tasks may be stolen from one pool to
 another. 
-In addition, the partitioning of tasks into per-consumer pools allows for optimizing performance in 
-case a consumer is working on its own pool without being interrupted by stealing; we refer to
+Partitioning of tasks into per-consumer pools also allows optimizing performance in the
+case where a consumer is working on its own pool without being interrupted by stealing; we refer to
 this case as the \emph{fast-path}. The concept of a synchronization-free fast-path previously
-appeared in works about scheduling queues,
+appeared in works on scheduling queues,
 e.g.,~\cite{Arora:1998:TSM:277651.277678,Hendler:2006:DNW:1160290.1160294}. However, these works
 assume that the same process is both the producer and the consumer, and hence the
 synchronization-free fast-path is actually used only when a process transfers data to \emph{itself}.
 On the other hand, our pool is synchronization-free even when tasks are transfered among multiple
 threads; our synchronization-free fast-path is used also when multiple producers produce data for
-a single consumer. We do not know of any other work that support synchronization-free data
-transfer between different threads.
+a single consumer. We do not know of any other work that supports synchronization-free data
+transfer among different threads.
 
 We improve the efficiency of stealing by transferring a chunk of tasks upon every steal
 operation. Hendler et al.~\cite{Hendler:2002:NSW:571825.571876} have proposed stealing of multiple
@@ -50,4 +50,3 @@ structures while preserving data locality. Chunk-based data structures were prev
 in~\cite{Braginsky:2011:LLL:1946143.1946153, Gidenstam:2010:CLQ:1940234.1940266,
 Hendler:2006:DNW:1160290.1160294, Sundell:2011:LAC:1989493.1989550}. SALSA extends on the idea of
 using chunk-based data structures by using chunks also for efficient stealing.
-
