@@ -151,7 +151,7 @@ We present a highly-scalable non-blocking producer-consumer task pool, designed 
 The core building block of our pool is \emph{SALSA, Scalable And Low Synchronization Algorithm} for a single-consumer container with task stealing support. Each consumer operates on its own SALSA container, stealing tasks from other containers if necessary. We implement an elegant self-tuning policy for task insertion, which does not push tasks to overloaded SALSA containers, thus decreasing the likelihood of stealing. 
 
 SALSA manages large chunks of tasks, which improves locality and facilitates stealing. The use of page-size chunks is perfectly suitable for data migration among processor nodes in NUMA architectures. 
-SALSA uses a novel approach for coordination among consumers, without strong atomic operations or memory barriers in the fast path. It invokes only a two CAS operations during a chunk steal. 
+SALSA uses a novel approach for coordination among consumers, without strong atomic operations or memory barriers in the fast path. It invokes only two CAS operations during a chunk steal. 
 
 Our evaluation demonstrates that a pool built using SALSA containers scales \emph{linearly} with the number of threads and significantly outperforms other FIFO and non-FIFO alternatives.
 
