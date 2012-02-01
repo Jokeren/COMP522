@@ -42,7 +42,7 @@
  	
  	\smallskip 
   \STATE n.idx++ \comment {tell the world you're going to take a task from idx} \label{alg:lines:ind-inc}
-  \INDENT {{\bf if} (chunk.owner $=$ consumerId) {\bf then} \comment {common case}}
+  \INDENT {{\bf if} (chunk.owner $=$ consumerId) {\bf then} \comment {common case}} \label{alg:lines:consumer-owner-check}
  		\STATE chunk.tasks[n.idx] $\leftarrow$ TAKEN \label{alg:lines:fast-path}
   	\STATE {\bf checkLast}(n)
   	\STATE {\bf return} task 

@@ -1,0 +1,40 @@
+\begin{claim}
+\label{salsa-insert-claim}
+ If a SALSA operation returned a task, this task was previously inserted to a pool in the system by a producer.
+\end{claim}
+The proof of Claim~\ref{salsa-insert-claim} is immediate.
+
+
+
+Before we proof the next cliam we proof the folowing lemma:
+
+\begin{lemma}
+ After the ownership of a chunk changes, the previous owner may only take one task, and that task will be pointer .
+\end{lemma}
+\begin{proof}
+ 
+\end{proof}
+
+
+
+
+\begin{claim}
+\label{salsa-consumer-claim}
+A task in a SALSA pool may be returned only once.
+\end{claim}
+
+\begin{proof}
+First we note that a consumer returns a task only after changing the value of the task slot to TAKEN. 
+Therefore, it is sufficient to show that only one consumer can change a slot to TAKEN.
+Consumers change the value of a slot to taken in three places in the code (see Algorithm~\ref{alg:non-fifo}):
+\begin{enumerate}
+ \item Line~\ref{alg:line:cas-consumer} -- the consumer detected that the chunk was stolen and therefore performs a CAS operation to mark the slot as TAKEN.
+ \item Line~\ref{alg:line:cas-steal} -- the consumer stole a chunk and now attempts to take a task using CAS operation.
+ \item Line~\ref{alg:lines:fast-path} -- this is the consumer fast-path, the consumer tries to take a task without synchronization.
+\end{enumerate}
+
+When multiple consumers try to take a task using CAS operations, only one can succeed, therefore we only have to show that the third operation, which does not use CAS, cannot execute simultaneously with other operations.
+
+For the operation on line~\ref{alg:lines:fast-path} to complete, the {\bf if} on line~\ref{alg:lines:consumer-owner-check} must be true. Therefore, we know that the current consumer was the owner of the chunk on line~\ref{alg:lines:ind-inc}.
+
+\end{proof}
