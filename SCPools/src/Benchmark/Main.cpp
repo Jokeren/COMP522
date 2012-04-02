@@ -21,8 +21,8 @@ void run(int consNum, consumerArg* consArgs, int prodNum, producerArg* prodArgs)
 	cout << "Producer fluctuations are turned " << (prodFluctuations ? "on" : "off") << endl;
 
 	bool consFluctuations = false;
-	Configuration::getInstance()->getVal(prodFluctuations, "consFluctuations");
-	cout << "Consumer fluctuations are turned " << (prodFluctuations ? "on" : "off") << endl;
+	Configuration::getInstance()->getVal(consFluctuations, "consFluctuations");
+	cout << "Consumer fluctuations are turned " << (consFluctuations ? "on" : "off") << endl;
 
 	int pausedThreads=1;
 	Configuration::getInstance()->getVal(pausedThreads, "pausedThreads");

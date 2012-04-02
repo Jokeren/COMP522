@@ -43,6 +43,8 @@ public:
 	static int getAllocatedPoolsCounter(){return allocatedPoolsCounter;}
 	static bool getStartFlag(){return simulationStart;}
 	static bool getStopFlag(){return simulationStop;}
+	static void assignToCPU(int cpu);
+
 };
 
 	void assignToCPU(int cpu);

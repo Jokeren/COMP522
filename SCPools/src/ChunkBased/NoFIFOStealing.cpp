@@ -2,6 +2,8 @@
 #include <assert.h>
 
 #include "NoFIFOPool.h"
+#include "Benchmark/Threads.h"
+#include "ArchEnvironment.h"
 
 #include "hp/hp.h"
 using namespace HP;
@@ -73,6 +75,13 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 		stealList.remove(prevNode, hpLoc);
 		return NULL;
 	}
+
+	//FIX: force original consumer to flush by switching to its core.
+	ArchEnvironment* ae = ArchEnvironment::getInstance();
+	int dest = ae->getConsumerCore(from->consumerID);
+	assignToCPU(dest);
+	dest = ae->getConsumerCore(this->consumerID);
+	assignToCPU(dest);
 
 	// succeeded to steal, create the copy of the node and put it in the stealing list
 	SwNode* newNode = new SwNode(c);
