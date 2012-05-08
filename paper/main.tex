@@ -1,26 +1,24 @@
-\documentclass[11pt]{article}
+\documentclass{sig-alternate}
+
+\setlength{\pdfpagewidth}{8.5in}
+\setlength{\pdfpageheight}{11in}
 
 \pdfoptionpdfminorversion=5
 
-% American letter size:
-\textwidth6.5in \textheight9in \oddsidemargin 0pt \evensidemargin 0pt
-\topmargin -47pt
-
-
-\usepackage{times}
-\usepackage{fullpage}
-\usepackage{epic}
+%\usepackage{times}
+%\usepackage{fullpage}
+%\usepackage{epic}
 \usepackage{subfigure}
-\usepackage{wrapfig}
-\usepackage{eepic}
-\usepackage{epsfig}
+%\usepackage{wrapfig}
+%\usepackage{eepic}
+%\usepackage{epsfig}
 \usepackage{color}
-\usepackage{amsmath,amsthm,amssymb}
-\usepackage{amsfonts}
+%\usepackage{amsmath,amsthm,amssymb}
+%\usepackage{amsfonts}
 \usepackage{float}
-\usepackage{appendix}
-\usepackage{multirow}
-\usepackage{booktabs}
+%\usepackage{appendix}
+%\usepackage{multirow}
+%\usepackage{booktabs}
 \usepackage{url}
 
 \renewcommand\floatpagefraction{1.0}
@@ -31,14 +29,14 @@
 
 \newenvironment{enum*}%
  {\begin{enumerate}%
-   \setlength{\itemsep}{-5pt}%
+   %\setlength{\itemsep}{-5pt}%
    \setlength{\parsep}{-5pt}%
    \setlength{\topsep}{-5pt}}%
  {\end{enumerate}}
 
 \newenvironment{item*}%
  {\begin{itemize}%
-   \setlength{\itemsep}{-5pt}%
+   %\setlength{\itemsep}{-5pt}%
    \setlength{\parsep}{-5pt}%
    \setlength{\topsep}{-5pt}}%
  {\end{itemize}}
@@ -51,15 +49,12 @@
         \fi
 }
 
-\theoremstyle{plain}
+%\theoremstyle{plain}
 \floatstyle{ruled}
 \newfloat{algo}{htbp}{algo}
 \floatname{algo}{Algorithm}
 \usepackage[noend]{algorithmic}
 \usepackage{distribalgo}
-
-\usepackage{setspace}
-% \doublespacing
 
 \newtheorem{thm}{Theorem}
 \newtheorem{lemma}{Lemma}
@@ -91,113 +86,95 @@
 \newcommand{\elcomment}[1]{\hfill{\comment{#1}}}
 \newcommand{\funcname}[1]{\textsc{\color{DarkBlue}{#1}}}
 \newcommand{\typename}[1]{\textbf{\color{Cyan}{#1}}}
-
-\setlength\topmargin{-0.025in}
-\setlength\textheight{8.75in}
-
-%%=======================================================================
-%% Latex template for SPAA 2012
-%%=======================================================================
 %
-%% remember to compile with dvips -t letter for US letter style
-%
-%\documentclass[11pt]{article}
-%
-%% American letter size:
-%\textwidth6.5in \textheight9in \oddsidemargin 0pt \evensidemargin 0pt
-%\topmargin -47pt
-%
-%\usepackage{times}
-%
-%\newtheorem{theorem}{Theorem}[section]
-%\newtheorem{lemma}[theorem]{Lemma}
-%\newtheorem{claim}[theorem]{Claim}
-%\newtheorem{fact}[theorem]{Fact}
-%
-%\newcommand{\sq}{\hbox{\rlap{$\sqcap$}$\sqcup$}}
-%\newcommand{\qed}{\hspace*{\fill}\sq}
-%\newenvironment{proof}{\noindent {\bf Proof.}\ }{\qed\par\vskip 4mm\par}
-%\newenvironment{proofof}[1]{\bigskip \noindent {\bf Proof of #1:}\quad }
-%{\qed\par\vskip 4mm\par}
-
-
+%\setlength\topmargin{-0.025in}
+%\setlength\textheight{8.75in}
 
 \begin{document}
 
-\begin{titlepage}
+\conferenceinfo{SPAA'12,} {June 25--27, 2012, Pittsburgh, Pennsylvania, USA.} 
+\CopyrightYear{2012} 
+\crdata{978-1-4503-1213-4/12/06} 
+\clubpenalty=10000 
+\widowpenalty = 10000
 
-\title{SALSA: Scalable and Low Synchronization NUMA-aware Algorithm for Producer-Consumer Pools \\
-       {\Large (Regular Submission)}}
+\title{SALSA: Scalable and Low Synchronization NUMA-aware Algorithm for Producer-Consumer Pools}
 
-\author{Elad Gidron \\
-   Department of Computer Science,\\Technion, Haifa, Israel\\
-   eladgi@cs.technion.ac.il \\
-   \and
-   Idit Keidar \\
-   Department of Electrical Engineering,\\Technion, Haifa, Israel\\
-   idish@ee.technion.ac.il \\
-   \and
-   Dmitri Perelman \\
-   Department of Electrical Engineering,\\Technion, Haifa, Israel\\
-   dima39@tx.technion.ac.il \\
-   \and
-   Yonathan Perez \\
-   Department of Electrical Engineering,\\Technion, Haifa, Israel\\
-   yonathan0210@gmail.com
-   } 
+\numberofauthors{4}
+
+\author{
+\alignauthor
+Elad Gidron\\
+\affaddr{CS Department}\\
+\affaddr{Technion, Haifa, Israel}\\
+\email{eladgi@cs.technion.ac.il}
+\alignauthor
+Idit Keidar\\
+\affaddr{EE Department}\\
+\affaddr{Technion, Haifa, Israel}\\
+\email{idish@ee.technion.ac.il}
+\and
+\alignauthor
+Dmitri Perelman\titlenote{This work was partially supported by Hasso Plattner Institute.}\\
+\affaddr{EE Department}\\
+\affaddr{Technion, Haifa, Israel}\\
+\email{dima39@tx.technion.ac.il}
+\alignauthor
+Yonathan Perez\\
+\affaddr{EE Department}\\
+\affaddr{Technion, Haifa, Israel}\\
+\email{yonathan0210@gmail.com}
+}
 
 \date{}
 
-\maketitle \thispagestyle{empty}
+\maketitle 
 
 \begin{abstract}
 We present a highly-scalable non-blocking producer-consumer task pool, designed with a special emphasis on lightweight synchronization and data locality.
 The core building block of our pool is \emph{SALSA, Scalable And Low Synchronization Algorithm} for a single-consumer container with task stealing support. Each consumer operates on its own SALSA container, stealing tasks from other containers if necessary. We implement an elegant self-tuning policy for task insertion, which does not push tasks to overloaded SALSA containers, thus decreasing the likelihood of stealing. 
 
-SALSA manages large chunks of tasks, which improves locality and facilitates stealing. The use of page-size chunks is perfectly suitable for data migration among processor nodes in NUMA architectures. 
+SALSA manages large chunks of tasks, which improves locality and facilitates stealing. 
+%The use of page-size chunks is perfectly suitable for data migration among processor nodes in NUMA architectures. 
 SALSA uses a novel approach for coordination among consumers, without strong atomic operations or memory barriers in the fast path. It invokes only two CAS operations during a chunk steal. 
 
 Our evaluation demonstrates that a pool built using SALSA containers scales \emph{linearly} with the number of threads and significantly outperforms other FIFO and non-FIFO alternatives.
 
 \end{abstract}
 
-\bigskip
+% A category with the (minimum) three required fields
+\category{D.1.3}{Software}{Concurrent Programming}
 
-\centerline{{\bf Keywords}: multi-core, concurrent data structures, producer-consumer pools, non-blocking synchronization.}
+\terms{Algorithms, Performance}
 
-\vspace{2.5cm}
+\keywords{Multi-core, concurrent data structures}
 
-\centerline{The figures in our paper occupy two full pages; they are inlined for better readability.}
-
-\end{titlepage}
-\negspace
 \section{Introduction}
 \label{sec:intro}
 \input{intro}
-\negspace
+
 \section{Related Work}
 \label{sec:related}
 \input{related}
-\negspace
+
 \section{System Overview}
 \label{sec:system}
 \input{system}
-\negspace
+
 \section{Algorithm Description}
 \label{sec:algo}
 \input{algorithmDescription}
-\negspace
+
 \section{Correctness}
 \label{sec:correctness}
 \input{safety}
-\negspace
-\section{Evaluation}
+
+\section{Implementation and Evaluation}
 \label{sec:evaluation}
 \input{evaluation}
-\negspace
+
 \section{Conclusions}
 \label{sec:conclusions}
-\negspace
 We presented a highly-scalable task pool framework, built upon
 our novel SALSA single-consumer pools and work stealing.
 Our work has employed a number of novel techniques for improving
@@ -208,7 +185,7 @@ balancing for decreasing the likelihood of stealing.
 
 We have shown that our solution scales linearly with the number
 of threads. It outperforms other work-stealing techniques by a
-factor of 20, and state-of-the art non-FIFO pools by a factor of 5.
+factor of $20$, and state-of-the art non-FIFO pools by a factor of $3.5$.
 We have further shown that it is highly robust to imbalances and
 unexpected thread stalls.
 
@@ -219,22 +196,20 @@ additional scalable high-performance services in the future.
 \bibliographystyle{abbrv}
 \bibliography{refs}
 
-\pagebreak \small
-
-\begin{appendix}
-
-\section{SALSA correctness}
-\subsection{Lock-freedom}
-\label{appendix:lock-freedom}
-\input{appendix-claim1-proof}
-\subsection{Linearizability}
-\label{appendix:salsa-correctness}
-\input{appendix-salsa-correctness}
-\clearpage
-\section{Chunk size influence}
-\label{appendix:chunk-size}
-\input{appendix-chunk-size}
-
-\end{appendix}
+%\begin{appendix}
+%
+%\section{SALSA correctness}
+%\subsection{Lock-freedom}
+%\label{appendix:lock-freedom}
+%\input{appendix-claim1-proof}
+%\subsection{Linearizability}
+%\label{appendix:salsa-correctness}
+%\input{appendix-salsa-correctness}
+%\clearpage
+%\section{Chunk size influence}
+%\label{appendix:chunk-size}
+%\input{appendix-chunk-size}
+%
+%\end{appendix}
 
 \end{document}

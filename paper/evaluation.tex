@@ -1,15 +1,43 @@
 In this section we evaluate the performance of our work-stealing framework built on SALSA pools. 
-We describe the experiment setup in Section~\ref{sec:exp-setup}, we show the overall system performance in Section~\ref{sec:eval-performance} and study the influence of various SALSA techniques in Section~\ref{sec:eval-techniques}.
-\negspace
+We first present the implementation details on dealing with memory reordering issues in Section~\ref{sec:memory-order}. The experiment setup is described in Section~\ref{sec:exp-setup}, we show the overall system performance in Section~\ref{sec:eval-performance}, study the influence of various SALSA techniques in Section~\ref{sec:eval-techniques} and check the impact of memory placement and thread scheduling in Section~\ref{sec:numa-impact}. 
+
+\begin{figure*}[tbh]
+	\centering
+  \subfigure [\scriptsize{System throughput -- N producers, N consumers.}] {
+    \includegraphics[width=0.45\textwidth]{figures/n-n-throughput}
+    \label{fig:n-n-throughput}
+  }
+  \subfigure [\scriptsize{System throughput -- variable producers-consumers ratio.}] {
+    \includegraphics[width=0.45\textwidth]{figures/prod-cons-fig}
+    \label{fig:prod-cons-fig}
+  }
+  \vspace{-10pt}
+	\caption{\footnotesize{System throughput for various ratios of producers and consumers. SALSA scales linearly with the number of threads -- in the $16/16$ workload, it is $\times20$ faster than WS-MSQ and WS-LIFO, and $\times3.5$ faster than Concurrent Bags. In tests with equal numbers of producers and consumers, the differences among work-stealing alternatives are mainly explained by the consume operation efficiency, since stealing rate is low and hardly influences performance. 
+}}
+	\vspace{-5pt}
+	\label{fig:throughput}
+\end{figure*}
+
+\subsection {Dealing with Memory Reordering}
+\label{sec:memory-order}
+The presentation of the SALSA algorithm in Section~\ref{sec:algo} assumes sequential consistency~\cite{Lamport:SC} as the memory model. However, most existing systems relax sequential consistency to achieve better performance. Specifically, according to x86-TSO~\cite{Sewell:x86-tso}, memory loads can be reordered with respect to older stores to different locations. In SALSA, this reordering can cause an index increment to occur after the ownership validation (lines~\ref{alg:lines:ind-inc}, \ref{alg:lines:consumer-owner-check} in Algorithm~\ref{alg:non-fifo}), which violates correctness as it may cause the same task to be taken twice, by both the original consumer and the stealing thread.
+
+The conventional way to ensure a correct execution in such cases is to use memory fences to force a specific memory ordering.
+For example, adding an \texttt{mfence} instruction between lines~\ref{alg:lines:ind-inc} and~\ref{alg:lines:consumer-owner-check} guarantees SALSA's correctness. However, memory fences are costly and their use in the common path degrades performance. Therefore, we prefer to employ a synchronization technique that does not add substantial overhead to the frequently used {\bf takeTask()} operation. One example for such a technique is location-based memory fences, recently proposed by Ladan-Mozes et al.~\cite{Ladan-Mozes:lmf}, which is unfortunately not implemented in current hardware.
+
+In our implementation, we adopt the synchronization technique described by Dice et al.~\cite{dice:fences}, where the slow thread (namely, the
+stealer) binds directly to the processor on which the fast thread (namely, the consumer) is currently running, preempting it from the processor, and then returns to run on its own processor. Thread displacement serves as a full memory fence, hence, a stealer that invokes the displacement binding right after updating the ownership (before the line ~\ref{alg:line:copy-prev-node} in Algorithm~\ref{alg:non-fifo}) observes the updated consumer's index. On the other hand, the steal-free fast path is not affected by this change.
+
 \subsection {Experiment Setup}
 \label{sec:exp-setup}
-The implementation of the work-stealing framework used in our evaluation does not include the linearizability mechanism described in~\ref{sec:correctness}. We believe that this mechanism has negligible effect on performance; moreover, in our experiment they would not have been invoked because the pool is never empty. We compare the following task pool implementations:
+%The implementation of the work-stealing framework used in our evaluation does not include the linearizability mechanism described in~\ref{sec:correctness}. We believe that this mechanism has negligible effect on performance; moreover, in our experiment they would not have been invoked because the pool is never empty. 
+We compare the following task pool implementations:
 \begin {item*}
 \item
 {\bf SALSA} -- our work-stealing framework with SCPools implemented by SALSA.
 \item
-{\bf SALSA+CAS} -- our work-stealing framework with SCPools implemented by a simplistic SALSA variation, in which every {\bf consume()} and {\bf steal()} operation tries to take a single task using CAS. In essence, SALSA+CAS removes the effects of SALSA's low-synchronization fast-path and per-chunk stealing. 
-Note that disabling per-chunk stealing in SALSA annuls the idea of chunk ownership, hence, disables its low-synchronization fast-path as well. 
+{\bf SALSA+CAS} -- our work-stealing framework with SCPools implemented by a simplistic SALSA variation, in which every {\bf consume()} and {\bf steal()} operation tries to take a single task using CAS. In essence, SALSA+CAS removes the effects of SALSA's low synchronization fast-path and per-chunk stealing. 
+Note that disabling per-chunk stealing in SALSA annuls the idea of chunk ownership, hence, disables its low synchronization fast-path as well. 
 \item
 {\bf ConcBag} -- an algorithm similar to the lock-free Concurrent Bags algorithm~\cite{Sundell:2011:LAC:1989493.1989550}. 
 It is worth noting that the original algorithm was optimized for the scenario where the same process is both a producer and a consumer (in essence producing tasks to itself), which we do not consider in this paper; in our system no thread acts as both a producer and a consumer, therefore every consume operation steals a task from some producer.
@@ -21,37 +49,20 @@ We did not have access to the original code, and therefore reimplemented the alg
 \end {item*} 
 
 We did not experiment with additional FIFO and LIFO queue implementations, because, as shown in~\cite{Sundell:2011:LAC:1989493.1989550}, their performance is of the same order of magnitude as the Michael-Scott queue. 
-Similarly, we did not evaluate {CAF\'E}\cite{Basin:2011:CST:2075029.2075087} pools because their performance is similar to that of WS-MSQ~\cite{Basin:Thesis:2011}, or ED-Pools~\cite{Afek:2010:SPP:1885276.1885295}, which have been shown to scale poorly in multi-processor architectures~\cite{Basin:Thesis:2011,Sundell:2011:LAC:1989493.1989550}. 
+Similarly, we did not evaluate {CAF\'E}~\cite{Basin:2011:CST:2075029.2075087} pools because their performance is similar to that of WS-MSQ~\cite{Basin:Thesis:2011}, or ED-Pools~\cite{Afek:2010:SPP:1885276.1885295}, which have been shown to scale poorly in multi-processor architectures~\cite{Basin:Thesis:2011,Sundell:2011:LAC:1989493.1989550}. 
 
 All the pools are implemented in C++ and compiled with \texttt{-O2} optimization level. 
-In order to minimize scalability issues related to allocations, we use \texttt{jemalloc} allocator~\cite{citeulike:4951109}, which has been shown to be highly scalable in multi-threaded environments\footnote{\url{http://www.facebook.com/notes/facebook-engineering/scalable-memory-allocation-using-jemalloc/480222803919}}.
-Chunks of SALSA and SALSA+CAS contain $1000$ tasks, and chunks of ConcBag contain $128$ tasks, which were the respective optimal values for each algorithm (see Appendix \ref{appendix:chunk-size}). 
+In order to minimize scalability issues related to allocations, we use \texttt{jemalloc} allocator, which has been shown to be highly scalable in multi-threaded environments~\cite{jemalloc}. 
+%\footnote{\url{http://www.facebook.com/notes/facebook-engineering/scalable-memory-allocation-using-jemalloc/480222803919}}.
+Chunks of SALSA and SALSA+CAS contain $1000$ tasks, and chunks of ConcBag contain $128$ tasks, which were the respective optimal values for each algorithm (see the full version of the paper~\cite{salsa-tech-rep}). 
 
 We use a synthetic benchmark where 1) each producer works in a loop of inserting dummy items; 2) each consumer works in a loop of retrieving dummy items. Each data point shown is an average of $5$ runs, each with a duration of $20$ seconds. 
 The tests are run on a dedicated shared memory NUMA server with $8$ Quad Core AMD $2.3$GHz processors and $16$GB of memory attached to each processor. 
-\negspace
 \subsection{System Throughput}
 \label{sec:eval-performance}
 
-\begin{figure}[htb]
-	\centering
-  \subfigure [\scriptsize{System throughput -- N producers, N consumers.}] {
-    \includegraphics[width=0.45\textwidth]{figures/n-n-throughput}
-    \label{fig:n-n-throughput}
-  }
-  \subfigure [\scriptsize{System throughput -- variable producers-consumers ratio.}] {
-    \includegraphics[width=0.45\textwidth]{figures/prod-cons-fig}
-    \label{fig:prod-cons-fig}
-  }
-  \vspace{-10pt}
-	\caption{\footnotesize{System throughput for various ratios of producers and consumers. SALSA scales linearly with the number of threads -- in the $16/16$ workload, it is $\times20$ faster than WS-MSQ and WS-LIFO, and more than $\times5$ faster than Concurrent Bags. In tests with equal numbers of producers and consumers, the differences among work-stealing alternatives are mainly explained by the consume operation efficiency, since stealing rate is low and hardly influences performance. In Concurrent Bags every {\bf consume()} operation implies stealing, which causes its sub-linear scalability.
-}}
-	\vspace{-5pt}
-	\label{fig:throughput}
-\end{figure}
-
 %Figure~\ref{fig:throughput} demonstrates system throughput of the compared algorithms for workloads with various numbers of producers and consumers. 
-Figure~\ref{fig:n-n-throughput} shows system throughput for workloads with equal number of producers and consumers. SALSA \emph{scales linearly} as the number of threads grows to $32$ (the number of physical cores in the system), and it clearly outperforms all other competitors. In the $16/16$ workload, SALSA is $\times20$ faster than WS-MSQ and WS-LIFO, and more than $\times5$ faster than Concurrent Bags. 
+Figure~\ref{fig:n-n-throughput} shows system throughput for workloads with equal number of producers and consumers. SALSA \emph{scales linearly} as the number of threads grows to $32$ (the number of physical cores in the system), and it clearly outperforms all other competitors. In the $16/16$ workload, SALSA is $\times20$ faster than WS-MSQ and WS-LIFO, and more than $\times3.5$ faster than Concurrent Bags. 
 
 We note that the performance trend of ConcBags in our measurements differs from the results presented by Sundell et al.~\cite{Sundell:2011:LAC:1989493.1989550}. 
 While in the original paper, their throughput \emph{drops} by a factor of $3$ when the number of threads increases from $4$ to $24$, in our tests, the performance of ConcBags \emph{increases} with the number of threads. The reasons for the better scalability of our implementation can be related to the use of different memory allocators, hardware architectures, and engineering optimizations. %In any case, both implementations provide the performance of tens of thousands of task retrievals in msec for multiple producers and consumers. 
@@ -60,7 +71,8 @@ While in the original paper, their throughput \emph{drops} by a factor of $3$ wh
 All systems implemented by our work-stealing framework scale linearly because of the low contention between consumers. 
 Their performance differences are therefore due to the efficiency of the {\bf consume()} operation -- for example, SALSA is $\times1.7$ faster than SALSA+CAS thanks to its fast-path consumption technique.
 %For example, SALSA is $\times1.7$ faster than SALSA+CAS thanks to the fast-path consumption technique, which does not use strong atomic operations. 
-In contrast, in ConcBags, which is not based on per-consumer pools, every {\bf consume()} operation implies stealing, which causes contention among consumers, leading to sub-linear scalability.
+
+In ConcBags, which is not based on per-consumer pools, every {\bf consume()} operation implies stealing, which causes contention among consumers, leading to sub-linear scalability. The stealing policy of ConcBags algorithm plays an important role. The stealing policy described in the original paper~\cite{Sundell:2011:LAC:1989493.1989550} proposes to iterate over the lists using round robin. We found out that the approach in which each stealer initiates stealing attempts from the predefined consumer improves ConcBags' results by $53$\% in a balanced workload.
 
 Figure~\ref{fig:prod-cons-fig} shows system throughput of the algorithms for various ratios of producers and consumers. 
 SALSA outperforms other alternatives in all scenarios, achieving its maximal throughput with equal number of producers and consumers, because neither of them is a system bottleneck. 
@@ -69,7 +81,7 @@ SALSA outperforms other alternatives in all scenarios, achieving its maximal thr
 %Our algorithm achieves maximal throughput for the equal number of producers and consumers because neither of them is a system bottleneck.
 %SALSA outperforms other alternatives for all possible producer-consumer ratios. 
 
-\begin{figure}[htb]
+\begin{figure*}[tbh]
 	\centering
   \subfigure [\scriptsize{System throughput -- 1 Producer, N consumers.}] {
     \includegraphics[width=0.45\textwidth]{figures/1-n-throughput}
@@ -84,70 +96,46 @@ SALSA outperforms other alternatives in all scenarios, achieving its maximal thr
 	Both SALSA and SALSA+CAS efficiency balance the load in this scenario. The throughput of other algorithms drops by a factor of $10$ due to increased contention among consumers trying to steal tasks from the same pool.}}
 	\vspace{-5pt}
 	\label{fig:1-n-perf}
-\end{figure}
+\end{figure*}
 
 We next evaluate the behavior of the pools in scenarios with a single producer and multiple consumers. 
 Figure~\ref{fig:1-n-throughput} shows that the performance of both SALSA and SALSA+CAS does not drop as more consumers are added, while the throughput of other algorithms degrades by the factor of $10$. 
 The degradation can be explained by high contention among stealing consumers, as evident from Figure~\ref{fig:1-n-cas}, which shows the average number of CAS operations per task transfer. %As we shall see in the next section, SALSA+CAS's low contention is achieved thanks to the producer-based balancing described in Section~\ref{alg-pools}, and SALSA achieves significantly better throughput thanks to chunk-based stealing.
 
-\subsection{Evaluation of SALSA Techniques}
+\subsection{Evaluating SALSA techniques}
 \label{sec:eval-techniques}
 \begin{figure}[htb]
-	\centering
-  \subfigure [\scriptsize{System throughput -- 1 Producer, N consumers.}] {
-    \includegraphics[width=0.45\textwidth]{figures/1-n-salsa}
-    \label{fig:1-n-salsa-perf}
-  }
-  \subfigure [\scriptsize{System throughput as a function of stalled threads.}] {
-    \includegraphics[width=0.45\textwidth]{figures/stalled-threads}
-    \label{fig:stalled-threads}
-  }
-  \vspace{-10pt}
-	\caption{\footnotesize{The effects of chunk-based stealing and producer-based balancing on system throughput in imbalanced scenarios. Producer-based balancing contributes to the robustness of the framework by reducing stealing. With no balancing, chunk-based stealing becomes important. }}
+	\includegraphics[width=0.45\textwidth]{figures/1-n-salsa}
+  \caption{\footnotesize{System throughput -- 1 Producer, N consumers. Producer-based balancing contributes to the robustness of the framework by reducing stealing. With no balancing, chunk-based stealing becomes important. }}
 	\vspace{-10pt}
 	\label{fig:1-n-salsa}
 \end{figure}
 In this section we study the influence of two of the techniques used in SALSA: 1) chunk-based-stealing with a low-synchronization fast path (Section~\ref{alg-stealing}), and 2) producer-based balancing (Section~\ref{alg-pools}). 
 To this end, we compare SALSA and SALSA+CAS both with and without producer-based balancing (in the latter a producer always inserts tasks to the same consumer's pool).
 
-Figure~\ref{fig:1-n-salsa-perf} depicts the behavior of the four alternatives in single producer / multiple consumers workloads. 
+Figure~\ref{fig:1-n-salsa} depicts the behavior of the four alternatives in single producer / multiple consumers workloads. 
 We see that producer-based balancing is instrumental in redistributing the load: neither SALSA nor SALSA+CAS suffers any degradation as the load increases. 
 When producer-based balancing is disabled, stealing becomes prevalent, and hence the stealing granularity becomes more important: 
 SALSA's chunk based stealing clearly outperforms the na\"{i}ve task-based approach of SALSA+CAS. 
 
-Figure~\ref{fig:stalled-threads} simulates the scenario where an equal number of producer and consumer threads are stalled in $16/16$ workload (e.g., because of an overloaded core or excessively long task), which leads to imbalance among SALSA pools.
-%This simulates the scenario of an overloaded machine in which some threads can be starved for long periods of time, or a scenario where some threads are busy running excessively long tasks. 
-%The stalled threads are chosen so that the default producers of the frozen consumers are not stalled, which leads to imbalance in the number of tasks among the SALSA pools. 
-Reducing the number of participating threads inherently degrades performance; the black dashed lines indicate the theoretical performance degradation in proportion to the number of stalled threads.
-The graphs show that producer-based balancing contributes to the robustness of the framework, and allows both SALSA variants to achieve performance close to that of the theoretical bound. 
-%When producer-based balancing is disabled, a high stealing rate is inevitable, which causes a severe throughput degradation.
+%Figure~\ref{fig:stalled-threads} simulates the scenario where an equal number of producer and consumer threads are stalled in $16/16$ workload (e.g., because of an overloaded core or excessively long task), which leads to imbalance among SALSA pools.
+%%This simulates the scenario of an overloaded machine in which some threads can be starved for long periods of time, or a scenario where some threads are busy running excessively long tasks. 
+%%The stalled threads are chosen so that the default producers of the frozen consumers are not stalled, which leads to imbalance in the number of tasks among the SALSA pools. 
+%Reducing the number of participating threads inherently degrades performance; the black dashed lines indicate the theoretical performance degradation in proportion to the number of stalled threads.
+%The graphs show that producer-based balancing contributes to the robustness of the framework, and allows both SALSA variants to achieve performance close to that of the theoretical bound. 
+%%When producer-based balancing is disabled, a high stealing rate is inevitable, which causes a severe throughput degradation.
 
-%
-%\begin{wrapfigure}{r}{0.47\textwidth}
-%  \vspace{-20pt}
-%  \begin{center}
-%    \includegraphics[width=0.45\textwidth]{figures/stalled-threads}
-%  \end{center}
-%  \vspace{-20pt}
-%  \caption{\footnotesize{System throughput in a system with $16$ producers and $16$ consumers as a function of the number of stalled threads.}}
-%  \vspace{-10pt}
-%  \label{fig:stalled-threads}
-%\end{wrapfigure}
-%
-%%
-%%
-%%\begin{figure}[htb]
-%%	\centering
-%%	\includegraphics[width=0.45\textwidth]{figures/stalled-threads}
-%%  \caption{\footnotesize{System throughput for different number of stalled threads (N/N workload). }}
-%%	\label{fig:stalled-threads}
-%%\end{figure}
-%
-%producer migration -- robustness against unpredictable stalls
-%
-%\begin{figure}[htb]
-%	\centering
-%	\includegraphics[width=0.45\textwidth]{figures/chunk-size}
-%  \caption{\footnotesize{System throughput as a function of chunk size. }}
-%	\label{fig:chunk-size}
-%\end{figure}
+\subsection {Impact of Scheduling and Allocation}
+\label{sec:numa-impact}
+\begin{figure}[htb]
+	\includegraphics[width=0.45\textwidth]{figures/salsa-numa-impact}
+  \caption{\footnotesize{Impact of scheduling and allocation (equal number of producers and consumers). Performance decreases once the interconnect becomes saturated. }}
+	\vspace{-10pt}
+	\label{fig:numa-impact}
+\end{figure}
+We now evaluate the impact of scheduling and allocation in our NUMA system. 
+To this end, we compare the following three alternatives: 1) the original SALSA algorithm; 2) SALSA with no affinity enforcement for the threads s.t. producers do not necessarily work with the closest consumers; 3) SALSA with all the memory pools preallocated on a single NUMA node. 
+
+Figure~\ref{fig:numa-impact} depicts the behavior of all the variants in the balanced workload. The performance of SALSA with no predefined affinities is almost identical to the performance of the standard SALSA, while the central allocation alternative looses its scalability after 12 threads. 
+
+The main reason for performance degradation in NUMA systems is bandwidth saturation of the interconnect. If all chunks are placed on a single node, every remote memory access is transfered via the interconnect of that node, which causes severe performance degradation. In case of random affinities, remote memory accesses are distributed among different memory nodes, hence their rate remains below the maximum available bandwidth of each individual channel, and the program does not reach the scalability limit. 

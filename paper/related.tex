@@ -1,4 +1,4 @@
-\paragraph{Task pools.}
+\paragraph{Task pools}
 There is a large body of work on lock-free unbounded FIFO queues and LIFO
 stacks~\cite{Gidenstam:2010:CLQ:1940234.1940266,Hendler:2004:SLS:1007912.1007944,
 Hoffman:2007:BQ:1782394.1782423, Michael:1996:SFP:248052.248106,Moir:2005:UEI:1073970.1074013}.
@@ -15,12 +15,14 @@ good locality and cache-friendliness, which has been shown to limit their scalab
 
 The closest non-FIFO pool to our work is the Concurrent Bags of
 Sundell et al.~\cite{Sundell:2011:LAC:1989493.1989550}, which, like SALSA, uses 
-per-producer chunk lists. Unlike our pool, however, their algorithm uses strong atomic operations
+per-producer chunk lists. 
+This work is optimized for the case that the same threads are both consumers and producers, and typically consume from themselves, while SALSA improves the performance of such a task pool in NUMA environments where producers and consumers are separate threads.
+Unlike our pool, the Concurrent Bags algorithm uses strong atomic operations
 upon each consume. In addition, steals are performed in the granularity of single tasks and
 not whole chunks as in SALSA. Overall, their throughput does not scale linearly with the number of participating threads,
 as shown in~\cite{Sundell:2011:LAC:1989493.1989550} and in Section~\ref{sec:evaluation} of this paper.
-\negspace
-\paragraph{Techniques.}
+
+\paragraph{Techniques}
 Variations of techniques we employ were previously used in various contexts. 
 Work-stealing~\cite{Blumofe:1999:SMC:324133.324234} is a standard way to reduce
 contention by using individual per-consumer pools, where tasks may be stolen from one pool to

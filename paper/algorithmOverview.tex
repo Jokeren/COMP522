@@ -1,23 +1,19 @@
 \subsubsection {SALSA producer}
 \input{producer-pseudo}
-\negspace
 The description of SALSA producer functions is presented in Algorithm~\ref{alg:producer-non-fifo}. 
 The insertion of a new task consists of two stages: 
 1) finding a chunk for task insertion (if necessary), and 2) adding a task to the chunk. 
-\negspace
-\paragraph {Finding a chunk.}
+\paragraph {Finding a chunk}
 The chunk for task insertions is kept in the local producer variable \emph{chunk} (line~\ref{alg:line:chunk} in Algorithm~\ref{alg:producer-non-fifo}). 
 Once a producer starts working with a chunk $c$, it continues inserting tasks to $c$ until $c$ is full -- 
 the producer is oblivious to chunk stealing. 
 If the \emph{chunk}'s value is $\bot$, then the producer should start a new chunk (function \emph{getChunk}). 
 In this case, it tries to retrieve a chunk from the chunk pool and to append it to the appropriate chunk list. If the chunk pool is empty then the producer either returns $\bot$ (if force$=$false), or allocates a new chunk by itself (otherwise) (lines~\ref{alg:line:no-chunk-start}--\ref{alg:line:no-chunk-end}). 
-\negspace
-\paragraph {Inserting a task to the chunk.}
+\paragraph {Inserting a task to the chunk}
 As previously described in Section~\ref{alg-structure}, different producers insert tasks to different chunks, which removes the need for synchronization among producers. 
 The producer local variable \emph{prodIdx} indicates the next free slot in the chunk.
 All that is left for the insertion function to do, is to put a task in that slot and to increment \emph{prodIdx} (line~\ref{alg:line:chunk-insert}).
 Once the index reaches the maximal value, the \emph{chunk} variable is set to $\bot$, indicating that the next insertion operation should start a new chunk. 
-\negspace
 \subsubsection {SALSA consumer without stealing}
 \input{consumer-pseudo}
 The consumer's algorithm without stealing is given in the left column of Algorithm~\ref{alg:non-fifo}.

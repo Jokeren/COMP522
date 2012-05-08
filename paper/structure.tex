@@ -1,10 +1,11 @@
-\newcounter{alg:non-fifo:lines}
+%\newcounter{alg:non-fifo:lines}
 \begin{algo}[!ht]
 \caption{SALSA implementation of SCPool: Data Structures.} 
 \label{alg:non-fifo-ds}
-\scriptsize
+%\scriptsize
 \begin{minipage}[t]{0.48\textwidth}
 \begin{distribalgo}[1]
+\setcounter{ALC@line}{\value{alg:non-fifo:lines}}
 \smallskip
 
 \INDENT {{\bf Chunk type}}
@@ -60,7 +61,7 @@
 
 \begin{figure}[htb]
 	\centering
-	\includegraphics[height=0.3\textwidth]{figures/salsa-struct}
+	\includegraphics[width=0.5\textwidth]{figures/salsa-struct}
 	\vspace{-10pt}
 	\caption{
 	    \footnotesize{Chunk lists in SALSA single consumer pool implementation. Tasks are kept in chunks, which are 
