@@ -72,7 +72,7 @@ Task* SwedishPool::steal(SCTaskPool* from, AtomicStatistics* stat) {
 }
 
 OpResult SwedishPool::consume(Task*& t, AtomicStatistics* stat) {
-	// a consumer don't have its own tasks
+	// a consumer doesn't have its own tasks
 	Task* res = steal(SwedishPool::getInstance(), stat);
 	t = res;
 	return (t != NULL) ? SUCCESS : EMPTY;

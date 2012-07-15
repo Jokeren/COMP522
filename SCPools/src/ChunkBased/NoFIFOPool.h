@@ -14,6 +14,7 @@
 #include "SwLinkedList.h"
 #include "SPChunk.h"
 
+// Single consumer pool that doesn't provide FIFO -- the main SALSA algorithm
 class NoFIFOPool : public SCTaskPool {
 
 public:

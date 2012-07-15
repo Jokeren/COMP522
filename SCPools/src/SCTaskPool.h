@@ -7,8 +7,10 @@
 
 class Producer;
 
+// Single consumer task pool with stealing
 class SCTaskPool {
 public:
+	// the code of producer
 	class ProducerContext {
 	public:
 		virtual ~ProducerContext() {};

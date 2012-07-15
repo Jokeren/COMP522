@@ -3,6 +3,7 @@
 
 #include "NoFIFOCASPool.h"
 
+// the implementation of the concurrent bags algorithm by Sundell et al. from SPAA'11
 class SwedishPool : public NoFIFOCASPool {
 
 public:

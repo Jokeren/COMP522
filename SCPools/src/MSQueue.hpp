@@ -121,7 +121,6 @@ public:
 	}
 
 	bool dequeue(T& pt, AtomicStatistics* stat){
-		static int countStrange = 0;
 		pointer_t head;
 		while(true)		// keep trying until dequeue is done
 		{
@@ -146,7 +145,6 @@ public:
 				else  // no need to deal with Tail
 				{
 					if (next.p.ptr == NULL) {
-						cout << "countStrange = " << (countStrange++) << endl;
 						continue; // something strange happened :)
 					}
 					pt = next.p.ptr->value;  //read value before CAS. otherwise another dequeue might free the next node

@@ -18,6 +18,7 @@ public:
 	markable_ref next;
 };
 
+// multi-writer linked list
 class MwLinkedList {
 public:
 	MwLinkedList();

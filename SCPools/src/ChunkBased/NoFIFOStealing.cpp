@@ -39,7 +39,6 @@ float NoFIFOPool::getStealingThreshold() const {
 // Gets a non-empty node from the longest list or NULL if no node exists
 // prefer a non-stolen node, unless no list is bigger than 1.
 // HP #2 will point to that node SP 3 will point to the chunk.
-//TODO: check if this is a good way to choose chunks
 SwNode* NoFIFOPool::getStealNode(int &stealQueueID) {
 	int idx = getLongestListIdx();
 	stealQueueID = idx;
@@ -76,7 +75,7 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 		return NULL;
 	}
 
-	//FIX: force original consumer to flush by switching to its core.
+	//force original consumer to flush by switching to its core.
 	ArchEnvironment* ae = ArchEnvironment::getInstance();
 	int dest = ae->getConsumerCore(from->consumerID);
 	assignToCPU(dest);

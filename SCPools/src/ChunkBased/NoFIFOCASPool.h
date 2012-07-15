@@ -10,7 +10,7 @@
 // This class is a straw man for the non-fifo pool
 // It uses the same idea of keeping chunks of memory with the following differences:
 // 1) every consume uses CAS operations in order to retrieve a task
-// 2) the steal operations steal individual tasks insteal of retrieving the whole chunks
+// 2) the steal operations steal individual tasks instead of retrieving the whole chunks
 class NoFIFOCASPool : public NoFIFOPool {
 
 public:
