@@ -33,19 +33,19 @@ void run(int consNum, consumerArg* consArgs, int prodNum, producerArg* prodArgs)
 
 	syncFlags::start();
 	cout << "Starting the run..." << endl;
+	int* pausedProducers = new int[pausedThreads];
+	int* pausedConsumers = new int[pausedThreads];
 	for(int i = 0; i < 10; i++) {
-		int prodIdx = 0;
-		int consIdx = 0;
 		if (prodFluctuations) {
-			prodIdx = (rand()%prodNum);
 			for(int p = 0; p < pausedThreads; p++) {
-				prodArgs[(prodIdx + (p<<1))%prodNum].pause = true;
+				pausedProducers[p] = (rand()%prodNum);
+				prodArgs[pausedProducers[p]].pause = true;
 			}
 		}
 		if (consFluctuations) {
-			consIdx = (rand()%consNum);
 			for(int c = 0; c < pausedThreads; c++) {
-				consArgs[(consIdx + (c<<1))%consNum].pause = true;
+				pausedConsumers[c] = (rand()%consNum);
+				consArgs[pausedConsumers[c]].pause = true;
 			}
 		}
 
@@ -53,12 +53,12 @@ void run(int consNum, consumerArg* consArgs, int prodNum, producerArg* prodArgs)
 
 		if (prodFluctuations) {
 			for(int p = 0; p < pausedThreads; p++) {
-				prodArgs[(prodIdx + (p<<1))%prodNum].pause = false;
+				prodArgs[pausedProducers[p]].pause = false;
 			}
 		}
 		if (consFluctuations) {
 			for(int c = 0; c < pausedThreads; c++) {
-				consArgs[(consIdx + (c<<1))%consNum].pause = false;
+				consArgs[pausedConsumers[c]].pause = false;
 			}
 		}
 	}
