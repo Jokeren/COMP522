@@ -8,6 +8,7 @@
 #include <iostream>
 #include <list>
 #include <time.h>
+#include <unistd.h>
 #include "ArchEnvironment.h"
 using namespace std;
 
@@ -70,7 +71,7 @@ void* prodRun(void* _arg){
 			while(arg->pause == true) {} // wait if you're paused
 			// peak period
 			/* sample peak start time */
-			clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
+			clock_gettime(CLOCK_MONOTONIC,ts);
 			unsigned long start_ns = ts->tv_nsec;
 			unsigned long start_sec = ts->tv_sec;
 			/* task generation and insertion */
@@ -79,14 +80,14 @@ void* prodRun(void* _arg){
 				// if i%100 == 0 - set task insertion time to current time in ms
 				if(i%100 == 0)
 				{
-					clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
+					clock_gettime(CLOCK_MONOTONIC,ts);
 					task->insertionTime_sec = ts->tv_sec;
 					task->insertionTime_ns = ts->tv_nsec;
 				}
 				producer->produce(*task);
 			}
 			/* sample peak end time and update timeMeasurements */
-			clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
+			clock_gettime(CLOCK_MONOTONIC,ts);
 			unsigned long finish_ns = ts->tv_nsec;
 			unsigned long finish_sec = ts->tv_sec;
 			if(start_sec < finish_sec)
@@ -175,7 +176,7 @@ void* consRun(void* _arg){
 	{	
 		// retrieve tasks in a loop
 		/* sample loop start time */
-		clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
+		clock_gettime(CLOCK_MONOTONIC,ts);
 		unsigned long start_sec = ts->tv_sec;
 		unsigned long start_ns = ts->tv_nsec;
 		/* retrieval loop */
@@ -193,7 +194,7 @@ void* consRun(void* _arg){
 			//delete dt;  // delete task
 		}
 		/* sample loop end time */
-		clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
+		clock_gettime(CLOCK_MONOTONIC,ts);
 		unsigned long finish_sec = ts->tv_sec;
 		unsigned long finish_ns = ts->tv_nsec;
 		/* update throughput */

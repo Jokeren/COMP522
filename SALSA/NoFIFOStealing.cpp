@@ -2,7 +2,7 @@
 #include <assert.h>
 
 #include "NoFIFOPool.h"
-#include "Benchmark/Threads.h"
+#include "Threads.h"
 #include "ArchEnvironment.h"
 
 #include "hp/hp.h"

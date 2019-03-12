@@ -16,7 +16,7 @@ ConsumerThread::ConsumerThread(int id) {
 /* consumer run: retrieve tasks in a loop */
 void ConsumerThread::run(){
 	/* get retrieval loop start time */
-	clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
+	clock_gettime(CLOCK_MONOTONIC_COARSE,ts);
 	unsigned long start_sec = ts->tv_sec;
 	unsigned long start_ns = ts->tv_nsec;
 	
@@ -35,7 +35,7 @@ void ConsumerThread::run(){
 	}
 	
 	/* get retrieval loop end time */
-	clock_gettime(_POSIX_MONOTONIC_CLOCK,ts);
+	clock_gettime(CLOCK_MONOTONIC_COARSE,ts);
 	unsigned long finish_sec = ts->tv_sec;
 	unsigned long finish_ns = ts->tv_nsec;
 	
