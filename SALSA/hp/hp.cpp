@@ -10,7 +10,7 @@
  */
 
 #include "hp.h"
-#include "../../Atomic.h"
+#include "../Atomic.h"
 
 #include <stdlib.h>
 #include <stdio.h>

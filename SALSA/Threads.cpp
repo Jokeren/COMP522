@@ -1,9 +1,5 @@
 #include "Threads.h"
-#include "MSQTaskPool.h"
 #include "NoFIFOPool.h"
-#include "NoFIFOCASPool.h"
-#include "SwedishPool.h"
-#include "LIFOPool.h"
 #include "hp/hp.h"
 #include <pthread.h>
 #include <sched.h>
@@ -153,25 +149,9 @@ void* consRun(void* _arg){
 	// allocate consumer's thread pool according to pool's type
 	string poolType;
 	assert(Configuration::getInstance()->getVal(poolType, "poolType"));
-	if(poolType.compare("MSQTaskPool") == 0)
-	{
-		*(arg->poolPtr) = new MSQTaskPool();
-	}
-	else if (poolType.compare("NoFIFOPool") == 0)
+	if (poolType.compare("NoFIFOPool") == 0)
 	{
 		*(arg->poolPtr) = new NoFIFOPool(arg->numOfProducers, arg->id);
-	}
-	else if (poolType.compare("NoFIFOCASPool") == 0)
-	{
-		*(arg->poolPtr) = new NoFIFOCASPool(arg->numOfProducers, arg->id);
-	}
-	else if (poolType.compare("LIFOPool") == 0)
-	{
-		*(arg->poolPtr) = new LIFOPool();
-	}
-	else if (poolType.compare("SwedishPool") == 0)
-	{
-		*(arg->poolPtr) = new SwedishPool(arg->numOfProducers, arg->id, true);
 	}
 	else
 	{

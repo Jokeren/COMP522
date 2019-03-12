@@ -8,7 +8,7 @@
 #ifndef NOFIFOPOOL_H_
 #define NOFIFOPOOL_H_
 
-#include "../SCTaskPool.h"
+#include "SCTaskPool.h"
 
 #include "ChunkPool.h"
 #include "SwLinkedList.h"

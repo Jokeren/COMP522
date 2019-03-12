@@ -282,7 +282,3 @@ int main(int argc, char* argv[])
 	delete[] consStatsArray;
 	return 0;
 }
-
-
-
-
