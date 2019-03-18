@@ -5,6 +5,8 @@ project (salsa)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g -std=c++11")
+
 set(SOURCES
     "ArchEnvironment.cpp"
     "AtomicStatistics.cpp"
@@ -30,3 +32,7 @@ add_executable(Main ${SOURCES})
 
 TARGET_LINK_LIBRARIES(Main pthread rt)
 
+find_library(JEMALLOC NAMES jemalloc PATHS ${JEMALLOC_DIR} PATH_SUFFIXES lib NO_DEFAULT_PATH)
+if (JEMALLOC)
+  TARGET_LINK_LIBRARIES(Main ${JEMALLOC})
+endif()
