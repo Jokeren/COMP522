@@ -1,8 +1,0 @@
-As described in Section~\ref{alg-structure}, each consumer keeps a pool of free chunks.
-When a producer needs a new chunk for adding a task to consumer $c_i$, it tries to get a chunk from $c_i$'s chunk pool -- if no free chunks are available, the {\bf produce()} operation fails.
-
-As described in Section~\ref{sec:system}, our system-wide policy defines that if an insertion operation fails, then the producer tries to insert a task to other pools. Thus, the producer avoids adding tasks to overloaded consumers, which in turn decreases the amount of costly steal operations. We further refer to this technique as producer-based balancing. 
-
-Another SALSA property is that a chunk is returned to the pool of a consumer that retrieves the latest task of this chunk. 
-Therefore, the size of the chunk pool of consumer $c_i$ is proportional to the rate of $c_i$'s task consumption.
-This property is especially appealing for heterogeneous systems -- a faster consumer $c_i$, (e.g., one running on a stronger or less loaded core), will have a larger chunk pool, and so more {\bf produce()} operations will insert tasks to $c_i$, automatically balancing the overall system load. 
