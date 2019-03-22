@@ -18,8 +18,6 @@
 
 namespace HP {
 
-typedef struct stack_t StackT, *Stack;
-
 typedef struct recliam_data_t {
 	void* address;
 	void* reclaimationFunc;
@@ -31,9 +29,11 @@ struct stack_t{
 	ReclaimationData* data;
 };
 
+typedef struct stack_t *Stack;
+
 // Returns new stack with size = initialSize
 Stack stackInit(int initialSize) {
-	Stack s = (Stack)malloc(sizeof(StackT));
+	Stack s = (Stack)malloc(sizeof(struct stack_t));
 	assert(s != NULL);
 	s->data = (ReclaimationData*)malloc(sizeof(ReclaimationData) * initialSize);
 	assert(s->data != NULL);
@@ -184,7 +184,7 @@ int binarySearch(long array[], int Size, long value)
 //Global vars
 
 //Head of HPrecord list - needed for thread register
-AtomicWrapper<HPRecord *> head;
+static AtomicWrapper<HPRecord *> head;
 //The per thread data
 __thread HPLocal localHPData;
 
@@ -221,6 +221,10 @@ struct HPLocal_t {
 };
 
 /*** External functions ***/
+void initHPHead() {
+  head.store(NULL);
+}
+
 
 HPData initHPData(int hpCountPerThread, int ThreadCount, int recCount) {
 	HPData res = (HPData) malloc(sizeof(struct HPData_t));

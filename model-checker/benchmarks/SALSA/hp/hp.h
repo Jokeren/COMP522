@@ -32,6 +32,8 @@ typedef struct HPLocal_t *HPLocal, HPLocalT;
 //Function for creating an HPData for use in the threadRegister function.
 HPData initHPData(int hpCountPerThread, int ThreadCount, int recCount=-1);
 
+void initHPHead();
+
 /*
  * Adds a thread to the HPReord list.
  * Returns an HPLocal var that the thread will hold locally,

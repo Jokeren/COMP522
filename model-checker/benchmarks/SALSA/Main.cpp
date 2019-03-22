@@ -3,6 +3,7 @@
 */
 #include "Threads.h"
 #include "ArchEnvironment.h"
+#include "hp/hp.h"
 #include <unistd.h>
 #include <assert.h>
 #include <stdlib.h>
@@ -64,47 +65,12 @@ void run(int consNum, consumerArg* consArgs, int prodNum, producerArg* prodArgs)
 		}
 	}
 
-//	if (prodFluctuations) {
-//		for(int i = 0; i < 10; i++) {
-//			int prodIdx = (rand()%prodNum);
-//			for(int p = 0; p < pausedThreads; p++) {
-//				prodArgs[(prodIdx + (p<<1))%prodNum].pause = true;
-//			}
-//
-//			usleep(100*timeToRun);
-//
-//			for(int p = 0; p < pausedThreads; p++) {
-//				prodArgs[(prodIdx + (p<<1))%prodNum].pause = false;
-//			}
-//		}
-//	} else if (consFluctuations) {
-//		for(int i = 0; i < 10; i++) {
-//			int consIdx = (rand()%consNum);
-//			for(int c = 0; c < pausedThreads; c++) {
-//				consArgs[(consIdx + (c<<1))%consNum].pause = true;
-//			}
-//
-//			usleep(100*timeToRun);
-//
-//			for(int c = 0; c < pausedThreads; c++) {
-//				consArgs[(consIdx + (c<<1))%consNum].pause = false;
-//			}
-//		}
-//	} else {
-//		usleep(1000*timeToRun);
-//	}
-
 	cout << "Terminating threads..." << endl;
 	syncFlags::stop();
 }
 
 int user_main(int argc, char* argv[])
 {
-	//if(argc < 2)
-	//{
-	//	cout << "no configuration file found. exiting.." << endl;
-	//	exit(1);
-	//}
 	setenv("WS_CONFIG", "SALSA/config.txt", 1);
 	int prodNum, consNum;
 	assert(Configuration::getInstance()->getVal(prodNum, "producersNum"));
@@ -148,6 +114,8 @@ int user_main(int argc, char* argv[])
 		prodArgs[i].numOfThreads = consNum + prodNum;
 		prodArgs[i].pause = false;
 	}
+
+  HP::initHPHead();
 	
 	//create and start threads
 	thrd_t* cThreads = new thrd_t[consNum];
@@ -194,38 +162,11 @@ int user_main(int argc, char* argv[])
 	unsigned long stealingCounter = 0;
 	AtomicStatistics* prodStats = new AtomicStatistics();
 	AtomicStatistics* consStats = new AtomicStatistics();
-	//for(int i = 0; i < prodNum; i++)
-	//{
-	//	producerStats* stats = (producerStats*)prodStatsArray[i];
-	//	TotalNumOfProducedTasks += stats->numOfProducedTasks;
-	//	TotalInsertionThroughput += stats->producerThroughput;
-	//	prodStats->add(&(stats->atomicStats));
-	//	delete stats;		
-	//}
-	//for(int i = 0; i < consNum; i++)
-	//{
-	//	consumerStats* stats = (consumerStats*)consStatsArray[i];
-	//	TotalNumOfRetrievedTasks += stats->numOfRetrievedTasks;
-	//	TotalSystemThroughput += stats->consumerThroughput;
-	//	consStats->add(&(stats->atomicStats));
-	//	//cout << "Consumer " << i << ": stealingCounter = " << stats->stealingCounter << endl;
-	//	stealingCounter += stats->stealingCounter;
-	//	delete stats;
-	//}
 	
-	//cout << "Total number of inserted tasks = " << TotalNumOfProducedTasks << endl;
 	cout << "Peak Insertion throughput (tasks/msec) = " << TotalInsertionThroughput << endl;
-	//cout << "Total Number of retrieved tasks = " << TotalNumOfRetrievedTasks << endl;
 	cout << "System Throughput (tasks/msec) = " << TotalSystemThroughput << endl;
 	double avgStealingAttempts = ((double)stealingCounter)/consNum;
 	cout << "Average Number of Work Stealing Attempts per Consumer = " << avgStealingAttempts << endl;
-
-//  prodStats->normalize(prodNum);
-//  consStats->normalize(consNum);
-//	cout << "Average Producer Atomic Statistics:" << endl;
-//	prodStats->print();
-//	cout << "Average Consumer Atomic Statistics:" << endl;
-//	consStats->print();
 
 	cout << "Producer Atomic Statistics:" << endl;
 	cout << "\t CAS operations per inserted task: "

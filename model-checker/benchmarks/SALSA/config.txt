@@ -21,7 +21,7 @@ peakLength=100000
 timeBetweenPeaks=0
 
 #Test runtime
-timeToRun=100
+timeToRun=1000
 
 # stealing on/off
 stealIterations=1

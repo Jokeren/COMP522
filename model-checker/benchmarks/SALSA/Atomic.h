@@ -27,15 +27,11 @@
 #define _ATOMIC_H
 #include <stdio.h>
 #include <atomic>
+#include <csignal>
 
 /* double-word - as in machine word - primitive
  * used for the double-compare-and-swap operations */
 typedef uint64_t DWORD;
-
-#define FAA atomic_fetch_add
-#define FAS atomic_fetch_sub
-#define CAS atomic_compare_exchange_strong
-#define DWCAS atomic_compare_exchange_strong
 
 template<typename T>
 class AtomicWrapper {
@@ -45,6 +41,7 @@ class AtomicWrapper {
   }
 
   T load(std::memory_order order = std::memory_order_seq_cst) {
+    printf("here1\n");
     return _entry.load(order);
   }
 
@@ -66,6 +63,7 @@ class AtomicWrapper<int> {
   }
 
   int load(std::memory_order order = std::memory_order_seq_cst) {
+    printf("here2\n");
     return _entry.load(order);
   }
 
