@@ -31,7 +31,9 @@ void prodRun(void* _arg){
 	//cout << "p" << id << " " << _cpu << " " << numa_node_of_cpu(_cpu) << endl;
 	/***************/
 	// wait until simulation starts
-	while(!syncFlags::getStartFlag()){}
+	while(!syncFlags::getStartFlag()){
+    thrd_yield();
+  }
 	
 	// create producer and run
 	int peakLength, timeBetweenPeaks;
@@ -49,7 +51,9 @@ void prodRun(void* _arg){
 		// peak-silence loop
 		while(!syncFlags::getStopFlag())
 		{
-			while(arg->pause == true) {} // wait if you're paused
+			while(arg->pause == true) {
+        thrd_yield();
+      } // wait if you're paused
 			// peak period
 			/* sample peak start time */
 			clock_gettime(CLOCK_MONOTONIC,ts);
@@ -78,6 +82,7 @@ void prodRun(void* _arg){
 			timeMeasurements->push_front(finish_ns-start_ns);
 			// silent period
 			if(timeBetweenPeaks > 0){1000*usleep(timeBetweenPeaks);}
+      thrd_yield();
 		}
 	}
 	delete ts;
@@ -121,7 +126,6 @@ void consRun(void* _arg){
 	if(forceAssignment.compare("yes") == 0)
 	{
 		int cpu = ArchEnvironment::getInstance()->getConsumerCore(id);
-		//assignToCPU(cpu);
 	}
 	/***** debug ********/
 	//cout << "c " << sched_getcpu() << endl;
@@ -143,7 +147,9 @@ void consRun(void* _arg){
 	syncFlags::incPoolsCounter();
 	
 	// wait until simulation starts
-	while(!syncFlags::getStartFlag()){}
+	while(!syncFlags::getStartFlag()){
+    thrd_yield();
+  }
 	
 	// create consumer and run
 	int numOfTasks = 0;
@@ -163,7 +169,9 @@ void consRun(void* _arg){
 		/* retrieval loop */
 		while(!syncFlags::getStopFlag())
 		{
-			while(arg->pause == true) {} // wait if you're paused
+			while(arg->pause == true) {
+        thrd_yield();
+      } // wait if you're paused
 			Task* task;
 			if(consumer->consume(task) != SUCCESS)
 			{
@@ -173,6 +181,7 @@ void consRun(void* _arg){
 			//DummyTask* dt = (DummyTask*)task;
 			//dt->run(NULL);  // run task
 			//delete dt;  // delete task
+      thrd_yield();
 		}
 		/* sample loop end time */
 		clock_gettime(CLOCK_MONOTONIC,ts);

@@ -133,7 +133,9 @@ int user_main(int argc, char* argv[])
 	
 	// busy-wait until all pools have been allocated
 	cout << "Waiting for pools initialization..." << endl;
-	while(syncFlags::getAllocatedPoolsCounter() < consNum){}
+	while(syncFlags::getAllocatedPoolsCounter() < consNum){
+    thrd_yield();
+  }
 	cout << "Pools created successfully..." << endl;
 	// set consumer-to-pool mapping in ArchEnvironment
 	ArchEnvironment::getInstance()->setConsumerToPoolMapping(pools);

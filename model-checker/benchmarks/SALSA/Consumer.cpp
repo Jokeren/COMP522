@@ -7,6 +7,7 @@
 #include "Consumer.h"
 #include "Configuration.h"
 #include "ArchEnvironment.h"
+#include <csignal>
 #include <assert.h>
 
 Consumer::Consumer(int _id)
