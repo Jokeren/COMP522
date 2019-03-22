@@ -184,7 +184,7 @@ int binarySearch(long array[], int Size, long value)
 //Global vars
 
 //Head of HPrecord list - needed for thread register
-std::atomic<HPRecord *> head;
+AtomicWrapper<HPRecord *> head;
 //The per thread data
 __thread HPLocal localHPData;
 
@@ -206,7 +206,7 @@ struct HPData_t {
 
 //A record that holds the hazard pointers of each thread.
 struct HPRecord_t {
-  std::atomic<struct HPRecord_t *> next; //Next record in the list.
+  AtomicWrapper<struct HPRecord_t *> next; //Next record in the list.
 	void* hp[]; //The hazardextern pointers
 };
 

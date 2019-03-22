@@ -106,7 +106,6 @@ int user_main(int argc, char* argv[])
 	//	exit(1);
 	//}
 	setenv("WS_CONFIG", "SALSA/config.txt", 1);
-  std::cout << argv[1] << std::endl;
 	int prodNum, consNum;
 	assert(Configuration::getInstance()->getVal(prodNum, "producersNum"));
 	assert(Configuration::getInstance()->getVal(consNum, "consumersNum"));
@@ -155,10 +154,12 @@ int user_main(int argc, char* argv[])
 	thrd_t* pThreads = new thrd_t[prodNum];
 	for(int i = 0; i < consNum; i++)
 	{
+    std::cout << "Consumer start " << i << std::endl;
 		thrd_create(&cThreads[i],consRun,(void*)&consArgs[i]);
 	}
 	for(int i = 0; i < prodNum; i++)
 	{
+    std::cout << "Producer start " << i << std::endl;
 		thrd_create(&pThreads[i],prodRun,(void*)&prodArgs[i]);
 	}
 	

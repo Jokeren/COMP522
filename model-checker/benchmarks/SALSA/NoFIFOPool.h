@@ -46,7 +46,7 @@ public:
 
 	class ProdCtx : public SCTaskPool::ProducerContext {
 	public:
-		ProdCtx(SwLinkedList& l, atomic<int> &count, ChunkPool& _chunkPool);
+		ProdCtx(SwLinkedList& l, AtomicWrapper<int> &count, ChunkPool& _chunkPool);
 		virtual ~ProdCtx() {};
 
 		virtual OpResult produce(Task& t, bool& changeConsumer, AtomicStatistics* stat);
@@ -57,7 +57,7 @@ public:
 		virtual OpResult produceImpl(Task& t, bool& changeConsumer, bool force, AtomicStatistics* stat);
 	private:
 		SwLinkedList& chunkList;
-		atomic<int>& chunkCount;
+		AtomicWrapper<int>& chunkCount;
 		ChunkPool& chunkPool;
 		SPChunk* curChunk;
 		HP::HPLocal hpLoc;
@@ -83,7 +83,7 @@ protected:
 	SwLinkedList* chunkLists;
 	SwNode* currentNode;
 	ChunkPool* chunkPool;
-	atomic<int> *chunkListSizes;
+	AtomicWrapper<int> *chunkListSizes;
 	int currentQueueID;
 	ReclaimChunkFunc* reclaimChunkFunc;
 	NoFIFOPool::ProdCtx** prodContexts;

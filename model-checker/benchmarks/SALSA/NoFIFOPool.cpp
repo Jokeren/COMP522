@@ -30,7 +30,7 @@ NoFIFOPool::NoFIFOPool(int _numProducers, int _consumerID) :
 
 	chunkPool = new ChunkPool(consumerID, initialPoolSize);
 	chunkLists = new SwLinkedList[_numProducers + 1];
-	chunkListSizes = new atomic<int>[numProducers + 1]();
+	chunkListSizes = new AtomicWrapper<int>[numProducers + 1]();
 	for (int i = 0; i < numProducers + 1; i++) {
 		chunkListSizes[i].store(0);
 	}

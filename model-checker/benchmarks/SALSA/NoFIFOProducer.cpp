@@ -1,7 +1,7 @@
 #include "NoFIFOPool.h"
 #include "hp/hp.h"
 
-NoFIFOPool::ProdCtx::ProdCtx(SwLinkedList& l, atomic<int> &c, ChunkPool& _chunkPool) :
+NoFIFOPool::ProdCtx::ProdCtx(SwLinkedList& l, AtomicWrapper<int> &c, ChunkPool& _chunkPool) :
 	chunkList(l),
 	chunkCount(c),
 	chunkPool(_chunkPool),

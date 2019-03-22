@@ -41,8 +41,8 @@ public:
 
 protected:
 	int head; // The index for insertion of the next task
-	atomic<int> owner;
-  std::atomic<Task *> tasks[TASKS_PER_CHUNK];
+	AtomicWrapper<int> owner;
+  AtomicWrapper<Task *> tasks[TASKS_PER_CHUNK];
 };
 
 #endif /* SPCHUNK_H_ */

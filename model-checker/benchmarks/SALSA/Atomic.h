@@ -37,4 +37,53 @@ typedef uint64_t DWORD;
 #define CAS atomic_compare_exchange_strong
 #define DWCAS atomic_compare_exchange_strong
 
+template<typename T>
+class AtomicWrapper {
+ public:
+  void store(T desired, std::memory_order order = std::memory_order_seq_cst) {
+    _entry.store(desired, order);
+  }
+
+  T load(std::memory_order order = std::memory_order_seq_cst) {
+    return _entry.load(order);
+  }
+
+  bool compare_exchange_strong(T& expected, T desired,
+    std::memory_order order = std::memory_order_seq_cst) {
+    return _entry.compare_exchange_strong(expected, desired, order);
+  }
+
+ private:
+  std::atomic<T> _entry;
+};
+
+
+template<>
+class AtomicWrapper<int> {
+ public:
+  void store(int desired, std::memory_order order = std::memory_order_seq_cst) {
+    _entry.store(desired, order);
+  }
+
+  int load(std::memory_order order = std::memory_order_seq_cst) {
+    return _entry.load(order);
+  }
+
+  bool compare_exchange_strong(int& expected, int desired,
+    std::memory_order order = std::memory_order_seq_cst) {
+    return _entry.compare_exchange_strong(expected, desired, order);
+  }
+
+  int fetch_add(int arg, std::memory_order order = std::memory_order_seq_cst) {
+    return _entry.fetch_add(arg, order);
+  }
+
+  int fetch_sub(int arg, std::memory_order order = std::memory_order_seq_cst) {
+    return _entry.fetch_sub(arg, order);
+  }
+
+ private:
+  std::atomic<int> _entry;
+};
+
 #endif /* _ATOMIC_H  */
