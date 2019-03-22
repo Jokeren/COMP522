@@ -37,4 +37,24 @@ typedef uint64_t DWORD;
 #define CAS atomic_compare_exchange_strong
 #define DWCAS atomic_compare_exchange_strong
 
+template<typename T>
+class AtomicWrapper {
+ public:
+  void store(T desired, std::memory_order order = std::memory_order_seq_cst) {
+    _entry.store(desired, order);
+  }
+
+  T load(std::memory_order order = std::memory_order_seq_cst) const {
+    return _entry.load(order);
+  }
+
+  bool compare_exchange_strong(T& expected, T desired,
+    std::memory_order order = std::memory_order_seq_cst) {
+    return _entry.compare_exchange_strong(expected, desired, order);
+  }
+
+ private:
+  std::atomic<T> _entry;
+};
+
 #endif /* _ATOMIC_H  */

@@ -14,16 +14,16 @@ template<class T> class MSQueue{
 	
 	struct node_t {
 		T value;
-    std::atomic<node_t *> next;
+    AtomicWrapper<node_t *> next;
 	};
 	
 	/* queue's head and tail */
-  std::atomic<node_t *> Head;
-  std::atomic<node_t *> Tail;
+  AtomicWrapper<node_t *> Head;
+  AtomicWrapper<node_t *> Tail;
 	
 	
 	/* performs double-width CAS of pointer_t objects and updates CAS statistics in stat */
-	bool mCAS(atomic<node_t *> &dest, node_t *oldVal, node_t *newVal, AtomicStatistics* stat){
+	bool mCAS(AtomicWrapper<node_t *> &dest, node_t *oldVal, node_t *newVal, AtomicStatistics* stat){
     bool retVal = dest.compare_exchange_strong(oldVal, newVal);
 		stat->CAS_count_inc();
 		if(!retVal){stat->CAS_failures_inc();}
