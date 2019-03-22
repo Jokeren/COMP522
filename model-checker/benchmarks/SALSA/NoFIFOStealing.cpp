@@ -98,10 +98,10 @@ Task* NoFIFOPool::steal(SCTaskPool* from_, AtomicStatistics* stat) {
 	prevNode->chunk = NULL;
 
 	// update counters for stealer and the one we stole from
-	FAA(&(chunkListSizes[numProducers]), 1); stat->FetchAndIncCount_inc();
+	chunkListSizes[numProducers].fetch_add(1); stat->FetchAndIncCount_inc();
 
 	assert(newNode->consumerIdx +1 < c->getMaxSize() && newNode->consumerIdx == prevNode->consumerIdx);
-	FAS(&(from->chunkListSizes[stealQueueID]), 1); stat->FetchAndIncCount_inc();
+	from->chunkListSizes[stealQueueID].fetch_sub(1); stat->FetchAndIncCount_inc();
 	// try to grab the task from the stolen chunk (in order to guarantee progress)
 	int idx = newNode->consumerIdx;
 	Task* task = NULL;
