@@ -37,8 +37,8 @@ class syncFlags{
 	static volatile int allocatedPoolsCounter;
 	static volatile bool simulationStop;
 public:
-	static void start(){simulationStart = true;}
-	static void incPoolsCounter(){__sync_fetch_and_add(&allocatedPoolsCounter,1);}
+	static void __attribute__((no_sanitize_thread)) start(){simulationStart = true;}
+	static void __attribute__((no_sanitize_thread)) incPoolsCounter(){__sync_fetch_and_add(&allocatedPoolsCounter,1);}
 	static void stop(){simulationStop = true;}
 	static int getAllocatedPoolsCounter(){return allocatedPoolsCounter;}
 	static bool getStartFlag(){return simulationStart;}

@@ -39,19 +39,19 @@ OpResult Consumer::consume(Task*& t) {
 	OpResult res = myPool->consume(t, stat);
 	if (res == SUCCESS || stealIterations <= 0) return res;
 
-	for(int stealIter = 0; stealIter < stealIterations; stealIter++) {
-		if (myPool->consume(t,stat) == SUCCESS) return SUCCESS;
-	}
+	//for(int stealIter = 0; stealIter < stealIterations; stealIter++) {
+	//	if (myPool->consume(t,stat) == SUCCESS) return SUCCESS;
+	//}
 
 	float stealThreshold = myPool->getStealingThreshold();
-	if (curStealPool != NULL && curStealPool->getStealingScore() >= stealThreshold) {
+	if (curStealPool != NULL) {
 		stealingCounter++;
 		t = myPool->steal(curStealPool, stat);
 		if (t != NULL) return SUCCESS;
 	}
 
 	for(int c = 1; c < consumersNum; c++) {
-		if (consumers[c]->getStealingScore() >= stealThreshold) {
+		//if (consumers[c]->getStealingScore() >= stealThreshold) {
 			// try to steal from that pool
 			stealingCounter++;
 			t = myPool->steal(consumers[c],stat);
@@ -60,7 +60,7 @@ OpResult Consumer::consume(Task*& t) {
 				curStealPool = consumers[c];
 				return SUCCESS;
 			}
-		}
+		//}
 	}
 
 	// the container is probably empty

@@ -7,10 +7,10 @@ OBJECTS := $(patsubst %.cpp, %.o, $(SOURCE_FILES))
 all: $(TESTNAME)
 
 $(TESTNAME): $(OBJECTS)
-	$(CXX) -o $@ $(OBJECTS) -std=c++11 -g -lpthread
+	$(CXX) -o $@ $(OBJECTS) -std=c++11 -g -lpthread -fsanitize=thread
 
 $(OBJECTS): %.o : %.cpp
-	$(CXX) -c -o $@ $<
+	$(CXX) -c -o $@ $< -fsanitize=thread -g
 
 clean:
 	rm -f $(TESTNAME) *.o hp/*.o

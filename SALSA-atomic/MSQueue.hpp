@@ -10,7 +10,7 @@ using namespace std;
 
 template<class T> class MSQueue{
 
-  std::atomic<int> queueSize;
+  AtomicWrapper<int> queueSize;
 	
 	struct node_t {
 		T value;
@@ -67,7 +67,7 @@ public:
 					node_t *updated_next = pNode;
 					if(mCAS(tail->next,next,updated_next,stat))  // try to link node at the end of the list
 					{
-						FAA(&queueSize, 1);
+            queueSize.fetch_add(1);
 						stat->FetchAndIncCount_inc();
 						break;  //enqueue is done - exit loop
 					}

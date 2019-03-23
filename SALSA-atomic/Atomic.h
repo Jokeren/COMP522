@@ -27,34 +27,59 @@
 #define _ATOMIC_H
 #include <stdio.h>
 #include <atomic>
+#include <csignal>
 
 /* double-word - as in machine word - primitive
  * used for the double-compare-and-swap operations */
 typedef uint64_t DWORD;
 
-#define FAA atomic_fetch_add
-#define FAS atomic_fetch_sub
-#define CAS atomic_compare_exchange_strong
-#define DWCAS atomic_compare_exchange_strong
-
 template<typename T>
 class AtomicWrapper {
  public:
-  void store(T desired, std::memory_order order = std::memory_order_seq_cst) {
+  void __attribute__((no_sanitize_thread)) store(T desired, std::memory_order order = std::memory_order_seq_cst) {
     _entry.store(desired, order);
   }
 
-  T load(std::memory_order order = std::memory_order_seq_cst) const {
+  T __attribute__((no_sanitize_thread)) load(std::memory_order order = std::memory_order_seq_cst) {
     return _entry.load(order);
   }
 
-  bool compare_exchange_strong(T& expected, T desired,
+  bool __attribute__((no_sanitize_thread)) compare_exchange_strong(T& expected, T desired,
     std::memory_order order = std::memory_order_seq_cst) {
     return _entry.compare_exchange_strong(expected, desired, order);
   }
 
  private:
   std::atomic<T> _entry;
+};
+
+
+template<>
+class AtomicWrapper<int> {
+ public:
+  void __attribute__((no_sanitize_thread)) store(int desired, std::memory_order order = std::memory_order_seq_cst) {
+    _entry.store(desired, order);
+  }
+
+  int __attribute__((no_sanitize_thread)) load(std::memory_order order = std::memory_order_seq_cst) {
+    return _entry.load(order);
+  }
+
+  bool __attribute__((no_sanitize_thread)) compare_exchange_strong(int& expected, int desired,
+    std::memory_order order = std::memory_order_seq_cst) {
+    return _entry.compare_exchange_strong(expected, desired, order);
+  }
+
+  int __attribute__((no_sanitize_thread)) fetch_add(int arg, std::memory_order order = std::memory_order_seq_cst) {
+    return _entry.fetch_add(arg, order);
+  }
+
+  int __attribute__((no_sanitize_thread)) fetch_sub(int arg, std::memory_order order = std::memory_order_seq_cst) {
+    return _entry.fetch_sub(arg, order);
+  }
+
+ private:
+  std::atomic<int> _entry;
 };
 
 #endif /* _ATOMIC_H  */

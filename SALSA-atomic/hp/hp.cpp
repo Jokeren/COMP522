@@ -18,8 +18,6 @@
 
 namespace HP {
 
-typedef struct stack_t StackT, *Stack;
-
 typedef struct recliam_data_t {
 	void* address;
 	void* reclaimationFunc;
@@ -30,6 +28,8 @@ struct stack_t{
 	int size;
 	ReclaimationData* data;
 };
+
+typedef struct stack_t StackT, *Stack;
 
 // Returns new stack with size = initialSize
 Stack stackInit(int initialSize) {
