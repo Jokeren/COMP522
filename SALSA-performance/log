@@ -1,0 +1,2255 @@
+producersNum = 4 , consumersNum = 4
+poolType is NoFIFOPool
+producerMigrate = 1
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 1000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1c00000060 by thread T5:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x000000409fcf)
+    #1 ArchEnvironment::getSortedConsumers(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:210 (Main+0x00000040a0a7)
+    #2 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:19 (Main+0x0000004035e8)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b1c00000060 by main thread:
+    #0 ArchEnvironment::setConsumerToPoolMapping(SCTaskPool**) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.h:28 (Main+0x00000040ef91)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:134 (Main+0x00000040dd80)
+
+  Location is heap block of size 104 at 0x7b1c00000000 allocated by main thread:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 ArchEnvironment::getInstance() /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:14 (Main+0x0000004083b2)
+    #2 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:88 (Main+0x00000040d839)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0800000060 by thread T5:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x00000040a01f)
+    #1 ArchEnvironment::getSortedConsumers(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:210 (Main+0x00000040a0a7)
+    #2 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:19 (Main+0x0000004035e8)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b0800000060 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 32 at 0x7b0800000060 allocated by main thread:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:91 (Main+0x00000040d873)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1c00000060 by thread T1:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x000000409fcf)
+    #1 ArchEnvironment::getSortedConsumers(Consumer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:216 (Main+0x00000040a115)
+    #2 Consumer::Consumer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:15 (Main+0x00000040c35a)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:155 (Main+0x000000412d53)
+
+  Previous write of size 8 at 0x7b1c00000060 by main thread:
+    #0 ArchEnvironment::setConsumerToPoolMapping(SCTaskPool**) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.h:28 (Main+0x00000040ef91)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:134 (Main+0x00000040dd80)
+
+  Location is heap block of size 104 at 0x7b1c00000000 allocated by main thread:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 ArchEnvironment::getInstance() /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:14 (Main+0x0000004083b2)
+    #2 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:88 (Main+0x00000040d839)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1c00000060 by thread T7:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x000000409fcf)
+    #1 ArchEnvironment::getSortedConsumers(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:210 (Main+0x00000040a0a7)
+    #2 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:19 (Main+0x0000004035e8)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b1c00000060 by main thread:
+    #0 ArchEnvironment::setConsumerToPoolMapping(SCTaskPool**) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.h:28 (Main+0x00000040ef91)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:134 (Main+0x00000040dd80)
+
+  Location is heap block of size 104 at 0x7b1c00000000 allocated by main thread:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 ArchEnvironment::getInstance() /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:14 (Main+0x0000004083b2)
+    #2 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:88 (Main+0x00000040d839)
+
+  Thread T7 (tid=70027, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1c00000060 by thread T6:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x000000409fcf)
+    #1 ArchEnvironment::getSortedConsumers(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:210 (Main+0x00000040a0a7)
+    #2 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:19 (Main+0x0000004035e8)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b1c00000060 by main thread:
+    #0 ArchEnvironment::setConsumerToPoolMapping(SCTaskPool**) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.h:28 (Main+0x00000040ef91)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:134 (Main+0x00000040dd80)
+
+  Location is heap block of size 104 at 0x7b1c00000000 allocated by main thread:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 ArchEnvironment::getInstance() /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:14 (Main+0x0000004083b2)
+    #2 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:88 (Main+0x00000040d839)
+
+  Thread T6 (tid=70026, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1c00000060 by thread T2:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x000000409fcf)
+    #1 ArchEnvironment::getSortedConsumers(Consumer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:216 (Main+0x00000040a115)
+    #2 Consumer::Consumer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:15 (Main+0x00000040c35a)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:155 (Main+0x000000412d53)
+
+  Previous write of size 8 at 0x7b1c00000060 by main thread:
+    #0 ArchEnvironment::setConsumerToPoolMapping(SCTaskPool**) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.h:28 (Main+0x00000040ef91)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:134 (Main+0x00000040dd80)
+
+  Location is heap block of size 104 at 0x7b1c00000000 allocated by main thread:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 ArchEnvironment::getInstance() /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:14 (Main+0x0000004083b2)
+    #2 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:88 (Main+0x00000040d839)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1c00000060 by thread T8:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x000000409fcf)
+    #1 ArchEnvironment::getSortedConsumers(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:210 (Main+0x00000040a0a7)
+    #2 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:19 (Main+0x0000004035e8)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b1c00000060 by main thread:
+    #0 ArchEnvironment::setConsumerToPoolMapping(SCTaskPool**) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.h:28 (Main+0x00000040ef91)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:134 (Main+0x00000040dd80)
+
+  Location is heap block of size 104 at 0x7b1c00000000 allocated by main thread:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 ArchEnvironment::getInstance() /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:14 (Main+0x0000004083b2)
+    #2 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:88 (Main+0x00000040d839)
+
+  Thread T8 (tid=70028, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1c00000060 by thread T4:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x000000409fcf)
+    #1 ArchEnvironment::getSortedConsumers(Consumer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:216 (Main+0x00000040a115)
+    #2 Consumer::Consumer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:15 (Main+0x00000040c35a)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:155 (Main+0x000000412d53)
+
+  Previous write of size 8 at 0x7b1c00000060 by main thread:
+    #0 ArchEnvironment::setConsumerToPoolMapping(SCTaskPool**) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.h:28 (Main+0x00000040ef91)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:134 (Main+0x00000040dd80)
+
+  Location is heap block of size 104 at 0x7b1c00000000 allocated by main thread:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 ArchEnvironment::getInstance() /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:14 (Main+0x0000004083b2)
+    #2 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:88 (Main+0x00000040d839)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1c00000060 by thread T3:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x000000409fcf)
+    #1 ArchEnvironment::getSortedConsumers(Consumer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:216 (Main+0x00000040a115)
+    #2 Consumer::Consumer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:15 (Main+0x00000040c35a)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:155 (Main+0x000000412d53)
+
+  Previous write of size 8 at 0x7b1c00000060 by main thread:
+    #0 ArchEnvironment::setConsumerToPoolMapping(SCTaskPool**) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.h:28 (Main+0x00000040ef91)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:134 (Main+0x00000040dd80)
+
+  Location is heap block of size 104 at 0x7b1c00000000 allocated by main thread:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 ArchEnvironment::getInstance() /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:14 (Main+0x0000004083b2)
+    #2 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:88 (Main+0x00000040d839)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0800000068 by thread T5:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x00000040a01f)
+    #1 ArchEnvironment::getSortedConsumers(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:210 (Main+0x00000040a0a7)
+    #2 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:19 (Main+0x0000004035e8)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b0800000068 by thread T2:
+    #0 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412cb3)
+
+  Location is heap block of size 32 at 0x7b0800000060 allocated by main thread:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:91 (Main+0x00000040d873)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0800000068 by thread T1:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x00000040a01f)
+    #1 ArchEnvironment::getSortedConsumers(Consumer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:216 (Main+0x00000040a115)
+    #2 Consumer::Consumer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:15 (Main+0x00000040c35a)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:155 (Main+0x000000412d53)
+
+  Previous write of size 8 at 0x7b0800000068 by thread T2:
+    #0 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412cb3)
+
+  Location is heap block of size 32 at 0x7b0800000060 allocated by main thread:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:91 (Main+0x00000040d873)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0800000070 by thread T7:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x00000040a01f)
+    #1 ArchEnvironment::getSortedConsumers(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:210 (Main+0x00000040a0a7)
+    #2 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:19 (Main+0x0000004035e8)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b0800000070 by thread T3:
+    #0 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412cb3)
+
+  Location is heap block of size 32 at 0x7b0800000060 allocated by main thread:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:91 (Main+0x00000040d873)
+
+  Thread T7 (tid=70027, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0800000068 by thread T6:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x00000040a01f)
+    #1 ArchEnvironment::getSortedConsumers(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:210 (Main+0x00000040a0a7)
+    #2 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:19 (Main+0x0000004035e8)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b0800000068 by thread T2:
+    #0 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412cb3)
+
+  Location is heap block of size 32 at 0x7b0800000060 allocated by main thread:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:91 (Main+0x00000040d873)
+
+  Thread T6 (tid=70026, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0800000070 by thread T2:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x00000040a01f)
+    #1 ArchEnvironment::getSortedConsumers(Consumer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:216 (Main+0x00000040a115)
+    #2 Consumer::Consumer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:15 (Main+0x00000040c35a)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:155 (Main+0x000000412d53)
+
+  Previous write of size 8 at 0x7b0800000070 by thread T3:
+    #0 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412cb3)
+
+  Location is heap block of size 32 at 0x7b0800000060 allocated by main thread:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:91 (Main+0x00000040d873)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0800000078 by thread T8:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x00000040a01f)
+    #1 ArchEnvironment::getSortedConsumers(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:210 (Main+0x00000040a0a7)
+    #2 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:19 (Main+0x0000004035e8)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b0800000078 by thread T4:
+    #0 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412cb3)
+
+  Location is heap block of size 32 at 0x7b0800000060 allocated by main thread:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:91 (Main+0x00000040d873)
+
+  Thread T8 (tid=70028, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0800000068 by thread T4:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x00000040a01f)
+    #1 ArchEnvironment::getSortedConsumers(Consumer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:216 (Main+0x00000040a115)
+    #2 Consumer::Consumer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:15 (Main+0x00000040c35a)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:155 (Main+0x000000412d53)
+
+  Previous write of size 8 at 0x7b0800000068 by thread T2:
+    #0 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412cb3)
+
+  Location is heap block of size 32 at 0x7b0800000060 allocated by main thread:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:91 (Main+0x00000040d873)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0800000078 by thread T3:
+    #0 ArchEnvironment::getSortedConsumers(int, bool) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 (Main+0x00000040a01f)
+    #1 ArchEnvironment::getSortedConsumers(Consumer const&) /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:216 (Main+0x00000040a115)
+    #2 Consumer::Consumer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:15 (Main+0x00000040c35a)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:155 (Main+0x000000412d53)
+
+  Previous write of size 8 at 0x7b0800000078 by thread T4:
+    #0 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412cb3)
+
+  Location is heap block of size 32 at 0x7b0800000060 allocated by main thread:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:91 (Main+0x00000040d873)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ArchEnvironment.cpp:191 in ArchEnvironment::getSortedConsumers(int, bool)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1800003000 by thread T5:
+    #0 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x00000040368f)
+    #1 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b1800003000 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 88 at 0x7b1800003000 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 in Producer::Producer(int)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1800003040 by thread T5:
+    #0 NoFIFOPool::getProducerContext(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 (Main+0x000000415daa)
+    #1 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x0000004036ad)
+    #2 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b1800003040 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 88 at 0x7b1800003000 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 in NoFIFOPool::getProducerContext(Producer const&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0800001140 by thread T5:
+    #0 NoFIFOPool::getProducerContext(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 (Main+0x000000415dcf)
+    #1 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x0000004036ad)
+    #2 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b0800001140 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 32 at 0x7b0800001140 allocated by thread T1:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:40 (Main+0x000000415766)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 in NoFIFOPool::getProducerContext(Producer const&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c00001860 by thread T5:
+    #0 NoFIFOPool::getProducerContext(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 (Main+0x000000415ddd)
+    #1 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x0000004036ad)
+    #2 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b0c00001860 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 48 at 0x7b0c00001860 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 in NoFIFOPool::getProducerContext(Producer const&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c00001888 by thread T5:
+    #0 NoFIFOPool::ProdCtx::setHP() /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:50 (Main+0x000000415110)
+    #1 NoFIFOPool::getProducerContext(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 (Main+0x000000415df5)
+    #2 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x0000004036ad)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b0c00001888 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 48 at 0x7b0c00001860 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:50 in NoFIFOPool::ProdCtx::setHP()
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b180000c000 by thread T8:
+    #0 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x00000040368f)
+    #1 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b180000c000 by thread T4:
+    [failed to restore the stack]
+
+  Location is heap block of size 88 at 0x7b180000c000 allocated by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T8 (tid=70028, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 in Producer::Producer(int)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1800003000 by thread T4:
+    #0 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:54 (Main+0x00000040ca76)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b1800003000 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 88 at 0x7b1800003000 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:54 in Consumer::consume(Task*&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 4 at 0x7b1800003008 by thread T4:
+    #0 NoFIFOPool::getLongestListIdx() const /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:22 (Main+0x00000040fe63)
+    #1 NoFIFOPool::getStealingScore() const /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:33 (Main+0x00000040ff6b)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:54 (Main+0x00000040ca8d)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b1800003008 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 88 at 0x7b1800003000 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:22 in NoFIFOPool::getLongestListIdx() const
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1800003028 by thread T4:
+    #0 NoFIFOPool::getLongestListIdx() const /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:23 (Main+0x00000040fe83)
+    #1 NoFIFOPool::getStealingScore() const /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:33 (Main+0x00000040ff6b)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:54 (Main+0x00000040ca8d)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b1800003028 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 88 at 0x7b1800003000 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:23 in NoFIFOPool::getLongestListIdx() const
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1800006028 by thread T4:
+    #0 NoFIFOPool::getLongestListIdx() const /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:23 (Main+0x00000040fe83)
+    #1 NoFIFOPool::getStealingScore() const /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:33 (Main+0x00000040ff6b)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:54 (Main+0x00000040ca8d)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b1800006028 by thread T2:
+    #0 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:33 (Main+0x00000041564c)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 88 at 0x7b1800006000 allocated by thread T2:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:23 in NoFIFOPool::getLongestListIdx() const
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1800006000 by thread T6:
+    #0 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x00000040368f)
+    #1 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b1800006000 by thread T2:
+    [failed to restore the stack]
+
+  Location is heap block of size 88 at 0x7b1800006000 allocated by thread T2:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T6 (tid=70026, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 in Producer::Producer(int)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1800009000 by thread T2:
+    #0 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:54 (Main+0x00000040ca76)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b1800009000 by thread T3:
+    [failed to restore the stack]
+
+  Location is heap block of size 88 at 0x7b1800009000 allocated by thread T3:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:54 in Consumer::consume(Task*&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c00001880 by thread T5:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:23 (Main+0x000000414efd)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c00001880 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 48 at 0x7b0c00001860 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:23 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c00001878 by thread T5:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:26 (Main+0x000000414f1e)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c00001878 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 48 at 0x7b0c00001860 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:26 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0800001030 by thread T5:
+    #0 ChunkPool::getChunk(AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/ChunkPool.cpp:32 (Main+0x000000410ff6)
+    #1 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:26 (Main+0x000000414f35)
+    #2 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #3 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #4 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0800001030 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 24 at 0x7b0800001020 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:31 (Main+0x0000004154d2)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/ChunkPool.cpp:32 in ChunkPool::getChunk(AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1800006000 by thread T1:
+    #0 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:54 (Main+0x00000040ca76)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b1800006000 by thread T2:
+    [failed to restore the stack]
+
+  Location is heap block of size 88 at 0x7b1800006000 allocated by thread T2:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:54 in Consumer::consume(Task*&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c00001870 by thread T5:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:35 (Main+0x000000414fa4)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c00001870 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 48 at 0x7b0c00001860 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:35 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c00001868 by thread T5:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x000000414fee)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c00001868 by thread T1:
+    [failed to restore the stack]
+
+  Location is heap block of size 48 at 0x7b0c00001860 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b180000c040 by thread T8:
+    #0 NoFIFOPool::getProducerContext(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 (Main+0x000000415daa)
+    #1 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x0000004036ad)
+    #2 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b180000c040 by thread T4:
+    #0 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:40 (Main+0x000000415783)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 88 at 0x7b180000c000 allocated by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T8 (tid=70028, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 in NoFIFOPool::getProducerContext(Producer const&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0800004158 by thread T8:
+    #0 NoFIFOPool::getProducerContext(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 (Main+0x000000415dcf)
+    #1 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x0000004036ad)
+    #2 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b0800004158 by thread T4:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:40 (Main+0x000000415766)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 32 at 0x7b0800004140 allocated by thread T4:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:40 (Main+0x000000415766)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T8 (tid=70028, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 in NoFIFOPool::getProducerContext(Producer const&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c000060f0 by thread T8:
+    #0 NoFIFOPool::getProducerContext(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 (Main+0x000000415ddd)
+    #1 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x0000004036ad)
+    #2 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b0c000060f0 by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 48 at 0x7b0c000060f0 allocated by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T8 (tid=70028, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 in NoFIFOPool::getProducerContext(Producer const&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c00006118 by thread T8:
+    #0 NoFIFOPool::ProdCtx::setHP() /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:50 (Main+0x000000415110)
+    #1 NoFIFOPool::getProducerContext(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 (Main+0x000000415df5)
+    #2 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x0000004036ad)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b0c00006118 by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 48 at 0x7b0c000060f0 allocated by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T8 (tid=70028, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:50 in NoFIFOPool::ProdCtx::setHP()
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Write of size 8 at 0x7b0c00001808 by thread T4:
+    #0 HP::setHP(int, void*, HP::HPLocal_t*) hp/hp.cpp:316 (Main+0x000000417a62)
+    #1 SwLinkedList::getLast(HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:110 (Main+0x00000040f62d)
+    #2 NoFIFOPool::getStealNode(int&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:49 (Main+0x00000041007c)
+    #3 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:56 (Main+0x000000410103)
+    #4 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #5 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b0c00001808 by thread T1:
+    #0 HP::setHP(int, void*, HP::HPLocal_t*) hp/hp.cpp:316 (Main+0x000000417a62)
+    #1 SwLinkedList::SwLinkedListIterator::SwLinkedListIterator(SwLinkedList*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:125 (Main+0x00000040f774)
+    #2 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:75 (Main+0x000000415f8b)
+    #3 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:39 (Main+0x00000040c737)
+    #4 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 40 at 0x7b0c00001800 allocated by thread T1:
+    #0 malloc /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:589 (libtsan.so.0+0x000000027811)
+    #1 HP::threadRegister(HP::HPData_t*) hp/hp.cpp:250 (Main+0x00000041752b)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:118 (Main+0x000000412adb)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race hp/hp.cpp:316 in HP::setHP(int, void*, HP::HPLocal_t*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Write of size 8 at 0x7b0c00001808 by thread T2:
+    #0 HP::setHP(int, void*, HP::HPLocal_t*) hp/hp.cpp:316 (Main+0x000000417a62)
+    #1 SwLinkedList::getLast(HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:110 (Main+0x00000040f62d)
+    #2 NoFIFOPool::getStealNode(int&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:49 (Main+0x00000041007c)
+    #3 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:56 (Main+0x000000410103)
+    #4 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #5 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b0c00001808 by thread T1:
+    #0 HP::setHP(int, void*, HP::HPLocal_t*) hp/hp.cpp:316 (Main+0x000000417a62)
+    #1 SwLinkedList::SwLinkedListIterator::SwLinkedListIterator(SwLinkedList*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:125 (Main+0x00000040f774)
+    #2 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:75 (Main+0x000000415f8b)
+    #3 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:39 (Main+0x00000040c737)
+    #4 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 40 at 0x7b0c00001800 allocated by thread T1:
+    #0 malloc /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:589 (libtsan.so.0+0x000000027811)
+    #1 HP::threadRegister(HP::HPData_t*) hp/hp.cpp:250 (Main+0x00000041752b)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:118 (Main+0x000000412adb)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race hp/hp.cpp:316 in HP::setHP(int, void*, HP::HPLocal_t*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Write of size 8 at 0x7b0800001070 by thread T5:
+    #0 SwLinkedList::append(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:103 (Main+0x00000040f5b1)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:71 (Main+0x00000040f32f)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous read of size 8 at 0x7b0800001070 by thread T1:
+    #0 SwLinkedList::SwLinkedListIterator::next(SwNode*&) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:135 (Main+0x00000040f843)
+    #1 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:85 (Main+0x0000004160a8)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:39 (Main+0x00000040c737)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 24 at 0x7b0800001060 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::SwLinkedList() /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:39 (Main+0x00000040f055)
+    #2 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:32 (Main+0x000000415594)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:103 in SwLinkedList::append(SwNode*, HP::HPLocal_t*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b180000c000 by thread T3:
+    #0 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:54 (Main+0x00000040ca76)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b180000c000 by thread T4:
+    [failed to restore the stack]
+
+  Location is heap block of size 88 at 0x7b180000c000 allocated by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:54 in Consumer::consume(Task*&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1800009000 by thread T7:
+    #0 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x00000040368f)
+    #1 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b1800009000 by thread T3:
+    [failed to restore the stack]
+
+  Location is heap block of size 88 at 0x7b1800009000 allocated by thread T3:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T7 (tid=70027, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 in Producer::Producer(int)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b1800006040 by thread T6:
+    #0 NoFIFOPool::getProducerContext(Producer const&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 (Main+0x000000415daa)
+    #1 Producer::Producer(int) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:21 (Main+0x0000004036ad)
+    #2 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:45 (Main+0x000000412359)
+
+  Previous write of size 8 at 0x7b1800006040 by thread T2:
+    #0 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:40 (Main+0x000000415783)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 88 at 0x7b1800006000 allocated by thread T2:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c59)
+
+  Thread T6 (tid=70026, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:60 in NoFIFOPool::getProducerContext(Producer const&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c00006110 by thread T8:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:23 (Main+0x000000414efd)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c00006110 by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 48 at 0x7b0c000060f0 allocated by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T8 (tid=70028, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:23 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Write of size 8 at 0x7b2000000018 by thread T5:
+    #0 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:72 (Main+0x00000040f33f)
+    #1 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #2 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #3 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #4 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous read of size 8 at 0x7b2000000018 by thread T2:
+    #0 SwLinkedList::getLast(HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:109 (Main+0x00000040f60c)
+    #1 NoFIFOPool::getStealNode(int&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:49 (Main+0x00000041007c)
+    #2 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:56 (Main+0x000000410103)
+    #3 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #4 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 128 at 0x7b2000000000 allocated by thread T1:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:32 (Main+0x00000041556a)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:72 in SwLinkedList::append(SPChunk*, HP::HPLocal_t*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b08000050a0 by thread T1:
+    #0 SwLinkedList::SwLinkedListIterator::next(SwNode*&) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:143 (Main+0x00000040f934)
+    #1 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:85 (Main+0x0000004160a8)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:43 (Main+0x00000040c80b)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000050a0 by thread T5:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Location is heap block of size 24 at 0x7b08000050a0 allocated by thread T5:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:143 in SwLinkedList::SwLinkedListIterator::next(SwNode*&)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b2000000018 by thread T3:
+    #0 SwLinkedList::getLast(HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:109 (Main+0x00000040f60c)
+    #1 NoFIFOPool::getStealNode(int&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:49 (Main+0x00000041007c)
+    #2 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:56 (Main+0x000000410103)
+    #3 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #4 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b2000000018 by thread T5:
+    #0 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:72 (Main+0x00000040f33f)
+    #1 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #2 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #3 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #4 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Location is heap block of size 128 at 0x7b2000000000 allocated by thread T1:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:32 (Main+0x00000041556a)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:109 in SwLinkedList::getLast(HP::HPLocal_t*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c000048e0 by thread T7:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:23 (Main+0x000000414efd)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c000048e0 by thread T3:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 48 at 0x7b0c000048c0 allocated by thread T3:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T7 (tid=70027, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:23 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c000048d8 by thread T7:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:26 (Main+0x000000414f1e)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c000048d8 by thread T3:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 48 at 0x7b0c000048c0 allocated by thread T3:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T7 (tid=70027, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:26 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c000030a8 by thread T6:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:26 (Main+0x000000414f1e)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c000030a8 by thread T2:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 48 at 0x7b0c00003090 allocated by thread T2:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T6 (tid=70026, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:26 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b08000050a0 by thread T4:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 (Main+0x000000410153)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000050a0 by thread T5:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Location is heap block of size 24 at 0x7b08000050a0 allocated by thread T5:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 in NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b08000050a0 by thread T2:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 (Main+0x000000410153)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000050a0 by thread T5:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Location is heap block of size 24 at 0x7b08000050a0 allocated by thread T5:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 in NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 4 at 0x7b08000050a8 by thread T1:
+    #0 NoFIFOPool::takeTask(SwNode*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:117 (Main+0x00000041632c)
+    #1 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:86 (Main+0x00000041611f)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:43 (Main+0x00000040c80b)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000050a8 by thread T5:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Location is heap block of size 24 at 0x7b08000050a0 allocated by thread T5:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:117 in NoFIFOPool::takeTask(SwNode*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 4 at 0x7b08000050a8 by thread T3:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:90 (Main+0x000000410384)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000050a8 by thread T5:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Location is heap block of size 24 at 0x7b08000050a0 allocated by thread T5:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:90 in NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c00006108 by thread T8:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:26 (Main+0x000000414f1e)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c00006108 by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 48 at 0x7b0c000060f0 allocated by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T8 (tid=70028, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:26 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c000048d0 by thread T7:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:35 (Main+0x000000414fa4)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c000048d0 by thread T3:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 48 at 0x7b0c000048c0 allocated by thread T3:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T7 (tid=70027, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:35 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c000048c8 by thread T7:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x000000414fee)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c000048c8 by thread T3:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 48 at 0x7b0c000048c0 allocated by thread T3:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T7 (tid=70027, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Write of size 8 at 0x7b0c00004808 by thread T1:
+    #0 HP::setHP(int, void*, HP::HPLocal_t*) hp/hp.cpp:316 (Main+0x000000417a62)
+    #1 SwLinkedList::getLast(HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:110 (Main+0x00000040f62d)
+    #2 NoFIFOPool::getStealNode(int&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:49 (Main+0x00000041007c)
+    #3 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:56 (Main+0x000000410103)
+    #4 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #5 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b0c00004808 by thread T4:
+    #0 HP::setHP(int, void*, HP::HPLocal_t*) hp/hp.cpp:316 (Main+0x000000417a62)
+    #1 SwLinkedList::getLast(HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:110 (Main+0x00000040f62d)
+    #2 NoFIFOPool::getStealNode(int&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:49 (Main+0x00000041007c)
+    #3 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:56 (Main+0x000000410103)
+    #4 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #5 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 40 at 0x7b0c00004800 allocated by thread T3:
+    #0 malloc /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:589 (libtsan.so.0+0x000000027811)
+    #1 HP::threadRegister(HP::HPData_t*) hp/hp.cpp:250 (Main+0x00000041752b)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:118 (Main+0x000000412adb)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race hp/hp.cpp:316 in HP::setHP(int, void*, HP::HPLocal_t*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Write of size 8 at 0x7b0c00004808 by thread T2:
+    #0 HP::setHP(int, void*, HP::HPLocal_t*) hp/hp.cpp:316 (Main+0x000000417a62)
+    #1 SwLinkedList::getLast(HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:110 (Main+0x00000040f62d)
+    #2 NoFIFOPool::getStealNode(int&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:49 (Main+0x00000041007c)
+    #3 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:56 (Main+0x000000410103)
+    #4 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #5 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b0c00004808 by thread T4:
+    #0 HP::setHP(int, void*, HP::HPLocal_t*) hp/hp.cpp:316 (Main+0x000000417a62)
+    #1 SwLinkedList::getLast(HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:110 (Main+0x00000040f62d)
+    #2 NoFIFOPool::getStealNode(int&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:49 (Main+0x00000041007c)
+    #3 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:56 (Main+0x000000410103)
+    #4 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #5 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 40 at 0x7b0c00004800 allocated by thread T3:
+    #0 malloc /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:589 (libtsan.so.0+0x000000027811)
+    #1 HP::threadRegister(HP::HPData_t*) hp/hp.cpp:250 (Main+0x00000041752b)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:118 (Main+0x000000412adb)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race hp/hp.cpp:316 in HP::setHP(int, void*, HP::HPLocal_t*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Write of size 8 at 0x7b2000004078 by thread T3:
+    #0 SwLinkedList::findPrevNode(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:86 (Main+0x00000040f46e)
+    #1 SwLinkedList::append(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:101 (Main+0x00000040f567)
+    #2 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:70 (Main+0x00000041023a)
+    #3 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #4 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous read of size 8 at 0x7b2000004078 by thread T1:
+    #0 SwLinkedList::getLast(HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:109 (Main+0x00000040f60c)
+    #1 NoFIFOPool::getStealNode(int&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:49 (Main+0x00000041007c)
+    #2 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:56 (Main+0x000000410103)
+    #3 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #4 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 128 at 0x7b2000004000 allocated by thread T3:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:32 (Main+0x00000041556a)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:86 in SwLinkedList::findPrevNode(SwNode*, HP::HPLocal_t*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c000030a0 by thread T6:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:35 (Main+0x000000414fa4)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c000030a0 by thread T2:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 48 at 0x7b0c00003090 allocated by thread T2:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T6 (tid=70026, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:35 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b0c000060f8 by thread T8:
+    #0 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x000000414fee)
+    #1 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #2 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #3 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x7b0c000060f8 by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Location is heap block of size 48 at 0x7b0c000060f0 allocated by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:42 (Main+0x0000004157ae)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T8 (tid=70028, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 in NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b08000031a0 by thread T1:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 (Main+0x000000410153)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000031a0 by thread T4:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:101 (Main+0x0000004104a5)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 24 at 0x7b08000031a0 allocated by thread T3:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:89 (Main+0x00000041035e)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 in NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b08000031a0 by thread T2:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 (Main+0x000000410153)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000031a0 by thread T4:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:101 (Main+0x0000004104a5)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 24 at 0x7b08000031a0 allocated by thread T3:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:89 (Main+0x00000041035e)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 in NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 4 at 0x7b08000041a8 by thread T3:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:90 (Main+0x000000410384)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 4 at 0x7b08000041a8 by thread T4:
+    #0 NoFIFOPool::takeTask(SwNode*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:122 (Main+0x0000004163ea)
+    #1 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:66 (Main+0x000000415ee4)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:39 (Main+0x00000040c737)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 24 at 0x7b08000041a0 allocated by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:89 (Main+0x00000041035e)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:90 in NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b2000004048 by thread T4:
+    #0 SwLinkedList::getLast(HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:109 (Main+0x00000040f60c)
+    #1 NoFIFOPool::getStealNode(int&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:49 (Main+0x00000041007c)
+    #2 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:56 (Main+0x000000410103)
+    #3 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:49 (Main+0x00000040c97d)
+    #4 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b2000004048 by thread T7:
+    #0 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:72 (Main+0x00000040f33f)
+    #1 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #2 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #3 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #4 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Location is heap block of size 128 at 0x7b2000004000 allocated by thread T3:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:32 (Main+0x00000041556a)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T7 (tid=70027, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:109 in SwLinkedList::getLast(HP::HPLocal_t*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b08000041a0 by thread T1:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 (Main+0x000000410153)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:49 (Main+0x00000040c97d)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000041a0 by thread T4:
+    #0 NoFIFOPool::takeTask(SwNode*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:132 (Main+0x000000416526)
+    #1 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:86 (Main+0x00000041611f)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:39 (Main+0x00000040c737)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 24 at 0x7b08000041a0 allocated by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:89 (Main+0x00000041035e)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 in NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 4 at 0x7b08000011a8 by thread T2:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:90 (Main+0x000000410384)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 4 at 0x7b08000011a8 by thread T1:
+    #0 NoFIFOPool::takeTask(SwNode*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:122 (Main+0x0000004163ea)
+    #1 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:66 (Main+0x000000415ee4)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:39 (Main+0x00000040c737)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 24 at 0x7b08000011a0 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:89 (Main+0x00000041035e)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:90 in NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Write of size 8 at 0x7b08000050b0 by thread T5:
+    #0 SwLinkedList::findPrevNode(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:88 (Main+0x00000040f48a)
+    #1 SwLinkedList::append(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:101 (Main+0x00000040f567)
+    #2 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:71 (Main+0x00000040f32f)
+    #3 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #4 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #5 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #6 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous read of size 8 at 0x7b08000050b0 by thread T1:
+    #0 SwLinkedList::SwLinkedListIterator::next(SwNode*&) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:149 (Main+0x00000040f9c5)
+    #1 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:85 (Main+0x0000004160a8)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:39 (Main+0x00000040c737)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 24 at 0x7b08000050a0 allocated by thread T5:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:88 in SwLinkedList::findPrevNode(SwNode*, HP::HPLocal_t*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b08000041a0 by thread T3:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:100 (Main+0x00000041045b)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000041a0 by thread T4:
+    #0 NoFIFOPool::takeTask(SwNode*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:132 (Main+0x000000416526)
+    #1 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:86 (Main+0x00000041611f)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:39 (Main+0x00000040c737)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 24 at 0x7b08000041a0 allocated by thread T4:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:89 (Main+0x00000041035e)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:100 in NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b08000070a0 by thread T4:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 (Main+0x000000410153)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:49 (Main+0x00000040c97d)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000070a0 by thread T7:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Location is heap block of size 24 at 0x7b08000070a0 allocated by thread T7:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T7 (tid=70027, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 in NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Write of size 8 at 0x7b08000011a0 by thread T2:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:101 (Main+0x0000004104a5)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous read of size 8 at 0x7b08000011a0 by thread T1:
+    #0 NoFIFOPool::takeTask(SwNode*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:112 (Main+0x0000004162aa)
+    #1 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:66 (Main+0x000000415ee4)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:39 (Main+0x00000040c737)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 24 at 0x7b08000011a0 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:89 (Main+0x00000041035e)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:101 in NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b08000011a0 by thread T1:
+    #0 SwLinkedList::findPrevNode(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:83 (Main+0x00000040f401)
+    #1 SwLinkedList::replace(SwNode*, SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:63 (Main+0x00000040f25d)
+    #2 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:97 (Main+0x00000041044f)
+    #3 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #4 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000011a0 by thread T2:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:101 (Main+0x0000004104a5)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 24 at 0x7b08000011a0 allocated by thread T1:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:89 (Main+0x00000041035e)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:83 in SwLinkedList::findPrevNode(SwNode*, HP::HPLocal_t*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x000000620590 by thread T5:
+    #0 DeleteNode::getInstance() /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:22 (Main+0x00000040fc77)
+    #1 SwLinkedList::findPrevNode(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:89 (Main+0x00000040f49b)
+    #2 SwLinkedList::append(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:101 (Main+0x00000040f567)
+    #3 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:71 (Main+0x00000040f32f)
+    #4 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #5 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #6 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #7 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Previous write of size 8 at 0x000000620590 by thread T3:
+    #0 DeleteNode::getInstance() /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:23 (Main+0x00000040fca2)
+    #1 SwLinkedList::findPrevNode(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:89 (Main+0x00000040f49b)
+    #2 SwLinkedList::append(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:101 (Main+0x00000040f567)
+    #3 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:70 (Main+0x00000041023a)
+    #4 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #5 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is global 'DeleteNode::instance' of size 8 at 0x000000620590 (Main+0x000000620590)
+
+  Thread T5 (tid=70025, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:22 in DeleteNode::getInstance()
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Write of size 8 at 0x7b200000c078 by thread T4:
+    #0 SwLinkedList::findPrevNode(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:86 (Main+0x00000040f46e)
+    #1 SwLinkedList::append(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:101 (Main+0x00000040f567)
+    #2 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:70 (Main+0x00000041023a)
+    #3 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:49 (Main+0x00000040c97d)
+    #4 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous read of size 8 at 0x7b200000c078 by thread T1:
+    #0 SwLinkedList::getLast(HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:109 (Main+0x00000040f60c)
+    #1 NoFIFOPool::getStealNode(int&) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:49 (Main+0x00000041007c)
+    #2 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:56 (Main+0x000000410103)
+    #3 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:49 (Main+0x00000040c97d)
+    #4 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 128 at 0x7b200000c000 allocated by thread T4:
+    #0 operator new[](unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:45 (libtsan.so.0+0x00000006a8b6)
+    #1 NoFIFOPool::NoFIFOPool(int, int) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:32 (Main+0x00000041556a)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:139 (Main+0x000000412c93)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:86 in SwLinkedList::findPrevNode(SwNode*, HP::HPLocal_t*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 4 at 0x7b08000070a8 by thread T3:
+    #0 NoFIFOPool::takeTask(SwNode*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:117 (Main+0x00000041632c)
+    #1 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:86 (Main+0x00000041611f)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:39 (Main+0x00000040c737)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000070a8 by thread T7:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Location is heap block of size 24 at 0x7b08000070a0 allocated by thread T7:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 SwLinkedList::append(SPChunk*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:70 (Main+0x00000040f302)
+    #2 NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:36 (Main+0x00000041501d)
+    #3 NoFIFOPool::ProdCtx::produce(Task&, bool&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOProducer.cpp:14 (Main+0x000000414e1e)
+    #4 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
+    #5 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T7 (tid=70027, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:126 (Main+0x00000040dd04)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:117 in NoFIFOPool::takeTask(SwNode*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x000000620590 by thread T1:
+    #0 DeleteNode::getInstance() /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:22 (Main+0x00000040fc77)
+    #1 SwLinkedList::findPrevNode(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:89 (Main+0x00000040f49b)
+    #2 SwLinkedList::replace(SwNode*, SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:63 (Main+0x00000040f25d)
+    #3 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:97 (Main+0x00000041044f)
+    #4 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #5 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x000000620590 by thread T3:
+    #0 DeleteNode::getInstance() /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:23 (Main+0x00000040fca2)
+    #1 SwLinkedList::findPrevNode(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:89 (Main+0x00000040f49b)
+    #2 SwLinkedList::append(SwNode*, HP::HPLocal_t*) /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:101 (Main+0x00000040f567)
+    #3 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:70 (Main+0x00000041023a)
+    #4 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #5 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is global 'DeleteNode::instance' of size 8 at 0x000000620590 (Main+0x000000620590)
+
+  Thread T1 (tid=70021, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T3 (tid=70023, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/SwLinkedList.cpp:22 in DeleteNode::getInstance()
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b08000021e0 by thread T4:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 (Main+0x000000410153)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000021e0 by thread T2:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:89 (Main+0x00000041035e)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 24 at 0x7b08000021e0 allocated by thread T2:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:89 (Main+0x00000041035e)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Thread T4 (tid=70024, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+SUMMARY: ThreadSanitizer: data race /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:62 in NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*)
+==================
+==================
+WARNING: ThreadSanitizer: data race (pid=70019)
+  Read of size 8 at 0x7b08000021e0 by thread T3:
+    #0 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:100 (Main+0x00000041045b)
+    #1 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #2 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Previous write of size 8 at 0x7b08000021e0 by thread T2:
+    #0 NoFIFOPool::takeTask(SwNode*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:132 (Main+0x000000416526)
+    #1 NoFIFOPool::consume(Task*&, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOPool.cpp:66 (Main+0x000000415ee4)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:39 (Main+0x00000040c737)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Location is heap block of size 24 at 0x7b08000021e0 allocated by thread T2:
+    #0 operator new(unsigned long) /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_new_delete.cc:39 (libtsan.so.0+0x00000006a806)
+    #1 NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*) /home/kz21/Codes/COMP522/SALSA-atomic/NoFIFOStealing.cpp:89 (Main+0x00000041035e)
+    #2 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:57 (Main+0x00000040cb82)
+    #3 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
+
+  Thread T3 (tid=70023, running) created by main threadMain: NoFIFOStealing.cpp:106: virtual Task* NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*): Assertion `newNode->consumerIdx +1 < c->getMaxSize() && newNode->consumerIdx == prevNode->consumerIdx' failed.
+ at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
+    #1 main /home/kz21/Codes/COMP522/SALSA-atomic/Main.cpp:122 (Main+0x00000040dc94)
+
+  Thread T2 (tid=70022, running) created by main thread at:
+    #0 pthread_create /projects/spack/var/spack/stage/gcc-7.3.0-qrjpi76aeo4bysagruwwfii6oneh56lj/gcc-7.3.0/libsanitizer/tsan/tsan_interceptors.cc:900 (libtsan.so.0+0x0000000285d0)
