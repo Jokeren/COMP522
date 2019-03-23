@@ -16,21 +16,6 @@ volatile bool syncFlags::simulationStart = false;
 volatile int syncFlags::allocatedPoolsCounter = false;
 volatile bool syncFlags::simulationStop = false;
 
-//void assignToCPU(int cpu){
-//
-//	pthread_t threadId = pthread_self();
-//	cpu_set_t cpuSet;
-//	CPU_ZERO(&cpuSet);
-//	CPU_SET(cpu,&cpuSet);
-//	int s = pthread_setaffinity_np(threadId,sizeof(cpu_set_t),&cpuSet);
-//	//int s = sched_setaffinity(0,sizeof(cpu_set_t),&cpuSet);
-//	if(s != 0)
-//	{
-//		cout << "Thread Assignment Failed! exiting.." << endl;
-//		exit(-1);
-//	}
-//}
-
 void *prodRun(void* _arg){
 	producerArg* arg = (producerArg*)_arg;
 	HP::threadRegister(HP::initHPData(4,arg->numOfThreads));
@@ -39,11 +24,10 @@ void *prodRun(void* _arg){
 	// handle thread's affinity
 	string forceAssignment;
 	Configuration::getInstance()->getVal(forceAssignment, "forceAssignment");
-	//if(forceAssignment.compare("yes") == 0)
-	//{
-	//	int cpu = ArchEnvironment::getInstance()->getProducerCore(id);
-	//	assignToCPU(cpu);
-	//}
+	if(forceAssignment.compare("yes") == 0)
+	{
+		int cpu = ArchEnvironment::getInstance()->getProducerCore(id);
+	}
 	/***** debug ****/
 	//cout << "p " << sched_getcpu() << endl; 
 	//int _cpu = sched_getcpu();

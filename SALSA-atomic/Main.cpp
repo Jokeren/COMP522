@@ -64,47 +64,12 @@ void run(int consNum, consumerArg* consArgs, int prodNum, producerArg* prodArgs)
 		}
 	}
 
-//	if (prodFluctuations) {
-//		for(int i = 0; i < 10; i++) {
-//			int prodIdx = (rand()%prodNum);
-//			for(int p = 0; p < pausedThreads; p++) {
-//				prodArgs[(prodIdx + (p<<1))%prodNum].pause = true;
-//			}
-//
-//			usleep(100*timeToRun);
-//
-//			for(int p = 0; p < pausedThreads; p++) {
-//				prodArgs[(prodIdx + (p<<1))%prodNum].pause = false;
-//			}
-//		}
-//	} else if (consFluctuations) {
-//		for(int i = 0; i < 10; i++) {
-//			int consIdx = (rand()%consNum);
-//			for(int c = 0; c < pausedThreads; c++) {
-//				consArgs[(consIdx + (c<<1))%consNum].pause = true;
-//			}
-//
-//			usleep(100*timeToRun);
-//
-//			for(int c = 0; c < pausedThreads; c++) {
-//				consArgs[(consIdx + (c<<1))%consNum].pause = false;
-//			}
-//		}
-//	} else {
-//		usleep(1000*timeToRun);
-//	}
-
 	cout << "Terminating threads..." << endl;
 	syncFlags::stop();
 }
 
 int main(int argc, char* argv[])
 {
-	//if(argc < 2)
-	//{
-	//	cout << "no configuration file found. exiting.." << endl;
-	//	exit(1);
-	//}
 	setenv("WS_CONFIG", "config.txt", 1);
 	int prodNum, consNum;
 	assert(Configuration::getInstance()->getVal(prodNum, "producersNum"));
@@ -217,13 +182,6 @@ int main(int argc, char* argv[])
 	cout << "System Throughput (tasks/msec) = " << TotalSystemThroughput << endl;
 	double avgStealingAttempts = ((double)stealingCounter)/consNum;
 	cout << "Average Number of Work Stealing Attempts per Consumer = " << avgStealingAttempts << endl;
-
-//  prodStats->normalize(prodNum);
-//  consStats->normalize(consNum);
-//	cout << "Average Producer Atomic Statistics:" << endl;
-//	prodStats->print();
-//	cout << "Average Consumer Atomic Statistics:" << endl;
-//	consStats->print();
 
 	cout << "Producer Atomic Statistics:" << endl;
 	cout << "\t CAS operations per inserted task: "

@@ -11,7 +11,10 @@ using namespace HP;
 #include <iostream>
 using namespace std;
 
-#define THRESHOLD 300
+// enable steal
+#define THRESHOLD 1
+// disable steal
+//#define THRESHOLD 300
 
 int NoFIFOPool::getLongestListIdx() const {
 	unsigned int maxScore = 0;
