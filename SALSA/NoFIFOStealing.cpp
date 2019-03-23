@@ -11,7 +11,7 @@ using namespace HP;
 #include <iostream>
 using namespace std;
 
-#define THRESHOLD 300
+#define THRESHOLD 1
 
 int NoFIFOPool::getLongestListIdx() const {
 	unsigned int maxScore = 0;
