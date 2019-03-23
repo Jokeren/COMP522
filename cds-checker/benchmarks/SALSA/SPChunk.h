@@ -13,7 +13,7 @@
 #include "AtomicStatistics.h"
 #include "Atomic.h"
 
-#define TASKS_PER_CHUNK 1000 //1020 // (4KB / 4B) - 2 = 1022
+#define TASKS_PER_CHUNK 1022 //1020 // (4KB / 4B) - 2 = 1022
 
 
 #define TAKEN (Task*)0x1

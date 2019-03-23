@@ -15,6 +15,8 @@ using namespace std;
 volatile bool syncFlags::simulationStart = false;
 volatile int syncFlags::allocatedPoolsCounter = false;
 volatile bool syncFlags::simulationStop = false;
+#define PROD_ITER 100
+#define CONS_ITER 100
 
 
 void prodRun(void* _arg){
@@ -48,42 +50,45 @@ void prodRun(void* _arg){
 	Configuration::getInstance()->getVal(disable, "prodDisable");
 	if(id >= disable)
 	{	
-		// peak-silence loop
-		while(!syncFlags::getStopFlag())
-		{
-			while(arg->pause == true) {
-        thrd_yield();
-      } // wait if you're paused
-			// peak period
-			/* sample peak start time */
-			clock_gettime(CLOCK_MONOTONIC,ts);
-			unsigned long start_ns = ts->tv_nsec;
-			unsigned long start_sec = ts->tv_sec;
-			/* task generation and insertion */
-			for(int i = 0; i < peakLength; i++)
-			{
-				// if i%100 == 0 - set task insertion time to current time in ms
-				if(i%100 == 0)
-				{
-					clock_gettime(CLOCK_MONOTONIC,ts);
-					task->insertionTime_sec = ts->tv_sec;
-					task->insertionTime_ns = ts->tv_nsec;
-				}
-				producer->produce(*task);
-			}
-			/* sample peak end time and update timeMeasurements */
-			clock_gettime(CLOCK_MONOTONIC,ts);
-			unsigned long finish_ns = ts->tv_nsec;
-			unsigned long finish_sec = ts->tv_sec;
-			if(start_sec < finish_sec)
-			{
-				finish_ns += 1000000000;
-			}
-			timeMeasurements->push_front(finish_ns-start_ns);
-			// silent period
-			if(timeBetweenPeaks > 0){1000*usleep(timeBetweenPeaks);}
-      thrd_yield();
-		}
+    for (size_t i = 0; i < PROD_ITER; ++i) {
+      producer->produce(*task);
+    }
+		//// peak-silence loop
+		//while(!syncFlags::getStopFlag())
+		//{
+		//	while(arg->pause == true) {
+    //    thrd_yield();
+    //  } // wait if you're paused
+		//	// peak period
+		//	/* sample peak start time */
+		//	clock_gettime(CLOCK_MONOTONIC,ts);
+		//	unsigned long start_ns = ts->tv_nsec;
+		//	unsigned long start_sec = ts->tv_sec;
+		//	/* task generation and insertion */
+		//	for(int i = 0; i < peakLength; i++)
+		//	{
+		//		// if i%100 == 0 - set task insertion time to current time in ms
+		//		if(i%100 == 0)
+		//		{
+		//			clock_gettime(CLOCK_MONOTONIC,ts);
+		//			task->insertionTime_sec = ts->tv_sec;
+		//			task->insertionTime_ns = ts->tv_nsec;
+		//		}
+		//		producer->produce(*task);
+		//	}
+		//	/* sample peak end time and update timeMeasurements */
+		//	clock_gettime(CLOCK_MONOTONIC,ts);
+		//	unsigned long finish_ns = ts->tv_nsec;
+		//	unsigned long finish_sec = ts->tv_sec;
+		//	if(start_sec < finish_sec)
+		//	{
+		//		finish_ns += 1000000000;
+		//	}
+		//	timeMeasurements->push_front(finish_ns-start_ns);
+		//	// silent period
+		//	if(timeBetweenPeaks > 0){1000*usleep(timeBetweenPeaks);}
+    //  thrd_yield();
+		//}
 	}
 	delete ts;
 	
@@ -161,40 +166,44 @@ void consRun(void* _arg){
 	Configuration::getInstance()->getVal(disable, "consDisable");
 	if(id >= disable)
 	{	
-		// retrieve tasks in a loop
-		/* sample loop start time */
-		clock_gettime(CLOCK_MONOTONIC,ts);
-		unsigned long start_sec = ts->tv_sec;
-		unsigned long start_ns = ts->tv_nsec;
-		/* retrieval loop */
-		while(!syncFlags::getStopFlag())
-		{
-			while(arg->pause == true) {
-        thrd_yield();
-      } // wait if you're paused
+    for (size_t i = 0; i < CONS_ITER; ++i) {
 			Task* task;
-			if(consumer->consume(task) != SUCCESS)
-			{
-				continue;
-			}
-			numOfTasks++;
-			//DummyTask* dt = (DummyTask*)task;
-			//dt->run(NULL);  // run task
-			//delete dt;  // delete task
-      thrd_yield();
-		}
-		/* sample loop end time */
-		clock_gettime(CLOCK_MONOTONIC,ts);
-		unsigned long finish_sec = ts->tv_sec;
-		unsigned long finish_ns = ts->tv_nsec;
-		/* update throughput */
-		if(finish_sec > start_sec)  
-		{
-			finish_ns += 1000000000;
-			finish_sec--;
-		}
-		double loopTime = 1000*(finish_sec - start_sec) + ((double)(finish_ns-start_ns))/1000000;
-		throughput = ((double)numOfTasks)/loopTime;
+			consumer->consume(task);
+    }
+		//// retrieve tasks in a loop
+		///* sample loop start time */
+		//clock_gettime(CLOCK_MONOTONIC,ts);
+		//unsigned long start_sec = ts->tv_sec;
+		//unsigned long start_ns = ts->tv_nsec;
+		///* retrieval loop */
+		//while(!syncFlags::getStopFlag())
+		//{
+		//	while(arg->pause == true) {
+    //    thrd_yield();
+    //  } // wait if you're paused
+		//	Task* task;
+		//	if(consumer->consume(task) != SUCCESS)
+		//	{
+		//		continue;
+		//	}
+		//	numOfTasks++;
+		//	//DummyTask* dt = (DummyTask*)task;
+		//	//dt->run(NULL);  // run task
+		//	//delete dt;  // delete task
+    //  thrd_yield();
+		//}
+		///* sample loop end time */
+		//clock_gettime(CLOCK_MONOTONIC,ts);
+		//unsigned long finish_sec = ts->tv_sec;
+		//unsigned long finish_ns = ts->tv_nsec;
+		///* update throughput */
+		//if(finish_sec > start_sec)  
+		//{
+		//	finish_ns += 1000000000;
+		//	finish_sec--;
+		//}
+		//double loopTime = 1000*(finish_sec - start_sec) + ((double)(finish_ns-start_ns))/1000000;
+		//throughput = ((double)numOfTasks)/loopTime;
 	}
 	delete ts;
 		

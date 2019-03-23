@@ -25,7 +25,7 @@ NoFIFOPool::NoFIFOPool(int _numProducers, int _consumerID) :
 	hpLoc = getHPLocal();
 	int initialPoolSize;
 	if (!Configuration::getInstance()->getVal(initialPoolSize, "initialPoolSize")) {
-		initialPoolSize = 200;
+		initialPoolSize = 4;
 	}
 
 	chunkPool = new ChunkPool(consumerID, initialPoolSize);

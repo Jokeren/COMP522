@@ -18,7 +18,7 @@ Configuration* Configuration::getInstance() {
 }
 
 Configuration::Configuration() {
-	char* filename = getenv("WS_CONFIG");
+	char* filename = "SALSA/config.txt";
 	assert (filename != NULL);
 	configFile = new ConfigFile(filename);
 }

@@ -71,7 +71,6 @@ void run(int consNum, consumerArg* consArgs, int prodNum, producerArg* prodArgs)
 
 int user_main(int argc, char* argv[])
 {
-	setenv("WS_CONFIG", "SALSA/config.txt", 1);
 	int prodNum, consNum;
 	assert(Configuration::getInstance()->getVal(prodNum, "producersNum"));
 	assert(Configuration::getInstance()->getVal(consNum, "consumersNum"));

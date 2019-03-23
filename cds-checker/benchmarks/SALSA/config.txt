@@ -17,11 +17,11 @@ poolType=NoFIFOPool
 #poolType=SwedishPool
 
 #Producers input intervals
-peakLength=100000
+peakLength=1000
 timeBetweenPeaks=0
 
 #Test runtime
-timeToRun=10000
+timeToRun=100
 
 # stealing on/off
 stealIterations=1
