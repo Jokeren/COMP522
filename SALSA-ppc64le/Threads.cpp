@@ -58,7 +58,7 @@ void* prodRun(void* _arg){
 	assert(Configuration::getInstance()->getVal(timeBetweenPeaks, "timeBetweenPeaks"));
 	list<long>* timeMeasurements = new list<long>();
 	struct timespec* ts = new timespec();
-	Producer* producer = new Producer(id);
+	Producer* producer = new Producer(id, arg->consumerId);
 	DummyTask* task = new DummyTask();
 	
 	int disable = 0;
