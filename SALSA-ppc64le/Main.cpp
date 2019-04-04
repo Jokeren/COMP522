@@ -142,6 +142,9 @@ int main(int argc, char* argv[])
 
 	string initialBinding;
 	Configuration::getInstance()->getVal(initialBinding, "initialBinding");
+	if (initialBinding.compare("yes") == 0) {
+		cout << "Enable initial producer&consumer binding..." << endl;
+	}
 	producerArg* prodArgs = new producerArg[prodNum];
 	// value of i will serve as an id for the corresponding producer from now on
 	for(int i = 0; i < prodNum; i++)

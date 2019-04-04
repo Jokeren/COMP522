@@ -119,7 +119,7 @@ public:
 				}
 			}
 		}
-		delete head; // it is now safe to free old dummy node. t itself will be freed outside by the caller 
+		//delete head; // it is now safe to free old dummy node. t itself will be freed outside by the caller 
 		return true;
 	}
 };
