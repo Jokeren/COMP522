@@ -4,13 +4,21 @@ DIRS := ./ hp/
 SOURCE_FILES := $(foreach d, $(DIRS), $(wildcard $(d)*.cpp) )
 OBJECTS := $(patsubst %.cpp, %.o, $(SOURCE_FILES))
 
+SANITIZER ?= 1
+
+CXXFLAGS := -g -std=c++11
+
+ifeq ($(SANITIZE), 1)
+CXXFLAGS += -fsanitize=thread
+endif
+
 all: $(TESTNAME)
 
 $(TESTNAME): $(OBJECTS)
-	$(CXX) -o $@ $(OBJECTS) -std=c++11 -g -lpthread -fsanitize=thread
+	$(CXX) -o $@ $(OBJECTS) $(CXXFLAGS) -lpthread
 
 $(OBJECTS): %.o : %.cpp
-	$(CXX) -c -o $@ $< -fsanitize=thread -g
+	$(CXX) -c -o $@ $< $(CXXFLAGS)
 
 clean:
 	rm -f $(TESTNAME) *.o hp/*.o
