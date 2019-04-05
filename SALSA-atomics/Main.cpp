@@ -70,7 +70,12 @@ void run(int consNum, consumerArg* consArgs, int prodNum, producerArg* prodArgs)
 
 int main(int argc, char* argv[])
 {
-	setenv("WS_CONFIG", "config.txt", 1);
+	if(argc < 2)
+	{
+		cout << "no configuration file found. exiting.." << endl;
+		exit(1);
+	}
+	setenv("WS_CONFIG", argv[1], 1);
 	int prodNum, consNum;
 	assert(Configuration::getInstance()->getVal(prodNum, "producersNum"));
 	assert(Configuration::getInstance()->getVal(consNum, "consumersNum"));
@@ -104,12 +109,22 @@ int main(int argc, char* argv[])
 		consArgs[i].numOfThreads = consNum + prodNum;
 		consArgs[i].pause = false;
 	}
-	
+
+	string initialBinding;
+	Configuration::getInstance()->getVal(initialBinding, "initialBinding");
+	if (initialBinding.compare("yes") == 0) {
+		cout << "Enable initial producer&consumer binding..." << endl;
+	}
 	producerArg* prodArgs = new producerArg[prodNum];
 	// value of i will serve as an id for the corresponding producer from now on
 	for(int i = 0; i < prodNum; i++)
 	{
 		prodArgs[i].id = i;
+		if (initialBinding.compare("yes") == 0) {
+			prodArgs[i].consumerId = i;
+		} else {
+			prodArgs[i].consumerId = 0;
+		}
 		prodArgs[i].numOfThreads = consNum + prodNum;
 		prodArgs[i].pause = false;
 	}

@@ -21,6 +21,7 @@ typedef struct{
 typedef struct producerArg{
 	int numOfThreads;
 	int id;
+	int consumerId;
 	volatile bool pause;
 } producerArg;
 
