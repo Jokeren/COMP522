@@ -30,6 +30,7 @@ public:
 
 private:
 	bool forceAssignment;
+	bool initialBinding;
 	int producersNum;
 	int consumersNum;
 	int producerCoresNum;

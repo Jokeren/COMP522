@@ -1,0 +1,28 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/kz21/COMP522/SALSA-ppc64le/hp/simpleSet.c
+simpleSet.h
+/home/kz21/COMP522/SALSA-ppc64le/hp/simpleSet.h
+stdlib.h
+-
+assert.h
+-
+
+/home/kz21/COMP522/SALSA-ppc64le/hp/simpleSet.h
+
+/home/kz21/COMP522/SALSA-ppc64le/hp/stack.c
+stack.h
+/home/kz21/COMP522/SALSA-ppc64le/hp/stack.h
+stdlib.h
+-
+assert.h
+-
+
+/home/kz21/COMP522/SALSA-ppc64le/hp/stack.h
+

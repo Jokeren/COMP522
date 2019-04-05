@@ -1,0 +1,3 @@
+/home/kz21/COMP522/SALSA-ppc64le/build/CMakeFiles/edit_cache.dir
+/home/kz21/COMP522/SALSA-ppc64le/build/CMakeFiles/rebuild_cache.dir
+/home/kz21/COMP522/SALSA-ppc64le/build/CMakeFiles/Main.dir

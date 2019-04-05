@@ -1,10 +1,6 @@
-cmake_minimum_required (VERSION 3.1)
 project (salsa)
 
 # Mode
-set(CMAKE_CXX_STANDARD 11)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
 set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "-O3 -g -std=c++11")
 
 set(SOURCES

@@ -11,7 +11,7 @@
 
 class Producer {
 public:
-	Producer(int id);
+	Producer(int id, int curConsumerIdx = 0);
 	virtual ~Producer();
 
 	virtual void produce(Task& t);

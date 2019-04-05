@@ -28,8 +28,11 @@ ArchEnvironment::ArchEnvironment() {
 	chips = parseChipCores(chipString, chipsNum, coresPerChip);
 	consumerToPool = NULL;
 	string force = "";
+	string init = "";
 	Configuration::getInstance()->getVal(force, "forceAssignment");
+	Configuration::getInstance()->getVal(init, "initialBinding");
 	forceAssignment = (force.compare("yes") == 0);
+	initialBinding = (init.compare("yes") == 0);
 }
 
 string* ArchEnvironment::stringSplit(const string str, const char seperator, int& arrLen)
