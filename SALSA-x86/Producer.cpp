@@ -17,7 +17,6 @@ Producer::Producer(int _id, int _curConsumerIdx)
  : id(_id), curConsumerIdx(_curConsumerIdx)
 {
 	this->consumers = ArchEnvironment::getInstance()->getSortedConsumers(*this);
-	this->curConsumerIdx = 0;
 	this->curProdContext = consumers[0]->getProducerContext(*this);
 	assert(Configuration::getInstance()->getVal(this->consumersNum, "consumersNum"));
 	this->stat = new AtomicStatistics();
