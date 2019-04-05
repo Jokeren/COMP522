@@ -51,6 +51,33 @@ WARNING: ThreadSanitizer: data race (pid=70019)
     #3 Consumer::consume(Task*&) /home/kz21/Codes/COMP522/SALSA-atomic/Consumer.cpp:39 (Main+0x00000040c737)
     #4 consRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:171 (Main+0x000000412e91)
 
+Two consumers access the same address.
+
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -921762048
+    addr -1207957272 pthread -930154752
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+    addr -1207957272 pthread -938547456
+
 3. *getlast* and *append*
 
 WARNING: ThreadSanitizer: data race (pid=70019)
@@ -68,7 +95,7 @@ WARNING: ThreadSanitizer: data race (pid=70019)
     #3 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
     #4 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
 
-3. Drawbacks of ThreadSanitizer
+4. Drawbacks of ThreadSanitizer
 
 False positive on a lot of cases, including data races on atomic variables, single-writer multiple-reader data structures, and places where data race does not affect the correctness.
 
