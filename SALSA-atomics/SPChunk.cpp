@@ -51,13 +51,13 @@ OpResult SPChunk::getTask(Task *& t, int idx) {
 }
 
 bool SPChunk::hasTask(int idx) {
-	if (tasks[idx].load(std::memory_order_relaxed) == NULL || tasks[idx].load() == TAKEN)
+	if (tasks[idx].load(std::memory_order_relaxed) == NULL || tasks[idx].load(std::memory_order_relaxed) == TAKEN)
 		return false;
 	return true;
 }
 
 bool SPChunk::isTaken(int idx) {
-	return (tasks[idx].load() == TAKEN);
+	return (tasks[idx].load(std::memory_order_relaxed) == TAKEN);
 }
 
 void SPChunk::markTaken(int idx) {
@@ -82,7 +82,7 @@ int SPChunk::getMaxSize() {
 
 void SPChunk::setOwner(int o) {
 	// will reset the ownership and put the counter to zero
-	owner.store(o);
+	owner.store(o, std::memory_order_relaxed);
 }
 
 int SPChunk::getOwner(int countedOwner) {
@@ -90,11 +90,11 @@ int SPChunk::getOwner(int countedOwner) {
 }
 
 int SPChunk::getCountedOwner() {
-	return owner.load();
+	return owner.load(std::memory_order_relaxed);
 }
 
 bool SPChunk::changeCountedOwner(int prevOwner, int newOwner, AtomicStatistics* stat) {
-	if (owner.load() != prevOwner) return false;
+	if (owner.load(std::memory_order_relaxed) != prevOwner) return false;
 
 	int counter = (prevOwner & COUNTER_MASK) >> COUNTER_SHIFT;
 	int newVal = ((newOwner & OWNER_MASK) | ((counter+1) << COUNTER_SHIFT));

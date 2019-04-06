@@ -32,7 +32,7 @@ NoFIFOPool::NoFIFOPool(int _numProducers, int _consumerID) :
 	chunkLists = new SwLinkedList[_numProducers + 1];
 	chunkListSizes = new atomic<int>[numProducers + 1]();
 	for (int i = 0; i < numProducers + 1; i++) {
-		chunkListSizes[i].store(0);
+		chunkListSizes[i].store(0, std::memory_order_relaxed);
 	}
 	reclaimChunkFunc = new ReclaimChunkFunc(chunkPool);
 
