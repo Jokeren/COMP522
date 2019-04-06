@@ -3,13 +3,13 @@
 
 # compile C with /opt/apps/software/Core/GCCcore/6.4.0/bin/gcc
 # compile CXX with /opt/apps/software/Core/GCCcore/6.4.0/bin/g++
-C_FLAGS =  
+C_FLAGS = -O2 -g -DNDEBUG  
 
 C_DEFINES = 
 
 C_INCLUDES = 
 
-CXX_FLAGS =   -std=gnu++11
+CXX_FLAGS = -O3 -g -std=c++11   -std=gnu++11
 
 CXX_DEFINES = 
 

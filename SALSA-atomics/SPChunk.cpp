@@ -21,7 +21,7 @@ const int OWNER_SHIFT = 0;
 const int COUNTER_SHIFT = 10;
 
 SPChunk::SPChunk(int _owner) : head(0) {
-  owner.store(_owner, std::memory_order_relaxed);
+  owner.store(_owner);
 	clean();
 }
 
@@ -32,7 +32,7 @@ void SPChunk::clean() {
 	// reset the array of task pointers
   // TODO(Keren): improvement point 1
   for (size_t i = 0; i < TASKS_PER_CHUNK; ++i) {
-    tasks[i].store(0, std::memory_order_relaxed);
+    tasks[i].store(0);
   }
 }
 
@@ -40,29 +40,29 @@ void SPChunk::clean() {
 bool SPChunk::insertTask(Task* t, bool& lastTask) {
 	if (head == TASKS_PER_CHUNK)
 		return false;
-  tasks[head++].store(t, std::memory_order_relaxed);
+  tasks[head++].store(t);
 	lastTask = (head == TASKS_PER_CHUNK);
 	return true;
 }
 
 OpResult SPChunk::getTask(Task *& t, int idx) {
-	t = tasks[idx].load(std::memory_order_relaxed);
+	t = tasks[idx].load();
 	return SUCCESS;
 }
 
 bool SPChunk::hasTask(int idx) {
-	if (tasks[idx].load(std::memory_order_relaxed) == NULL || tasks[idx].load(std::memory_order_relaxed) == TAKEN)
+	if (tasks[idx].load() == NULL || tasks[idx].load() == TAKEN)
 		return false;
 	return true;
 }
 
 bool SPChunk::isTaken(int idx) {
-	return (tasks[idx].load(std::memory_order_relaxed) == TAKEN);
+	return (tasks[idx].load() == TAKEN);
 }
 
 void SPChunk::markTaken(int idx) {
   // TODO(Keren): improvement point 2
-	tasks[idx].store(TAKEN, std::memory_order_relaxed);
+	tasks[idx].store(TAKEN);
 }
 
 bool SPChunk::markTaken(int idx, Task* prevTask, AtomicStatistics* stat) {
@@ -82,7 +82,7 @@ int SPChunk::getMaxSize() {
 
 void SPChunk::setOwner(int o) {
 	// will reset the ownership and put the counter to zero
-	owner.store(o, std::memory_order_relaxed);
+	owner.store(o);
 }
 
 int SPChunk::getOwner(int countedOwner) {
@@ -90,11 +90,11 @@ int SPChunk::getOwner(int countedOwner) {
 }
 
 int SPChunk::getCountedOwner() {
-	return owner.load(std::memory_order_relaxed);
+	return owner.load();
 }
 
 bool SPChunk::changeCountedOwner(int prevOwner, int newOwner, AtomicStatistics* stat) {
-	if (owner.load(std::memory_order_relaxed) != prevOwner) return false;
+	if (owner.load() != prevOwner) return false;
 
 	int counter = (prevOwner & COUNTER_MASK) >> COUNTER_SHIFT;
 	int newVal = ((newOwner & OWNER_MASK) | ((counter+1) << COUNTER_SHIFT));

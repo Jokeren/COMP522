@@ -32,7 +32,7 @@ NoFIFOPool::NoFIFOPool(int _numProducers, int _consumerID) :
 	chunkLists = new SwLinkedList[_numProducers + 1];
 	chunkListSizes = new atomic<int>[numProducers + 1]();
 	for (int i = 0; i < numProducers + 1; i++) {
-		chunkListSizes[i].store(0, std::memory_order_relaxed);
+		chunkListSizes[i].store(0);
 	}
 	reclaimChunkFunc = new ReclaimChunkFunc(chunkPool);
 
@@ -75,7 +75,7 @@ OpResult NoFIFOPool::consume(Task*& t, AtomicStatistics* stat) {
 	SwLinkedList::SwLinkedListIterator iter(NULL,hpLoc);
 	int traversedLists = 0;
 	while (traversedLists < (numProducers+1)) {
-		if (chunkListSizes[currentQueueID].load(std::memory_order_relaxed) != 0) {
+		if (chunkListSizes[currentQueueID].load() != 0) {
 			// according to the counter, there are chunks in this list
 			SwLinkedList &currList = chunkLists[currentQueueID];
 			iter.reset(&currList);
