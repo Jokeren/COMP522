@@ -1,0 +1,296 @@
+producersNum = 1 , consumersNum = 1
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 14647.3
+System Throughput (tasks/msec) = 14474.1
+Average Number of Work Stealing Attempts per Consumer = 0
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.00099
+	 CAS failures per inserted task: 3.40716e-08
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00199975
+	 CAS failures per inserted task: 0
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,1,1,14647.3,14474.1,0,0.00099,3.40716e-08,0.00199975,0,1,1,0,0,2
+producersNum = 1 , consumersNum = 1
+poolType is NoFIFOPool
+producerMigrate = 1
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 14356.9
+System Throughput (tasks/msec) = 14189.9
+Average Number of Work Stealing Attempts per Consumer = 0
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.000991096
+	 CAS failures per inserted task: 1.04348e-07
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00199986
+	 CAS failures per inserted task: 8.80578e-08
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,1,1,14356.9,14189.9,0,0.000991096,1.04348e-07,0.00199986,8.80578e-08,0,1,0,0,2
+producersNum = 2 , consumersNum = 2
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 29151.8
+System Throughput (tasks/msec) = 28761.5
+Average Number of Work Stealing Attempts per Consumer = 1
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.000988502
+	 CAS failures per inserted task: 3.08219e-07
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00199984
+	 CAS failures per inserted task: 1.73774e-08
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,2,2,29151.8,28761.5,1,0.000988502,3.08219e-07,0.00199984,1.73774e-08,1,1,0,0,2
+producersNum = 2 , consumersNum = 2
+poolType is NoFIFOPool
+producerMigrate = 1
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 28895.8
+System Throughput (tasks/msec) = 28528.7
+Average Number of Work Stealing Attempts per Consumer = 1
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.000989939
+	 CAS failures per inserted task: 3.80294e-07
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00199992
+	 CAS failures per inserted task: 0
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,2,2,28895.8,28528.7,1,0.000989939,3.80294e-07,0.00199992,0,0,1,0,0,2
+producersNum = 4 , consumersNum = 4
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 57893.6
+System Throughput (tasks/msec) = 57235.5
+Average Number of Work Stealing Attempts per Consumer = 2.5
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.000987853
+	 CAS failures per inserted task: 1.68176e-06
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.0019995
+	 CAS failures per inserted task: 1.74651e-08
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,4,4,57893.6,57235.5,2.5,0.000987853,1.68176e-06,0.0019995,1.74651e-08,1,1,0,0,2
+producersNum = 4 , consumersNum = 4
+poolType is NoFIFOPool
+producerMigrate = 1
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 57403.4
+System Throughput (tasks/msec) = 56770.9
+Average Number of Work Stealing Attempts per Consumer = 4.75
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.000987138
+	 CAS failures per inserted task: 1.97912e-06
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00199951
+	 CAS failures per inserted task: 1.32061e-08
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,4,4,57403.4,56770.9,4.75,0.000987138,1.97912e-06,0.00199951,1.32061e-08,0,1,0,0,2
+producersNum = 8 , consumersNum = 8
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 114877
+System Throughput (tasks/msec) = 113454
+Average Number of Work Stealing Attempts per Consumer = 3.375
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.000989261
+	 CAS failures per inserted task: 2.03043e-06
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00199888
+	 CAS failures per inserted task: 1.10135e-08
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,8,8,114877,113454,3.375,0.000989261,2.03043e-06,0.00199888,1.10135e-08,1,1,0,0,2
+producersNum = 8 , consumersNum = 8
+poolType is NoFIFOPool
+producerMigrate = 1
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 114328
+System Throughput (tasks/msec) = 112708
+Average Number of Work Stealing Attempts per Consumer = 15.75
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.000998462
+	 CAS failures per inserted task: 1.07361e-05
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.001999
+	 CAS failures per inserted task: 8.86911e-09
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,8,8,114328,112708,15.75,0.000998462,1.07361e-05,0.001999,8.86911e-09,0,1,0,0,2
+producersNum = 16 , consumersNum = 16
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 225732
+System Throughput (tasks/msec) = 222630
+Average Number of Work Stealing Attempts per Consumer = 12.1875
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.000989154
+	 CAS failures per inserted task: 1.87341e-06
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00199975
+	 CAS failures per inserted task: 1.90597e-08
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,16,16,225732,222630,12.1875,0.000989154,1.87341e-06,0.00199975,1.90597e-08,1,1,0,0,2
+producersNum = 16 , consumersNum = 16
+poolType is NoFIFOPool
+producerMigrate = 1
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 219670
+System Throughput (tasks/msec) = 217125
+Average Number of Work Stealing Attempts per Consumer = 7.125
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.000997099
+	 CAS failures per inserted task: 7.89892e-06
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00199761
+	 CAS failures per inserted task: 2.18679e-08
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,16,16,219670,217125,7.125,0.000997099,7.89892e-06,0.00199761,2.18679e-08,0,1,0,0,2
+producersNum = 32 , consumersNum = 32
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 437225
+System Throughput (tasks/msec) = 431995
+Average Number of Work Stealing Attempts per Consumer = 1798.75
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.000998097
+	 CAS failures per inserted task: 1.00868e-05
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00199879
+	 CAS failures per inserted task: 2.48781e-08
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,32,32,437225,431995,1798.75,0.000998097,1.00868e-05,0.00199879,2.48781e-08,1,1,0,0,2
+producersNum = 32 , consumersNum = 32
+poolType is NoFIFOPool
+producerMigrate = 1
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 409759
+System Throughput (tasks/msec) = 410803
+Average Number of Work Stealing Attempts per Consumer = 1607
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.00105368
+	 CAS failures per inserted task: 5.66252e-05
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00199531
+	 CAS failures per inserted task: 1.21685e-08
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,32,32,409759,410803,1607,0.00105368,5.66252e-05,0.00199531,1.21685e-08,0,1,0,0,2
+producersNum = 64 , consumersNum = 64
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+producersNum = 64 , consumersNum = 64
+poolType is NoFIFOPool
+producerMigrate = 1
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+producersNum = 64 , consumersNum = 64
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+producersNum = 64 , consumersNum = 64
+poolType is NoFIFOPool
+producerMigrate = 1
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
