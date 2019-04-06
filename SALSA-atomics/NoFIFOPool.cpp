@@ -75,7 +75,7 @@ OpResult NoFIFOPool::consume(Task*& t, AtomicStatistics* stat) {
 	SwLinkedList::SwLinkedListIterator iter(NULL,hpLoc);
 	int traversedLists = 0;
 	while (traversedLists < (numProducers+1)) {
-		if (chunkListSizes[currentQueueID].load() != 0) {
+		if (chunkListSizes[currentQueueID].load(std::memory_order_relaxed) != 0) {
 			// according to the counter, there are chunks in this list
 			SwLinkedList &currList = chunkLists[currentQueueID];
 			iter.reset(&currList);

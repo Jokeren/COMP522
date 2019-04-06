@@ -249,7 +249,7 @@ void threadRegister(HPData hpData) {
 	HPRecord* record = (HPRecord*) malloc(sizeof(HPRecord) + (sizeof(void*)
 			* hpData->HP_COUNT));
 	assert(record != NULL);
-  record->next.store(NULL);
+  record->next.store(NULL, std::memory_order_relaxed);
 	for (i = 0; i < hpData->HP_COUNT; i++) {
 		record->hp[i] = NULL;
 	}
@@ -270,15 +270,15 @@ void threadRegister(HPData hpData) {
 	res->hpData = hpData;
 
   HPRecord *mhead = NULL;
-	if (head.load() == NULL && head.compare_exchange_strong(mhead,record)) {
+	if (head.load(std::memory_order_relaxed) == NULL && head.compare_exchange_strong(mhead,record)) {
 		res->HPRecHead = record;
 	} else {
-		res->HPRecHead = head.load();
+		res->HPRecHead = head.load(std::memory_order_relaxed);
 		//add record to list
 		while (1) {
-			HPRecord* last = head.load();
-			while (last->next.load() != NULL)
-				last = last->next.load();
+			HPRecord* last = head.load(std::memory_order_relaxed);
+			while (last->next.load(std::memory_order_relaxed) != NULL)
+				last = last->next.load(std::memory_order_relaxed);
       mhead = NULL;
 			if (last->next.compare_exchange_strong(mhead, record))
 				break;
@@ -288,15 +288,15 @@ void threadRegister(HPData hpData) {
 }
 
 void resetHPSystem() {
-	HPRecord* curr = head.load();
+	HPRecord* curr = head.load(std::memory_order_relaxed);
 	if (curr == NULL)
 		return;
-	while (curr->next.load() != NULL) {
+	while (curr->next.load(std::memory_order_relaxed) != NULL) {
 		HPRecord* tmp = curr;
-    curr = curr->next.load();
+    curr = curr->next.load(std::memory_order_relaxed);
 		free(tmp);
 	}
-	head.store(NULL);
+	head.store(NULL, std::memory_order_relaxed);
 }
 
 // Marks that the node needs to be freed and calls scan if needed.
@@ -334,7 +334,7 @@ void scan(HPLocal localData) {
 				setAdd(plist, (long) (curr->hp[i]));
 			}
 		}
-    curr = curr->next.load();
+    curr = curr->next.load(std::memory_order_relaxed);
 	}
 	//Stage 2: search plist
 	//uses two stacks instead of allocating a new one each time scan() is called

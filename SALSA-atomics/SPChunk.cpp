@@ -21,7 +21,7 @@ const int OWNER_SHIFT = 0;
 const int COUNTER_SHIFT = 10;
 
 SPChunk::SPChunk(int _owner) : head(0) {
-  owner.store(_owner);
+  owner.store(_owner, std::memory_order_relaxed);
 	clean();
 }
 
@@ -30,8 +30,9 @@ SPChunk::~SPChunk() {}
 void SPChunk::clean() {
 	head = 0;
 	// reset the array of task pointers
+  // TODO(Keren): improvement point 1
   for (size_t i = 0; i < TASKS_PER_CHUNK; ++i) {
-    tasks[i].store(0);
+    tasks[i].store(0, std::memory_order_relaxed);
   }
 }
 
@@ -39,18 +40,18 @@ void SPChunk::clean() {
 bool SPChunk::insertTask(Task* t, bool& lastTask) {
 	if (head == TASKS_PER_CHUNK)
 		return false;
-  tasks[head++].store(t);
+  tasks[head++].store(t, std::memory_order_relaxed);
 	lastTask = (head == TASKS_PER_CHUNK);
 	return true;
 }
 
 OpResult SPChunk::getTask(Task *& t, int idx) {
-	t = tasks[idx].load();
+	t = tasks[idx].load(std::memory_order_relaxed);
 	return SUCCESS;
 }
 
 bool SPChunk::hasTask(int idx) {
-	if (tasks[idx].load() == NULL || tasks[idx].load() == TAKEN)
+	if (tasks[idx].load(std::memory_order_relaxed) == NULL || tasks[idx].load() == TAKEN)
 		return false;
 	return true;
 }
@@ -60,7 +61,8 @@ bool SPChunk::isTaken(int idx) {
 }
 
 void SPChunk::markTaken(int idx) {
-	tasks[idx].store(TAKEN);
+  // TODO(Keren): improvement point 2
+	tasks[idx].store(TAKEN, std::memory_order_relaxed);
 }
 
 bool SPChunk::markTaken(int idx, Task* prevTask, AtomicStatistics* stat) {

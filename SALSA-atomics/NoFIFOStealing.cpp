@@ -20,8 +20,8 @@ int NoFIFOPool::getLongestListIdx() const {
 	unsigned int maxScore = 0;
 	int idx = 0;
 	for(int i = 0; i <= numProducers; i++) {
-		if (chunkListSizes[i].load() > maxScore) {
-			maxScore = chunkListSizes[i].load();
+		if (chunkListSizes[i].load(std::memory_order_relaxed) > maxScore) {
+			maxScore = chunkListSizes[i].load(std::memory_order_relaxed);
 			idx = i;
 		}
 	}
@@ -31,7 +31,7 @@ int NoFIFOPool::getLongestListIdx() const {
 
 float NoFIFOPool::getStealingScore() const {
 	int longestListIdx = getLongestListIdx();
-	return chunkListSizes[longestListIdx].load();
+	return chunkListSizes[longestListIdx].load(std::memory_order_relaxed);
 }
 
 float NoFIFOPool::getStealingThreshold() const {

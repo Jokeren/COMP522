@@ -35,32 +35,32 @@ public:
 	/* constructor - allocate a free node - only node in the list */
 	MSQueue(){
 		node_t* pNode = new node_t();
-    pNode->next.store(NULL);
-		Head.store(pNode);
-    Tail.store(pNode);
-    queueSize.store(0);
+    pNode->next.store(NULL, std::memory_order_relaxed);
+		Head.store(pNode, std::memory_order_relaxed);
+    Tail.store(pNode, std::memory_order_relaxed);
+    queueSize.store(0, std::memory_order_relaxed);
 	}
 	
 	/* destructor - delete dummy head */
 	~MSQueue(){
-		delete Head.load();
+		delete Head.load(std::memory_order_relaxed);
 	}
 	
 	int getSize(){
-		return queueSize.load();
+		return queueSize.load(std::memory_order_relaxed);
 	}
 
 	void enqueue(const T& t, AtomicStatistics* stat){
 		node_t* pNode = new node_t();  // allocate a free node 
 		pNode->value = t;
-    pNode->next.store(NULL);
+    pNode->next.store(NULL, std::memory_order_relaxed);
 		
 		node_t *tail;
 		while(true)   // keep trying until enqueue is done
 		{
-			tail = Tail.load();  // "read Tail.ptr and Tail.count together" - do we need an "atomic" assignments / copy constructor ?
-			node_t *next = tail->next.load();  // read next ptr and count together
-			if(tail == Tail.load())   // are tail and next consistent? - default field-by-fields comparison
+			tail = Tail.load(std::memory_order_relaxed);  // "read Tail.ptr and Tail.count together" - do we need an "atomic" assignments / copy constructor ?
+			node_t *next = tail->next.load(std::memory_order_relaxed);  // read next ptr and count together
+			if(tail == Tail.load(std::memory_order_relaxed))   // are tail and next consistent? - default field-by-fields comparison
 			{
 				if(next == NULL)  // was Tail pointing to the last node?
 				{
@@ -87,14 +87,14 @@ public:
 		node_t *head;
 		while(true)		// keep trying until dequeue is done
 		{
-			head = Head.load();  // read Head
-			node_t *tail = Tail.load();  // read Tail
+			head = Head.load(std::memory_order_relaxed);  // read Head
+			node_t *tail = Tail.load(std::memory_order_relaxed);  // read Tail
 			if(head == NULL)
 			{
 				return false;
 			}
-			node_t *next = head->next.load();  // read Head.ptr->next
-			if(head == Head.load())  // are head,tail and next consistent
+			node_t *next = head->next.load(std::memory_order_relaxed);  // read Head.ptr->next
+			if(head == Head.load(std::memory_order_relaxed))  // are head,tail and next consistent
 			{
 				if(head == tail)  //is the queue empty or Tail is falling behind
 				{
