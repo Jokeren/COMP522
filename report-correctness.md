@@ -31,6 +31,8 @@ and
 
     66: newNode->consumerIdx = prevNode->consumerIdx;
 
+which means that a thread that steals the node sees the old consumerIdx value and will lead to assertion fail at Line 106 (assert(newNode->consumerIdx == prevNode->consumerIdx)).
+
 Right now, I do not think thread yielding could help avoid the race, but I need to read Dave's paper more carefully.
 
 2. HP race 
@@ -78,6 +80,42 @@ Two consumers access the same address.
     addr -1207957272 pthread -938547456
     addr -1207957272 pthread -938547456
 
+Extract the source code, we have:
+ 
+    //gets last node as sets HP to it
+    SwNode* SwLinkedList::getLast(HPLocal hpLoc) {
+      while (true) {
+        SwNode* res = last;
+        setHP(0, res, hpLoc);
+        if (res != last)
+          continue;
+        return res;
+      }
+    }
+
+    // uses HP 0 & 1
+    // Note: List function may not be used when using this iterator
+    // because they share the same HPs.
+
+    SwLinkedList::SwLinkedListIterator::SwLinkedListIterator(SwLinkedList* list, HPLocal _hpLoc) :
+      hp0(0), hp1(1) {
+      curr = (list == NULL) ? NULL : list->head;
+      hpLoc = _hpLoc;
+      setHP(hp0, curr, hpLoc);
+    }
+
+Since hpLoc is declared as a protected member per consumer, the only possible reason for conflicting is that hpLocs points to the same objects.
+
+Since we have:
+
+	SwNode* const prevNode = from->getStealNode(stealQueueID);
+
+and 
+
+	SwLinkedList::SwLinkedListIterator iter(NULL,hpLoc);
+
+It is probably that while stealing node from the `from` pool, the `from` thread is trying to take nodes from its own pool.
+
 3. *getlast* and *append*
 
 WARNING: ThreadSanitizer: data race (pid=70019)
@@ -95,8 +133,8 @@ WARNING: ThreadSanitizer: data race (pid=70019)
     #3 Producer::produce(Task&) /home/kz21/Codes/COMP522/SALSA-atomic/Producer.cpp:40 (Main+0x000000403a46)
     #4 prodRun(void*) /home/kz21/Codes/COMP522/SALSA-atomic/Threads.cpp:71 (Main+0x000000412574)
 
+I think this data race is fine because hazard pointer linked list allows multiple readers and a single writer.
+
 4. Drawbacks of ThreadSanitizer
 
 False positive on a lot of cases, including data races on atomic variables, single-writer multiple-reader data structures, and places where data race does not affect the correctness.
-
-
