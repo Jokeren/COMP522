@@ -6,5 +6,5 @@ DIR=$2
 
 for ((i=0;i<${#THREADS[@]};i++))
 do
-  valgrind --tool=massif $MAIN $DIR/config.${THREADS[$i]}.bind.init.txt
+  valgrind --tool=massif $MAIN $DIR/config.${THREADS[$i]}.valgrind.txt
 done

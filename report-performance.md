@@ -54,3 +54,16 @@ Table 4. Throughput comparisons of SALSA implementations on different platforms 
 |32|1079990|1053280|410803|431995|387694|540824|
 |64|Limit|Limit|Failed| Failed|437461|624135|
 |128|Limit|Limit|Failed | Failed|Limit|Limit|
+
+3. Memory usage
+
+Table 5. Memory consumption of SALSA x86 implementation (MB/10s)
+
+| Threads | x86 |
+|:---:|:---:|
+|1| 161 |
+|2| 292 |
+|4| 276 |
+|8| 243 |
+|16| 141 |
+|32| 243 |

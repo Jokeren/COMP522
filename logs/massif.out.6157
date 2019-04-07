@@ -1,0 +1,900 @@
+desc: (none)
+cmd: SALSA-x86/build/Main SALSA-x86/configs//config.8.valgrind.txt
+time_unit: i
+#-----------
+snapshot=0
+#-----------
+time=0
+mem_heap_B=0
+mem_heap_extra_B=0
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=1
+#-----------
+time=54682362
+mem_heap_B=3224923
+mem_heap_extra_B=11765
+mem_stacks_B=0
+heap_tree=detailed
+n2: 3224923 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 3203200 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 3203200 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 3203200 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 3203200 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 3203200 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 21723 in 45 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=2
+#-----------
+time=1826759818
+mem_heap_B=3225859
+mem_heap_extra_B=12021
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=3
+#-----------
+time=2015008694
+mem_heap_B=11269779
+mem_heap_extra_B=37829
+mem_stacks_B=0
+heap_tree=detailed
+n2: 11269779 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 11211200 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 11211200 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 11211200 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 11211200 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 11211200 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 58579 in 45 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=4
+#-----------
+time=2355486275
+mem_heap_B=11271295
+mem_heap_extra_B=38081
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=5
+#-----------
+time=2427719115
+mem_heap_B=12888563
+mem_heap_extra_B=43285
+mem_stacks_B=0
+heap_tree=detailed
+n2: 12888563 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 75763 in 45 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=6
+#-----------
+time=3219397329
+mem_heap_B=12889499
+mem_heap_extra_B=43541
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=7
+#-----------
+time=3237396660
+mem_heap_B=12894931
+mem_heap_extra_B=43725
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=8
+#-----------
+time=3701797195
+mem_heap_B=12897647
+mem_heap_extra_B=43817
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=9
+#-----------
+time=3946607131
+mem_heap_B=12903236
+mem_heap_extra_B=44020
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=10
+#-----------
+time=4829809337
+mem_heap_B=12903233
+mem_heap_extra_B=44023
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=11
+#-----------
+time=5039099506
+mem_heap_B=12916455
+mem_heap_extra_B=54105
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=12
+#-----------
+time=5307596256
+mem_heap_B=23943135
+mem_heap_extra_B=103409
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=13
+#-----------
+time=5628112154
+mem_heap_B=41323287
+mem_heap_extra_B=177609
+mem_stacks_B=0
+heap_tree=detailed
+n3: 41323287 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 28292264 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 28292264 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 28292264 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 28292264 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 28292264 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 28292264 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 218223 in 65 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=14
+#-----------
+time=5829804634
+mem_heap_B=41331663
+mem_heap_extra_B=179977
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=15
+#-----------
+time=6152065634
+mem_heap_B=41345895
+mem_heap_extra_B=185369
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=16
+#-----------
+time=6383376016
+mem_heap_B=43410695
+mem_heap_extra_B=191361
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=17
+#-----------
+time=6694212920
+mem_heap_B=44345999
+mem_heap_extra_B=201137
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=18
+#-----------
+time=6966463356
+mem_heap_B=57532455
+mem_heap_extra_B=256961
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=19
+#-----------
+time=7090929675
+mem_heap_B=65276047
+mem_heap_extra_B=287969
+mem_stacks_B=0
+heap_tree=detailed
+n3: 65276047 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 52132080 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 52132080 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 52132080 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 52132080 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 52132080 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 52132080 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 331167 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=20
+#-----------
+time=7329480363
+mem_heap_B=70782271
+mem_heap_extra_B=312617
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=21
+#-----------
+time=7607797388
+mem_heap_B=74041871
+mem_heap_extra_B=324705
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=22
+#-----------
+time=7800733705
+mem_heap_B=80041623
+mem_heap_extra_B=348913
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=23
+#-----------
+time=8029733076
+mem_heap_B=88851071
+mem_heap_extra_B=382793
+mem_stacks_B=0
+heap_tree=detailed
+n3: 88851071 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 75635560 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 75635560 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 75635560 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 75635560 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 75635560 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 75635560 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 402711 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=24
+#-----------
+time=8145244599
+mem_heap_B=93533847
+mem_heap_extra_B=401529
+mem_stacks_B=0
+heap_tree=detailed
+n3: 93533847 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 80304224 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 80304224 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 80304224 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 80304224 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 80304224 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 80304224 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 416823 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=25
+#-----------
+time=8361330546
+mem_heap_B=98999199
+mem_heap_extra_B=420361
+mem_stacks_B=0
+heap_tree=detailed
+n3: 98999199 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 85757672 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 85757672 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 85757672 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 85757672 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 85757672 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 85757672 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 428727 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=26
+#-----------
+time=8648051104
+mem_heap_B=102158447
+mem_heap_extra_B=440041
+mem_stacks_B=0
+heap_tree=detailed
+n3: 102158447 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 88896808 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 88896808 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 88896808 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 88896808 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 88896808 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 88896808 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 448839 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=27
+#-----------
+time=8800647996
+mem_heap_B=103899959
+mem_heap_extra_B=451521
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=28
+#-----------
+time=9037205405
+mem_heap_B=119045711
+mem_heap_extra_B=510121
+mem_stacks_B=0
+heap_tree=detailed
+n3: 119045711 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 105729624 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 105729624 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 105729624 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 105729624 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 105729624 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 105729624 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 503287 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=29
+#-----------
+time=9284035179
+mem_heap_B=124102951
+mem_heap_extra_B=528353
+mem_stacks_B=0
+heap_tree=detailed
+n3: 124102951 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 110774664 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 110774664 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 110774664 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 110774664 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 110774664 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 110774664 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 515487 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=30
+#-----------
+time=9551176252
+mem_heap_B=131312231
+mem_heap_extra_B=554617
+mem_stacks_B=0
+heap_tree=detailed
+n3: 131312231 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 117965848 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 117965848 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 117965848 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 117965848 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 117965848 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 117965848 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 533583 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=31
+#-----------
+time=9723633048
+mem_heap_B=134342383
+mem_heap_extra_B=568241
+mem_stacks_B=0
+heap_tree=detailed
+n3: 134342383 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 120984864 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 120984864 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 120984864 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 120984864 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 120984864 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 120984864 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 544719 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=32
+#-----------
+time=10045698394
+mem_heap_B=142144215
+mem_heap_extra_B=600977
+mem_stacks_B=0
+heap_tree=detailed
+n3: 142144215 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 128760632 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 128760632 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 128760632 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 128760632 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 128760632 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 128760632 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 570783 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=33
+#-----------
+time=10249992406
+mem_heap_B=144070711
+mem_heap_extra_B=608001
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=34
+#-----------
+time=10497985861
+mem_heap_B=147705367
+mem_heap_extra_B=619681
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=35
+#-----------
+time=10774743704
+mem_heap_B=159213359
+mem_heap_extra_B=664609
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=36
+#-----------
+time=10972379598
+mem_heap_B=170924399
+mem_heap_extra_B=711521
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=37
+#-----------
+time=11193121011
+mem_heap_B=176101255
+mem_heap_extra_B=734793
+mem_stacks_B=0
+heap_tree=detailed
+n3: 176101255 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 162618456 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 162618456 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 162618456 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 162618456 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 162618456 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 162618456 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 669999 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=38
+#-----------
+time=11480038205
+mem_heap_B=183527535
+mem_heap_extra_B=767481
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=39
+#-----------
+time=11694453559
+mem_heap_B=183692983
+mem_heap_extra_B=770937
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=40
+#-----------
+time=11966886801
+mem_heap_B=192727863
+mem_heap_extra_B=806785
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=41
+#-----------
+time=12255689172
+mem_heap_B=199899087
+mem_heap_extra_B=834457
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=42
+#-----------
+time=12523941896
+mem_heap_B=201283607
+mem_heap_extra_B=836073
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=43
+#-----------
+time=12709569290
+mem_heap_B=204528807
+mem_heap_extra_B=849761
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=44
+#-----------
+time=12988728040
+mem_heap_B=218967303
+mem_heap_extra_B=910593
+mem_stacks_B=0
+heap_tree=detailed
+n3: 218967303 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 205349144 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 205349144 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 205349144 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 205349144 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 205349144 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 205349144 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 805359 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=45
+#-----------
+time=13145750654
+mem_heap_B=223258647
+mem_heap_extra_B=928409
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=46
+#-----------
+time=13395100265
+mem_heap_B=229633543
+mem_heap_extra_B=952753
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=47
+#-----------
+time=13552110959
+mem_heap_B=233859871
+mem_heap_extra_B=965089
+mem_stacks_B=0
+heap_tree=detailed
+n3: 233859871 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 220203984 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 220203984 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 220203984 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 220203984 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 220203984 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 220203984 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 843087 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=48
+#-----------
+time=13761682576
+mem_heap_B=234597559
+mem_heap_extra_B=967321
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=49
+#-----------
+time=13892139864
+mem_heap_B=235766671
+mem_heap_extra_B=974905
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=50
+#-----------
+time=13910288568
+mem_heap_B=235763991
+mem_heap_extra_B=973233
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=51
+#-----------
+time=13928376218
+mem_heap_B=236593671
+mem_heap_extra_B=972929
+mem_stacks_B=0
+heap_tree=detailed
+n3: 236593671 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 222934712 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 222934712 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 222934712 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 222934712 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 222934712 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 222934712 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 846159 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=52
+#-----------
+time=13946421765
+mem_heap_B=237830647
+mem_heap_extra_B=977889
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=53
+#-----------
+time=13964447861
+mem_heap_B=239051535
+mem_heap_extra_B=982785
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=54
+#-----------
+time=13982492736
+mem_heap_B=240264415
+mem_heap_extra_B=987649
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=55
+#-----------
+time=13996631286
+mem_heap_B=240683111
+mem_heap_extra_B=989833
+mem_stacks_B=0
+heap_tree=detailed
+n3: 240683111 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 227010784 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 227010784 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 227010784 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 227010784 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 227010784 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 227010784 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 859527 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=56
+#-----------
+time=14014651598
+mem_heap_B=241517431
+mem_heap_extra_B=992673
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=57
+#-----------
+time=14033484354
+mem_heap_B=242633967
+mem_heap_extra_B=997177
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=58
+#-----------
+time=14053471321
+mem_heap_B=242635647
+mem_heap_extra_B=997857
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=59
+#-----------
+time=14072725513
+mem_heap_B=242635183
+mem_heap_extra_B=997417
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=60
+#-----------
+time=14090750916
+mem_heap_B=242636351
+mem_heap_extra_B=998081
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=61
+#-----------
+time=14108812793
+mem_heap_B=242638055
+mem_heap_extra_B=999769
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=62
+#-----------
+time=14128310558
+mem_heap_B=243266015
+mem_heap_extra_B=1003209
+mem_stacks_B=0
+heap_tree=detailed
+n3: 243266015 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 229581352 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 229581352 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 229581352 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 229581352 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 229581352 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 229581352 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 871863 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=63
+#-----------
+time=14146373670
+mem_heap_B=244090767
+mem_heap_extra_B=1004977
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=64
+#-----------
+time=14164477582
+mem_heap_B=245472319
+mem_heap_extra_B=1010513
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=65
+#-----------
+time=14184159953
+mem_heap_B=246556679
+mem_heap_extra_B=1014857
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=66
+#-----------
+time=14186267827
+mem_heap_B=246557671
+mem_heap_extra_B=1015353
+mem_stacks_B=0
+heap_tree=detailed
+n3: 246557671 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 232864632 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 232864632 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 232864632 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 232864632 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 232864632 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 232864632 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 880239 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=67
+#-----------
+time=14209555332
+mem_heap_B=246776087
+mem_heap_extra_B=1017249
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=68
+#-----------
+time=14233722742
+mem_heap_B=246776799
+mem_heap_extra_B=1017473
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=69
+#-----------
+time=14251746782
+mem_heap_B=247121951
+mem_heap_extra_B=1019121
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=70
+#-----------
+time=14269822621
+mem_heap_B=248262519
+mem_heap_extra_B=1023681
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=71
+#-----------
+time=14287894320
+mem_heap_B=249459311
+mem_heap_extra_B=1028465
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=72
+#-----------
+time=14305918620
+mem_heap_B=250736471
+mem_heap_extra_B=1033601
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=73
+#-----------
+time=14323426251
+mem_heap_B=251829879
+mem_heap_extra_B=1038489
+mem_stacks_B=0
+heap_tree=detailed
+n3: 251829879 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 238117880 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 238117880 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 238117880 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 238117880 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 238117880 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 238117880 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 899199 in 66 places, all below massif's threshold (1.00%)
+#-----------
+snapshot=74
+#-----------
+time=14341509918
+mem_heap_B=252133991
+mem_heap_extra_B=1039169
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=75
+#-----------
+time=14359535831
+mem_heap_B=253465319
+mem_heap_extra_B=1037921
+mem_stacks_B=0
+heap_tree=empty
+#-----------
+snapshot=76
+#-----------
+time=14373058791
+mem_heap_B=254509527
+mem_heap_extra_B=1042113
+mem_stacks_B=0
+heap_tree=peak
+n3: 254509527 (heap allocation functions) malloc/new/new[], --alloc-fns, etc.
+ n1: 240800560 0x40E92D: NoFIFOPool::ProdCtx::produceImpl(Task&, bool&, bool, AtomicStatistics*) (NoFIFOProducer.cpp:32)
+  n1: 240800560 0x40E865: NoFIFOPool::ProdCtx::produceForce(Task&, AtomicStatistics*) (NoFIFOProducer.cpp:19)
+   n1: 240800560 0x40EEE5: Producer::produce(Task&) (Producer.cpp:60)
+    n1: 240800560 0x41038B: prodRun(void*) (Threads.cpp:87)
+     n1: 240800560 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+      n0: 240800560 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n1: 12812800 0x40A8B8: ChunkPool::ChunkPool(int, int) (ChunkPool.cpp:16)
+  n1: 12812800 0x40E597: NoFIFOPool::NoFIFOPool(int, int) (NoFIFOPool.cpp:31)
+   n1: 12812800 0x410AC1: consRun(void*) (Threads.cpp:155)
+    n1: 12812800 0x4E40DD3: start_thread (in /usr/lib64/libpthread-2.17.so)
+     n0: 12812800 0x5B79EAB: clone (in /usr/lib64/libc-2.17.so)
+ n0: 896167 in 68 places, all below massif's threshold (1.00%)
