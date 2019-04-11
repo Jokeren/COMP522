@@ -239,6 +239,8 @@ int main(int argc, char* argv[])
 			consFluctuations << "," <<
 			pausedThreads << endl;
 
+  prodStats->print();
+  consStats->print();
 
 	// free allocated memory
 	delete prodStats;

@@ -1,5 +1,6 @@
 #include "NoFIFOPool.h"
 #include "hp/hp.h"
+#include <iostream>
 
 NoFIFOPool::ProdCtx::ProdCtx(SwLinkedList& l, atomic<int> &c, ChunkPool& _chunkPool) :
 	chunkList(l),
@@ -29,6 +30,7 @@ OpResult NoFIFOPool::ProdCtx::produceImpl(Task& t, bool& changeConsumer, bool fo
 			if (!force) {
 				return FULL;
 			} else {
+        stat->NewChunkCount_inc();
 				newChunk = new SPChunk(chunkPool.getOwner());
 			}
 		}
@@ -40,6 +42,7 @@ OpResult NoFIFOPool::ProdCtx::produceImpl(Task& t, bool& changeConsumer, bool fo
 	bool lastTask;
 	curChunk->insertTask(&t, lastTask);
 	if (lastTask) {
+    stat->DequeueChunkCount_inc();
 		changeConsumer = true;
 		curChunk = NULL; // the next produce operation will start a new chunk
 	}
