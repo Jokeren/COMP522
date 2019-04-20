@@ -1,0 +1,118 @@
+producersNum = 1 , consumersNum = 1
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 14620.1
+System Throughput (tasks/msec) = 14449.6
+Average Number of Work Stealing Attempts per Consumer = 0
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.000990017
+	 CAS failures per inserted task: 3.41297e-08
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00199975
+	 CAS failures per inserted task: 0
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,1,1,14620.1,14449.6,0,0.000990017,3.41297e-08,0.00199975,0,1,1,0,0,2
+producersNum = 1 , consumersNum = 2
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 17119.7
+System Throughput (tasks/msec) = 17099.6
+Average Number of Work Stealing Attempts per Consumer = 697.5
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.001
+	 CAS failures per inserted task: 0
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00205209
+	 CAS failures per inserted task: 0
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,1,2,17119.7,17099.6,697.5,0.001,0,0.00205209,0,1,1,0,0,2
+producersNum = 1 , consumersNum = 4
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Main: /home/kz21/COMP522/SALSA-knl/NoFIFOStealing.cpp:103: virtual Task* NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*): Assertion `newNode->consumerIdx +1 < c->getMaxSize() && newNode->consumerIdx == prevNode->consumerIdx' failed.
+./bench-1-n.sh: line 11: 77635 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
+producersNum = 1 , consumersNum = 8
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Main: /home/kz21/COMP522/SALSA-knl/NoFIFOStealing.cpp:103: virtual Task* NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*): Assertion `newNode->consumerIdx +1 < c->getMaxSize() && newNode->consumerIdx == prevNode->consumerIdx' failed.
+./bench-1-n.sh: line 11: 77642 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
+producersNum = 1 , consumersNum = 16
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Main: /home/kz21/COMP522/SALSA-knl/NoFIFOStealing.cpp:103: virtual Task* NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*): Assertion `newNode->consumerIdx +1 < c->getMaxSize() && newNode->consumerIdx == prevNode->consumerIdx' failed.
+./bench-1-n.sh: line 11: 77656 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
+producersNum = 1 , consumersNum = 32
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Main: /home/kz21/COMP522/SALSA-knl/NoFIFOStealing.cpp:103: virtual Task* NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*): Assertion `newNode->consumerIdx +1 < c->getMaxSize() && newNode->consumerIdx == prevNode->consumerIdx' failed.
+./bench-1-n.sh: line 11: 77675 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
+producersNum = 1 , consumersNum = 64
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Main: /home/kz21/COMP522/SALSA-knl/NoFIFOStealing.cpp:103: virtual Task* NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*): Assertion `newNode->consumerIdx +1 < c->getMaxSize() && newNode->consumerIdx == prevNode->consumerIdx' failed.
+./bench-1-n.sh: line 11: 77710 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
+producersNum = 1 , consumersNum = 64
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Main: /home/kz21/COMP522/SALSA-knl/NoFIFOStealing.cpp:103: virtual Task* NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*): Assertion `newNode->consumerIdx +1 < c->getMaxSize() && newNode->consumerIdx == prevNode->consumerIdx' failed.
+./bench-1-n.sh: line 11: 77777 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
+terminate called after throwing an instance of 'ConfigFile::file_not_found'
+./bench-1-n.sh: line 11: 77844 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
