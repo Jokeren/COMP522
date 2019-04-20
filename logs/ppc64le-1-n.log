@@ -1,0 +1,139 @@
+producersNum = 1 , consumersNum = 1
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 13300.8
+System Throughput (tasks/msec) = 12750.7
+Average Number of Work Stealing Attempts per Consumer = 0
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.000961051
+	 CAS failures per inserted task: 1.50094e-07
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00199976
+	 CAS failures per inserted task: 1.37214e-07
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,1,1,13300.8,12750.7,0,0.000961051,1.50094e-07,0.00199976,1.37214e-07,1,1,0,0,2
+producersNum = 1 , consumersNum = 2
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 18340.4
+System Throughput (tasks/msec) = 18260.3
+Average Number of Work Stealing Attempts per Consumer = 137
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.00100027
+	 CAS failures per inserted task: 1.3624e-07
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00200964
+	 CAS failures per inserted task: 1.36873e-07
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,1,2,18340.4,18260.3,137,0.00100027,1.3624e-07,0.00200964,1.36873e-07,1,1,0,0,2
+producersNum = 1 , consumersNum = 4
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 17835.7
+System Throughput (tasks/msec) = 17817.6
+Average Number of Work Stealing Attempts per Consumer = 3785.5
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.00100022
+	 CAS failures per inserted task: 1.40056e-07
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00206442
+	 CAS failures per inserted task: 1.26248e-07
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,1,4,17835.7,17817.6,3785.5,0.00100022,1.40056e-07,0.00206442,1.26248e-07,1,1,0,0,2
+producersNum = 1 , consumersNum = 8
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Main: /home/kz21/COMP522/SALSA-ppc64le/NoFIFOStealing.cpp:103: virtual Task* NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*): Assertion `newNode->consumerIdx +1 < c->getMaxSize() && newNode->consumerIdx == prevNode->consumerIdx' failed.
+./bench-1-n.sh: line 11: 127264 Aborted                 $MAIN $DIR/config.${THREADS[$i]}.$BIND
+producersNum = 1 , consumersNum = 16
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Main: /home/kz21/COMP522/SALSA-ppc64le/NoFIFOStealing.cpp:103: virtual Task* NoFIFOPool::steal(SCTaskPool*, AtomicStatistics*): Assertion `newNode->consumerIdx +1 < c->getMaxSize() && newNode->consumerIdx == prevNode->consumerIdx' failed.
+./bench-1-n.sh: line 11: 127274 Aborted                 $MAIN $DIR/config.${THREADS[$i]}.$BIND
+producersNum = 1 , consumersNum = 32
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 15571.2
+System Throughput (tasks/msec) = 15226.8
+Average Number of Work Stealing Attempts per Consumer = 2.92995e+06
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.00100003
+	 CAS failures per inserted task: 3.21027e-08
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.00710388
+	 CAS failures per inserted task: 0.000133284
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,1,32,15571.2,15226.8,2.92995e+06,0.00100003,3.21027e-08,0.00710388,0.000133284,1,1,0,0,2
+producersNum = 1 , consumersNum = 64
+poolType is NoFIFOPool
+producerMigrate = 1
+Enable initial producer&consumer binding...
+Waiting for pools initialization...
+Pools created successfully...
+Time to run = 4000 msec
+Producer fluctuations are turned off
+Consumer fluctuations are turned off
+Starting the run...
+Terminating threads...
+Peak Insertion throughput (tasks/msec) = 15901
+System Throughput (tasks/msec) = 15799.3
+Average Number of Work Stealing Attempts per Consumer = 1.22798e+06
+Producer Atomic Statistics:
+	 CAS operations per inserted task: 0.00100009
+	 CAS failures per inserted task: 4.70958e-08
+Consumer Atomic Statistics:
+	 CAS operations per retrieved task: 0.0116456
+	 CAS failures per inserted task: 0.00027242
+CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
+CSV:NoFIFOPool,1,64,15901,15799.3,1.22798e+06,0.00100009,4.70958e-08,0.0116456,0.00027242,1,1,0,0,2
+./bench-1-n.sh: line 11: 127355 Aborted                 $MAIN $DIR/config.${THREADS[$i]}.$BIND
+terminate called after throwing an instance of 'ConfigFile::file_not_found'
+./bench-1-n.sh: line 11: 127427 Aborted                 $MAIN $DIR/config.${THREADS[$i]}.$BIND
+terminate called after throwing an instance of 'ConfigFile::file_not_found'
+./bench-1-n.sh: line 11: 127428 Aborted                 $MAIN $DIR/config.${THREADS[$i]}.$BIND
