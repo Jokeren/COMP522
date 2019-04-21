@@ -67,3 +67,18 @@ Table 5. Memory consumption of SALSA x86 implementation (MB/10s)
 |8| 243 |
 |16| 141 |
 |32| 243 |
+
+4. 1 producer and N consumer
+
+Table 6. Throughput comparisons of SALSA implementations on different platforms with 1 producer and N consumer
+
+| Consumer Threads | knl-bind | x86-bind | ppc64le-bind |
+|:---:|:---:|:---:|:---:|:---:|:---:|:---:|
+|1|14449.1|67424|12750|
+|2|17099.5|96722|18260|
+|4|Failed|96247|17817|
+|8|Failed|91192|Failed|
+|16|Failed|93713|15226|
+|32|Failed|95211|15799|
+|64|Failed|Limit|Failed|
+|128|Failed|Limit|Failed|
