@@ -9,18 +9,18 @@ Producer fluctuations are turned off
 Consumer fluctuations are turned off
 Starting the run...
 Terminating threads...
-Peak Insertion throughput (tasks/msec) = 66787.6
-System Throughput (tasks/msec) = 66592.2
+Peak Insertion throughput (tasks/msec) = 67637.7
+System Throughput (tasks/msec) = 67424.3
 Average Number of Work Stealing Attempts per Consumer = 0
 Producer Atomic Statistics:
-	 CAS operations per inserted task: 0.000996868
-	 CAS failures per inserted task: 5.23952e-08
+	 CAS operations per inserted task: 0.000996881
+	 CAS failures per inserted task: 5.17369e-08
 Consumer Atomic Statistics:
-	 CAS operations per retrieved task: 0.00199997
-	 CAS failures per inserted task: 1.50136e-08
+	 CAS operations per retrieved task: 0.00199999
+	 CAS failures per inserted task: 3.70709e-09
 CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
-CSV:NoFIFOPool,1,1,66787.6,66592.2,0,0.000996868,5.23952e-08,0.00199997,1.50136e-08,1,1,0,0,2
-producersNum = 2 , consumersNum = 2
+CSV:NoFIFOPool,1,1,67637.7,67424.3,0,0.000996881,5.17369e-08,0.00199999,3.70709e-09,1,1,0,0,2
+producersNum = 1 , consumersNum = 2
 poolType is NoFIFOPool
 producerMigrate = 1
 Enable initial producer&consumer binding...
@@ -31,18 +31,18 @@ Producer fluctuations are turned off
 Consumer fluctuations are turned off
 Starting the run...
 Terminating threads...
-Peak Insertion throughput (tasks/msec) = 134615
-System Throughput (tasks/msec) = 134120
+Peak Insertion throughput (tasks/msec) = 96776.8
+System Throughput (tasks/msec) = 96722.6
 Average Number of Work Stealing Attempts per Consumer = 0
 Producer Atomic Statistics:
-	 CAS operations per inserted task: 0.000996698
-	 CAS failures per inserted task: 1.24373e-07
+	 CAS operations per inserted task: 0.00100094
+	 CAS failures per inserted task: 8.78099e-07
 Consumer Atomic Statistics:
-	 CAS operations per retrieved task: 0.00199993
-	 CAS failures per inserted task: 1.11812e-08
+	 CAS operations per retrieved task: 0.00199995
+	 CAS failures per inserted task: 6.20242e-08
 CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
-CSV:NoFIFOPool,2,2,134615,134120,0,0.000996698,1.24373e-07,0.00199993,1.11812e-08,1,1,0,0,2
-producersNum = 4 , consumersNum = 4
+CSV:NoFIFOPool,1,2,96776.8,96722.6,0,0.00100094,8.78099e-07,0.00199995,6.20242e-08,1,1,0,0,2
+producersNum = 1 , consumersNum = 4
 poolType is NoFIFOPool
 producerMigrate = 1
 Enable initial producer&consumer binding...
@@ -53,18 +53,18 @@ Producer fluctuations are turned off
 Consumer fluctuations are turned off
 Starting the run...
 Terminating threads...
-Peak Insertion throughput (tasks/msec) = 237232
-System Throughput (tasks/msec) = 236163
+Peak Insertion throughput (tasks/msec) = 96340.8
+System Throughput (tasks/msec) = 96247.5
 Average Number of Work Stealing Attempts per Consumer = 0
 Producer Atomic Statistics:
-	 CAS operations per inserted task: 0.00099449
-	 CAS failures per inserted task: 9.3648e-07
+	 CAS operations per inserted task: 0.00100023
+	 CAS failures per inserted task: 2.07577e-07
 Consumer Atomic Statistics:
-	 CAS operations per retrieved task: 0.00199979
-	 CAS failures per inserted task: 0
+	 CAS operations per retrieved task: 0.00199984
+	 CAS failures per inserted task: 2.59709e-08
 CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
-CSV:NoFIFOPool,4,4,237232,236163,0,0.00099449,9.3648e-07,0.00199979,0,1,1,0,0,2
-producersNum = 8 , consumersNum = 8
+CSV:NoFIFOPool,1,4,96340.8,96247.5,0,0.00100023,2.07577e-07,0.00199984,2.59709e-08,1,1,0,0,2
+producersNum = 1 , consumersNum = 8
 poolType is NoFIFOPool
 producerMigrate = 1
 Enable initial producer&consumer binding...
@@ -75,18 +75,18 @@ Producer fluctuations are turned off
 Consumer fluctuations are turned off
 Starting the run...
 Terminating threads...
-Peak Insertion throughput (tasks/msec) = 464493
-System Throughput (tasks/msec) = 462969
+Peak Insertion throughput (tasks/msec) = 91243.1
+System Throughput (tasks/msec) = 91192
 Average Number of Work Stealing Attempts per Consumer = 0
 Producer Atomic Statistics:
-	 CAS operations per inserted task: 0.000996508
-	 CAS failures per inserted task: 7.3932e-06
+	 CAS operations per inserted task: 0.00100015
+	 CAS failures per inserted task: 1.42466e-07
 Consumer Atomic Statistics:
-	 CAS operations per retrieved task: 0.00199974
-	 CAS failures per inserted task: 0
+	 CAS operations per retrieved task: 0.00199973
+	 CAS failures per inserted task: 1.09643e-08
 CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
-CSV:NoFIFOPool,8,8,464493,462969,0,0.000996508,7.3932e-06,0.00199974,0,1,1,0,0,2
-producersNum = 16 , consumersNum = 16
+CSV:NoFIFOPool,1,8,91243.1,91192,0,0.00100015,1.42466e-07,0.00199973,1.09643e-08,1,1,0,0,2
+producersNum = 1 , consumersNum = 16
 poolType is NoFIFOPool
 producerMigrate = 1
 Enable initial producer&consumer binding...
@@ -97,18 +97,18 @@ Producer fluctuations are turned off
 Consumer fluctuations are turned off
 Starting the run...
 Terminating threads...
-Peak Insertion throughput (tasks/msec) = 921341
-System Throughput (tasks/msec) = 918697
+Peak Insertion throughput (tasks/msec) = 93761.3
+System Throughput (tasks/msec) = 93713.5
 Average Number of Work Stealing Attempts per Consumer = 0
 Producer Atomic Statistics:
-	 CAS operations per inserted task: 0.00102603
-	 CAS failures per inserted task: 3.75445e-05
+	 CAS operations per inserted task: 0.00100005
+	 CAS failures per inserted task: 4.79872e-08
 Consumer Atomic Statistics:
 	 CAS operations per retrieved task: 0.00199943
-	 CAS failures per inserted task: 3.5369e-09
+	 CAS failures per inserted task: 0
 CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
-CSV:NoFIFOPool,16,16,921341,918697,0,0.00102603,3.75445e-05,0.00199943,3.5369e-09,1,1,0,0,2
-producersNum = 32 , consumersNum = 32
+CSV:NoFIFOPool,1,16,93761.3,93713.5,0,0.00100005,4.79872e-08,0.00199943,0,1,1,0,0,2
+producersNum = 1 , consumersNum = 32
 poolType is NoFIFOPool
 producerMigrate = 1
 Enable initial producer&consumer binding...
@@ -119,20 +119,20 @@ Producer fluctuations are turned off
 Consumer fluctuations are turned off
 Starting the run...
 Terminating threads...
-Peak Insertion throughput (tasks/msec) = 1.1021e+06
-System Throughput (tasks/msec) = 1.09236e+06
-Average Number of Work Stealing Attempts per Consumer = 0.03125
+Peak Insertion throughput (tasks/msec) = 95278.2
+System Throughput (tasks/msec) = 95211.9
+Average Number of Work Stealing Attempts per Consumer = 0
 Producer Atomic Statistics:
-	 CAS operations per inserted task: 0.0010385
-	 CAS failures per inserted task: 5.42694e-05
+	 CAS operations per inserted task: 0.00100002
+	 CAS failures per inserted task: 2.36097e-08
 Consumer Atomic Statistics:
-	 CAS operations per retrieved task: 0.00199758
-	 CAS failures per inserted task: 2.5168e-08
+	 CAS operations per retrieved task: 0.0019989
+	 CAS failures per inserted task: 0
 CSV Formatting: PoolType,ProdNum,ConsNum,ProdRate,ConsRate,AvgStealingAttempts,ProdCAS,ProdCASFailure,ConsCAS,ConsCASFailure,Affinity,ProdMigrate,ProdFluct,ConsFluct,PausedThreads
-CSV:NoFIFOPool,32,32,1.1021e+06,1.09236e+06,0.03125,0.0010385,5.42694e-05,0.00199758,2.5168e-08,1,1,0,0,2
+CSV:NoFIFOPool,1,32,95278.2,95211.9,0,0.00100002,2.36097e-08,0.0019989,0,1,1,0,0,2
 terminate called after throwing an instance of 'ConfigFile::file_not_found'
-./bench-1-n.sh: line 11: 72413 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
+./bench-1-n.sh: line 11: 111942 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
 terminate called after throwing an instance of 'ConfigFile::file_not_found'
-./bench-1-n.sh: line 11: 72415 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
+./bench-1-n.sh: line 11: 111944 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
 terminate called after throwing an instance of 'ConfigFile::file_not_found'
-./bench-1-n.sh: line 11: 72418 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
+./bench-1-n.sh: line 11: 111947 Aborted                 (core dumped) $MAIN $DIR/config.${THREADS[$i]}.$BIND
