@@ -1,6 +1,5 @@
 1. Relaxed memory order
 
-
 Table 1. Throughput comparisons of SALSA implementations on x86 with different consistency models
 
 | Threads | x86 | x86-atomics | x86-atomics-seq-cst |
@@ -29,7 +28,7 @@ Table 2. Throughput comparisons of SALSA implementations on knl with different c
 
 Table 3. Throughput comparisons of SALSA implementations on ppc64le with different consistency models
 
-| Threads | x86 | ppc64le-atomics | ppc64le-atomics-seq-cst |
+| Threads | ppc64le | ppc64le-atomics | ppc64le-atomics-seq-cst |
 |:---:|:---:|:---:|:---:|
 |1|33805.3|34311.7|14390|
 |2|66994.5|68479|28761.6|
